@@ -8,6 +8,7 @@
 
 void EnterPlaying(void) {
     InitCards();
+    RevealDoorCardAtStart();
 }
 
 void UpdatePlaying(void) {

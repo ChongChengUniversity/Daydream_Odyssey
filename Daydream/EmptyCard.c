@@ -3,29 +3,30 @@
 #include "config.h"
 #include <stdlib.h>
 
+//æŠŠç‰Œä¸€å¾‹æ”¹ç‚ºæœªç¿»é–‹ç‹€æ…‹
 static void ResetEmpty(CardBase* self) {
     self->isRevealed = false;
 }
 
 static void DrawEmpty(CardBase* self) {
     if (self->isRevealed)
-        DrawRectangleRec(self->bounds, LIGHTGRAY); // Â½¶}µe¦Ç¦â
+        DrawRectangleRec(self->bounds, LIGHTGRAY); // Â½ï¿½}ï¿½eï¿½Ç¦ï¿½
     else
         DrawRectangleLinesEx(self->bounds, 2.0f, WHITE);
 }
 
 static void OnRevealEmpty(CardBase* self) {
     self->isRevealed = true;
-    // ªÅ¥Õ¥d¨S¦³¯S§O®ÄªG
+    // ï¿½Å¥Õ¥dï¿½Sï¿½ï¿½ï¿½Sï¿½Oï¿½ÄªG
 }
 
 static void OnInteractEmpty(CardBase* self) {
-    // ¤°»ò³£¤£°µ
+    // ï¿½ï¿½ï¿½ò³£¤ï¿½ï¿½ï¿½
 }
 
 CardBase* CreateEmptyCard(float x, float y) {
     CardBase* card = malloc(sizeof(CardBase));
-    if (!card) return NULL; // ¦pªG malloc ¥¢±Ñ¡Aª½±µ¦^¶Ç NULL
+    if (!card) return NULL; // ï¿½pï¿½G malloc ï¿½ï¿½ï¿½Ñ¡Aï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½ï¿½ NULL
 
     card->bounds = (Rectangle){ x, y, TILE_SIZE, TILE_SIZE };
     card->isRevealed = false;

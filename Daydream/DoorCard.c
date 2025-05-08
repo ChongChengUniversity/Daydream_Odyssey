@@ -7,6 +7,7 @@
 #include "assetManager.h"
 #include "levelManager.h" // ���F�P�_�O�_�̫�@��
 
+//門一開始就翻開了
 static void ResetDoor(CardBase *self)
 {
     self->isRevealed = false;
@@ -14,11 +15,8 @@ static void ResetDoor(CardBase *self)
 
 static void DrawDoor(CardBase *self)
 {
-    if (self->isRevealed)
-        DrawTextureEx(textures[TEXTURE_DOOR], (Vector2){self->bounds.x, self->bounds.y}, 0.0f,
-                      (float)TILE_SIZE / textures[TEXTURE_DOOR].width, WHITE);
-    else
-        DrawRectangleLinesEx(self->bounds, 2.0f, WHITE);
+    DrawTextureEx(textures[TEXTURE_DOOR], (Vector2){self->bounds.x, self->bounds.y}, 0.0f,
+                (float)TILE_SIZE / textures[TEXTURE_DOOR].width, WHITE);
 }
 
 static void OnRevealDoor(CardBase *self)
@@ -46,7 +44,7 @@ static void OnInteractDoor(CardBase *self)
 CardBase *CreateDoorCard(float x, float y)
 {
     CardBase *card = malloc(sizeof(CardBase));
-    if (!card)
+    if (!card)      //避免錯誤無法正常執行程式
         return NULL;
 
     card->bounds = (Rectangle){x, y, TILE_SIZE, TILE_SIZE};

@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Texture2D textures[MAX_TEXTURES];
+Texture2D textures[MAX_TEXTURES];   //Texture2D是存寬度高度等照片資料的結構體
 Texture2D seasonalItems[SEASON_COUNT][ITEM_TYPE_COUNT];
 Season currentSeason = SEASON_SPRING; // defined here
 
@@ -13,6 +13,7 @@ const char *itemSuffix[ITEM_TYPE_COUNT] = {
     "_t_scroll.png", "_aoe_scroll.png", "_shield_scroll.png",
     "_heal_scroll.png", "_single_scroll.png"};
 
+//隨機決定格子中的物品種類
 ItemType GetRandomItemType()
 {
     float r = (float)rand() / RAND_MAX; // RAND_MAX defined in stdlib.h
@@ -36,6 +37,7 @@ ItemType GetRandomItemType()
         return BOSS;
 }
 
+//將所需圖片地址分類存入陣列方便後續使用
 void InitAssetManager()
 {
     for (int i = 0; i < BACKGROUND_COUNT; ++i)
@@ -45,6 +47,7 @@ void InitAssetManager()
         textures[TEXTURE_BG_START + i] = LoadTexture(path);
     }
 
+    //分前後綴組成圖片地址 前綴季節種類後綴物品種類
     char path[128];
     for (int season = 0; season < SEASON_COUNT; season++)
     {

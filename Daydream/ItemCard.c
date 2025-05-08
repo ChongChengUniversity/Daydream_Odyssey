@@ -1,13 +1,15 @@
 // ItemCard.c
 #include "ItemCard.h"
+#include "assetManager.h"  // 引入 assetManager.h 來使用 GetRandomItemType
 #include "config.h"
-#include "assetManager.h"
 #include <stdlib.h>
 
 typedef struct {
     CardBase base;
     ItemType type;
 } ItemCard;
+
+// 這裡不再定義 GetRandomItemType，而是引用 assetManager.h 中的函數
 
 static void ResetItem(CardBase* self) {
     self->isRevealed = false;
