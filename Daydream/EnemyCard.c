@@ -4,33 +4,76 @@
 #include <stdlib.h>
 #include "stateController.h"
 #include "assetManager.h"
+#include "CombatSystem.h"
+#include "CharacterStats.h"
+#include "cardManager.h"
+
+//ç•«å‡ºç²—é«”å­—
+static void DrawBoldText(const char* text, int posX, int posY, int fontSize, Color color) {
+    for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+            if (dx != 0 || dy != 0) {
+                DrawText(text, posX + dx, posY + dy, fontSize, BLACK); // ç•«é‚Šæ¡†
+            }
+        }
+    }
+    DrawText(text, posX, posY, fontSize, color); // ç•«ä¸»é«”
+}
 
 static void ResetEnemy(CardBase* self) {
     self->isRevealed = false;
 }
 
 static void DrawEnemy(CardBase* self) {
-    if (self->isRevealed)
+    if (self->isRevealed){
         DrawTextureEx(textures[TEXTURE_ENEMY], (Vector2) { self->bounds.x, self->bounds.y }, 0.0f,
             (float)TILE_SIZE / textures[TEXTURE_ENEMY].width, WHITE);
-    else
+        
+        EnemyStats* enemy = (EnemyStats*)self->data;
+        Rectangle bounds = self->bounds;
+        float centerX = bounds.x + bounds.width / 2;
+        float centerY = bounds.y + bounds.height / 2;
+        float radius = bounds.width / 2;
+
+        // // é»ƒè‰²åœ“ï¼šé˜²ç¦¦
+        // if (enemy->def > 0) {
+        //     DrawCircle(centerX, centerY, radius * 0.85f, YELLOW);
+        // }
+
+        // // ç´…è‰²åœ“ï¼šè¡€é‡æ¯”ä¾‹
+        // float hpRatio = (float)enemy->currentHp / (float)enemy->maxHp;
+        // DrawCircle(centerX, centerY, radius * hpRatio * 0.7f, RED);
+
+        int fontSize = 16;
+        // å·¦ä¸Šè§’ï¼šæ”»æ“ŠåŠ›ï¼ˆç²—é«”é»ƒè‰²ï¼‰
+        DrawBoldText(TextFormat("%d", enemy->atk), bounds.x + 2, bounds.y + 2, fontSize, YELLOW);
+
+        // å·¦ä¸‹è§’ï¼šè¡€é‡ï¼ˆç²—é«”ç´…è‰²ï¼‰
+        DrawBoldText(TextFormat("%d", enemy->currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED);
+    }
+    else{
         DrawRectangleLinesEx(self->bounds, 2.0f, WHITE);
+    }
 }
 
 static void OnRevealEnemy(CardBase* self) {
     self->isRevealed = true;
-    // ³oÃä¥i¥H¥[¡G¹CÀ¸¥¢±ÑÅÞ¿è
 }
 
 static void OnInteractEnemy(CardBase* self) {
-    // ¼Ä¤H³Q«ö²Ä¤G¦¸¡A¥i¥H³]­p¦¨¦©¦å¡BÄµ§iµ¥µ¥
-    GOTO(LOSE);
+    PlayerStats* player = GetPlayerStats();
+    EnemyStats* enemy = (EnemyStats*)self->data;
+
+    bool enemyDead = AttackEnemy(player, enemy);
+    if(enemyDead){
+        ReplaceCardWithEmpty(self->indexInArray);
+    }
 }
 
 
-CardBase* CreateEnemyCard(float x, float y) {
+CardBase* CreateEnemyCard(float x, float y, int index) {
     CardBase* card = malloc(sizeof(CardBase));
-    if (!card) return NULL; // ¦pªG malloc ¥¢±Ñ¡Aª½±µ¦^¶Ç NULL
+    if (!card) return NULL; // ï¿½pï¿½G malloc ï¿½ï¿½ï¿½Ñ¡Aï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½ï¿½ NULL
 
     card->bounds = (Rectangle){ x, y, TILE_SIZE, TILE_SIZE };
     card->isRevealed = false;
@@ -38,5 +81,7 @@ CardBase* CreateEnemyCard(float x, float y) {
     card->draw = DrawEnemy;
     card->onReveal = OnRevealEnemy;
     card->onInteract = OnInteractEnemy; 
+    card->indexInArray = index;
+    card->data = CreateEnemyStats(10, 3, 1, false);
     return card;
 }

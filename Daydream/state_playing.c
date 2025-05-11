@@ -5,6 +5,7 @@
 
 #include "levelManager.h"     // �s�W�G���d�޲z
 #include "assetManager.h"     // �s�W�G���o�I���K��
+#include "playerUI.h"
 
 void EnterPlaying(void) {
     InitCards();
@@ -24,6 +25,7 @@ void RenderPlaying(void) {
     DrawTexture(textures[GetCurrentLevel() - 1], 0, 0, WHITE);
 
     DrawAllCards();
+    DrawPlayerUI();
 }
 
 void ExitPlaying(void) {

@@ -41,7 +41,7 @@ static void OnInteractDoor(CardBase *self)
     }
 }
 
-CardBase *CreateDoorCard(float x, float y)
+CardBase *CreateDoorCard(float x, float y, int index)
 {
     CardBase *card = malloc(sizeof(CardBase));
     if (!card)      //避免錯誤無法正常執行程式
@@ -53,5 +53,6 @@ CardBase *CreateDoorCard(float x, float y)
     card->draw = DrawDoor;
     card->onReveal = OnRevealDoor;
     card->onInteract = OnInteractDoor;
+    card->indexInArray = index;
     return card;
 }

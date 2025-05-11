@@ -30,7 +30,10 @@ SRC = \
     DoorCard.c \
     EmptyCard.c \
     EnemyCard.c \
-    ItemCard.c
+    ItemCard.c \
+    CharacterStats.c \
+    CombatSystem.c \
+    playerUI.c
 
 # 輸出檔案名稱
 TARGET = test.exe

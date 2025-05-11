@@ -2,14 +2,16 @@
 #include "stateController.h"
 #include "config.h"
 #include "audioManager.h"
+#include "CharacterStats.h"
 
 static void EnterMainMenu() {
-    // ¨Ò¦p¼½©ñ­I´º­µ¼Ö¡B­«³]ÅÜ¼Æµ¥
+    // ï¿½Ò¦pï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ö¡Bï¿½ï¿½ï¿½]ï¿½Ü¼Æµï¿½
 }
 
 static void UpdateMainMenu() {
     if (IsKeyPressed(KEY_N)) {
         GamePlaySound(SOUND_TWO);
+        InitPlayerStats();  //åœ¨é€™è£¡åˆå§‹åŒ–è§’è‰²ç‹€æ…‹ç¢ºä¿ä¸æœƒæ¯å±¤æ¨“éƒ½é‡è£½
         GOTO(PLAYING);
     }
     else if (IsKeyPressed(KEY_O)) {
@@ -27,7 +29,7 @@ static void RenderMainMenu() {
 }
 
 static void ExitMainMenu() {
-    // ¨Ò¦p°±¤î­I´º­µ¼Öµ¥
+    // ï¿½Ò¦pï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½
 }
 
 const GameState STATE_MAIN_MENU = {

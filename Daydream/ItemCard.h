@@ -5,4 +5,4 @@
 
 ItemType GetRandomItemType();  // 在此處添加函式原型宣告
  
-CardBase* CreateItemCard(float x, float y, ItemType type);  // ItemCard.c
+CardBase* CreateItemCard(float x, float y, int index, ItemType type);  // ItemCard.c

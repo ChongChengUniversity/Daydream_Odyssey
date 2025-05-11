@@ -32,7 +32,7 @@ void InitCardTypes()
     cardTypes[index++] = TYPE_DOOR;
     for (int i = 0; i < 14; ++i)
         cardTypes[index++] = TYPE_ITEM;
-    for (int i = 0; i < 1; ++i)
+    for (int i = 0; i < 3; ++i)
         cardTypes[index++] = TYPE_ENEMY;
     while (index < TOTAL_CARDS)
         cardTypes[index++] = TYPE_EMPTY;
@@ -73,18 +73,18 @@ void InitCards()
             switch (cardTypes[card_index])
             {
             case TYPE_DOOR:
-                cards[card_index] = CreateDoorCard(x, y);
+                cards[card_index] = CreateDoorCard(x, y, card_index);
                 indexdoorRow = row;     //紀錄門的位置
                 indexdoorCol = col; 
                 break;
             case TYPE_ITEM:
-                cards[card_index] = CreateItemCard(x, y, GetRandomItemType());
+                cards[card_index] = CreateItemCard(x, y, card_index, GetRandomItemType());
                 break;
             case TYPE_ENEMY:
-                cards[card_index] = CreateEnemyCard(x, y);
+                cards[card_index] = CreateEnemyCard(x, y, card_index);
                 break;
             case TYPE_EMPTY:
-                cards[card_index] = CreateEmptyCard(x, y);
+                cards[card_index] = CreateEmptyCard(x, y, card_index);
                 break;
             }
             card_index++;
@@ -188,6 +188,17 @@ void OnMouseClick(Vector2 mousePos)
         }        
     }
 }
+
+//死亡的怪物卡變為翻開狀態空卡
+void ReplaceCardWithEmpty(int index) {
+    float x = cards[index]->bounds.x;
+    float y = cards[index]->bounds.y;
+    free(cards[index]);  // 釋放原本的記憶體（EnemyCard）
+    cards[index] = CreateEmptyCard(x, y, index);  // 換成空卡
+    cards[index]->onReveal(cards[index]);
+    cardTypes[index] = TYPE_EMPTY;  // 同步更新卡片類型
+}
+
 
 void ResetAllCards()
 {

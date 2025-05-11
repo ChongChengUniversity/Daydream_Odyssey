@@ -16,3 +16,6 @@ void AbleToReveal();
 
 // 一開始自動翻開門並更新可翻開卡片
 void RevealDoorCardAtStart();
+
+//怪物死亡後怪物卡轉為空卡
+void ReplaceCardWithEmpty(int index);

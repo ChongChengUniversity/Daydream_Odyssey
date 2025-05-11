@@ -24,7 +24,7 @@ static void OnInteractEmpty(CardBase* self) {
     // ���򳣤���
 }
 
-CardBase* CreateEmptyCard(float x, float y) {
+CardBase* CreateEmptyCard(float x, float y, int index) {
     CardBase* card = malloc(sizeof(CardBase));
     if (!card) return NULL; // �p�G malloc ���ѡA�����^�� NULL
 
@@ -34,5 +34,6 @@ CardBase* CreateEmptyCard(float x, float y) {
     card->draw = DrawEmpty;
     card->onReveal = OnRevealEmpty;
     card->onInteract = OnInteractEmpty;
+    card->indexInArray = index;
     return card;
 }

@@ -34,7 +34,7 @@ static void OnInteractItem(CardBase* self) {
     // 可以依據 item type 設計效果
 }
 
-CardBase* CreateItemCard(float x, float y, ItemType type) {
+CardBase* CreateItemCard(float x, float y, int index, ItemType type) {
     ItemCard* card = malloc(sizeof(ItemCard));
     if (!card) return NULL;
 
@@ -45,6 +45,7 @@ CardBase* CreateItemCard(float x, float y, ItemType type) {
     card->base.onReveal = OnRevealItem;
     card->base.onInteract = OnInteractItem;
     card->type = type;
+    card->base.indexInArray = index;
 
     return (CardBase*)card;
 }

@@ -2,4 +2,4 @@
 #pragma once
 #include "CardBase.h"
 
-CardBase* CreateEnemyCard(float x, float y);
+CardBase* CreateEnemyCard(float x, float y, int index);

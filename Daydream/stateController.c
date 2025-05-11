@@ -1,6 +1,6 @@
 ﻿#include "stateController.h"
 
-#include<stddef.h>
+#include <stddef.h>
 
 // 手動宣告每個 state 的 struct（不需要 .h）
 extern const GameState STATE_MAIN_MENU;

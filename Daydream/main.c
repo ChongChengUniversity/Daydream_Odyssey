@@ -1,11 +1,12 @@
 ﻿#include "config.h"
 #include "game.h"
 #include "stateController.h"
+#include "assetManager.h"
 
 int main()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib:: Minesweeper");
-    SetTargetFPS(60);//把while(!WindowShouldClose)控制在每1/60秒跑一次
+    SetTargetFPS(60);//把wBhile(!WindowShouldClose)控制在每1/60秒跑一次
     GameStartup();
 
     while (!WindowShouldClose()) {
