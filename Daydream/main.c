@@ -1,4 +1,5 @@
-﻿#include "config.h"
+﻿// main.c
+#include "config.h"
 #include "game.h"
 #include "stateController.h"
 #include "assetManager.h"

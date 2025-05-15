@@ -1,3 +1,4 @@
+// state_option_menu.c
 #include "raylib.h"
 #include "stateController.h"
 #include "config.h"
@@ -39,7 +40,7 @@ static void RenderOptionMenu() {
     DrawText("MINESWEEPER :: OPTIONS", 20, 20, 40, WHITE);
 
     DrawText("[S]ound ", 120, 220, 20, WHITE);
-    if (isSoundEnabled) { //�]���|�C���H�ɳ��i���ܡA�ҥH��GameRender��
+    if (isSoundEnabled) { 
         DrawText("ON", 280, 220, 20, YELLOW);
         DrawText(" / ", 310, 220, 20, WHITE);
         DrawText("OFF", 350, 220, 20, WHITE);

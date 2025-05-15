@@ -1,5 +1,4 @@
 // state_shop.c
-
 #include "audioManager.h"    // 播放音效
 #include "config.h"          // 螢幕寬度高度等常數（如 SCREEN_WIDTH）
 #include "levelManager.h"    // 可用來調整商店內容依關卡變化（目前尚未使用）

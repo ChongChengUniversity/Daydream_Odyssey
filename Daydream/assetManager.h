@@ -37,6 +37,7 @@ extern Season currentSeason;
 
 extern Texture2D textures[MAX_TEXTURES];
 extern Texture2D seasonalItems[SEASON_COUNT][ITEM_TYPE_COUNT];
+extern Texture2D TEX_SHOP_ICON;
 
 void InitAssetManager();
 void ShutdownAssetManager();

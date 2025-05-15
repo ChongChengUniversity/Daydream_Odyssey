@@ -5,7 +5,7 @@
 
 #include "stateController.h"
 #include "assetManager.h"
-#include "levelManager.h" // ���F�P�_�O�_�̫�@��
+#include "levelManager.h" 
 
 //門一開始就翻開了
 static void ResetDoor(CardBase *self)

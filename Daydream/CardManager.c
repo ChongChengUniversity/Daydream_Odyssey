@@ -199,6 +199,17 @@ void ReplaceCardWithEmpty(int index) {
     cardTypes[index] = TYPE_EMPTY;  // 同步更新卡片類型
 }
 
+// 點擊過的道具卡變為翻開狀態空卡
+void ReplaceItemCardWithEmpty(int index) {
+    float x = cards[index]->bounds.x;
+    float y = cards[index]->bounds.y;
+    free(cards[index]);  // 釋放原本的記憶體（道具卡）
+
+    // 替換為已翻開的空白卡
+    cards[index] = CreateEmptyCard(x, y, index);
+    cards[index]->onReveal(cards[index]);  // 自動將其設為已翻開
+    cardTypes[index] = TYPE_EMPTY;  // 同步更新卡片類型
+}
 
 void ResetAllCards()
 {

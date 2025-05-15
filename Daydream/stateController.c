@@ -1,4 +1,5 @@
-﻿#include "stateController.h"
+﻿// stateController.c
+#include "stateController.h"
 
 #include <stddef.h>
 

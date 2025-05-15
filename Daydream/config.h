@@ -1,3 +1,4 @@
+// config.h
 #pragma once
 
 #define SCREEN_WIDTH 800

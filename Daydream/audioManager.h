@@ -1,4 +1,6 @@
+// audioManager.h
 #pragma once
+#include "raylib.h"
 
 #define MAX_SOUNDS 3
 typedef enum {

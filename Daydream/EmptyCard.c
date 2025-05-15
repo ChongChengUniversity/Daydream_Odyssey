@@ -10,7 +10,7 @@ static void ResetEmpty(CardBase* self) {
 
 static void DrawEmpty(CardBase* self) {
     if (self->isRevealed)
-        DrawRectangleRec(self->bounds, LIGHTGRAY); // ½�}�e�Ǧ�
+        DrawRectangleRec(self->bounds, LIGHTGRAY);
     else
         DrawRectangleLinesEx(self->bounds, 2.0f, WHITE);
 }
@@ -26,7 +26,7 @@ static void OnInteractEmpty(CardBase* self) {
 
 CardBase* CreateEmptyCard(float x, float y, int index) {
     CardBase* card = malloc(sizeof(CardBase));
-    if (!card) return NULL; // �p�G malloc ���ѡA�����^�� NULL
+    if (!card) return NULL; 
 
     card->bounds = (Rectangle){ x, y, TILE_SIZE, TILE_SIZE };
     card->isRevealed = false;

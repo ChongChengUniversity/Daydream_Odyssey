@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿// stateController.h
+#pragma once
 
 // 狀態結構定義（每個狀態都符合這個結構）
 typedef struct GameState {

@@ -1,5 +1,4 @@
 // shopicon.c
-
 #include "shopicon.h"        // 此模組對外的函式宣告
 #include "assetManager.h"    // 使用 TEX_SHOP_ICON（商店圖示）
 #include "audioManager.h"    // 播放點擊音效

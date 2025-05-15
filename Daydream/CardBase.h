@@ -2,10 +2,8 @@
 #pragma once
 #include "raylib.h"
 
-// �e�V�ŧi�]���F�i�H�� CardBase* ���С^
 typedef struct CardBase CardBase;
 
-// �w�q�d���@�q���c
 struct CardBase {
     Rectangle bounds;           
     bool isRevealed;            

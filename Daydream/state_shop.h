@@ -1,5 +1,4 @@
 // state_shop.h
-
 #pragma once                 // 防止重複包含這個標頭檔
 #include "stateController.h" // 需要 GameState 結構定義
 

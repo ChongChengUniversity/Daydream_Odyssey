@@ -3,10 +3,13 @@
 #include "CardManager.h"
 #include "raylib.h"
 
-#include "assetManager.h" // �s�W�G���o�I���K��
-#include "levelManager.h" // �s�W�G���d�޲z
+#include "assetManager.h"
+#include "levelManager.h"
 #include "playerUI.h"
 #include "shopicon.h" // 商店圖示模組：包含圖示顯示、互動邏輯與狀態旗標（是否從商店回來）
+
+#include "backpackicon.h"
+
 
 // 進入「遊玩中」狀態時執行的初始化函式
 void EnterPlaying(void) {
@@ -19,13 +22,14 @@ void EnterPlaying(void) {
   // 若是從商店返回，就不重設地圖，保留遊戲進度
   InitShopIcon();
   SetReturningFromShop(false); // 重設狀態
+
+  InitBackpackIcon(); // 初始化背包圖示
 }
 
 void UpdatePlaying(void) {
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         Vector2 mousePos = GetMousePosition();
-        OnMouseClick(mousePos); // �� CardManager �B�z�I��
-    }
+    UpdateBackpackIcon(mousePos);
+
     UpdateShopIcon(); // 處理商店點擊互動
 }
 
@@ -37,10 +41,12 @@ void RenderPlaying(void) {
     DrawAllCards();
     DrawPlayerUI();
     DrawShopIcon(); // 畫出右上角商店圖示（可以點擊）
+
+    DrawBackpackIcon(); // 繪製背包圖示
 }
 
 void ExitPlaying(void) {
-    
+    ExitBackpackIcon();
 }
 
 const GameState STATE_PLAYING = {

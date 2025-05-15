@@ -1,3 +1,4 @@
+// state_lose.c
 #include "raylib.h"
 #include "stateController.h"
 #include "config.h"

@@ -33,7 +33,11 @@ SRC = \
     ItemCard.c \
     CharacterStats.c \
     CombatSystem.c \
-    playerUI.c
+    playerUI.c \
+    shopicon.c \
+    state_shop.c \
+    inventory.c \
+    backpackicon.c
 
 # 輸出檔案名稱
 TARGET = test.exe

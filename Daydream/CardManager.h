@@ -19,3 +19,6 @@ void RevealDoorCardAtStart();
 
 //怪物死亡後怪物卡轉為空卡
 void ReplaceCardWithEmpty(int index);
+
+// 道具點擊後道具卡轉為空卡
+void ReplaceItemCardWithEmpty(int index);

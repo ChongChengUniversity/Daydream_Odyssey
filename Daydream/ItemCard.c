@@ -4,6 +4,9 @@
 #include "config.h"
 #include <stdlib.h>
 
+#include "inventory.h"  // 背包系統
+#include "cardManager.h" // 換成空白格
+
 typedef struct {
     CardBase base;
     ItemType type;
@@ -32,6 +35,13 @@ static void OnRevealItem(CardBase* self) {
 
 static void OnInteractItem(CardBase* self) {
     // 可以依據 item type 設計效果
+    ItemCard* card = (ItemCard*)self;
+    
+    // 將道具加入背包
+    AddItemToInventory(card->type);
+    
+    // 轉換成空白格（已翻開）
+    ReplaceItemCardWithEmpty(self->indexInArray);
 }
 
 CardBase* CreateItemCard(float x, float y, int index, ItemType type) {
