@@ -6,6 +6,7 @@
 Texture2D textures[MAX_TEXTURES];   //Texture2D是存寬度高度等照片資料的結構體
 Texture2D seasonalItems[SEASON_COUNT][ITEM_TYPE_COUNT];
 Season currentSeason = SEASON_SPRING; // defined here
+Texture2D TEX_SHOP_ICON;              // 商店圖
 
 const char *seasonPrefix[SEASON_COUNT] = {"sp", "su", "au", "wi"};
 const char *itemSuffix[ITEM_TYPE_COUNT] = {
@@ -61,6 +62,7 @@ void InitAssetManager()
 
     textures[TEXTURE_DOOR] = LoadTexture("assets/door.png");
     textures[TEXTURE_ENEMY] = LoadTexture("assets/monsters/enemy.png");
+    TEX_SHOP_ICON = LoadTexture("assets/shop.png");
 }
 
 void ShutdownAssetManager()
@@ -76,4 +78,6 @@ void ShutdownAssetManager()
             UnloadTexture(seasonalItems[season][item]);
         }
     }
+    // 卸載商店圖像
+    UnloadTexture(TEX_SHOP_ICON);
 }
