@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "cardmanager.h": "c",
+        "doorcard.h": "c",
+        "assetmanager.h": "c"
+    }
+}
