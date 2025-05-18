@@ -1,0 +1,21 @@
+# 編譯產物
+*.exe
+*.o
+*.obj
+*.out
+*.dll
+
+# VS / VSCode 雜項
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.ipch/
+.vs/
+.vscode/
+*.vcxproj.*
+*.sln
+
+# macOS 雜項
+.DS_Store

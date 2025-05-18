@@ -1,3 +1,0 @@
-C:\Users\yujun\source\repos\(4_30)DayDream\x64\Debug\raylib.dll
-C:\Users\yujun\source\repos\(4_30)DayDream\x64\Debug\glfw3.dll
-C:\Users\yujun\source\repos\(4_30)DayDream\(4_30)DayDream\x64\Debug\(4_30)Da.DA32AB57.Up2Date
