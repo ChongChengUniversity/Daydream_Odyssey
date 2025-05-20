@@ -3,23 +3,21 @@
 #include "stateController.h"
 #include "audioManager.h"
 #include "assetManager.h"
-#include "inventory.h"
+
+#include"inventory.h"
+#include "money.h" // 金幣系統
 
 void GameStartup() {
-    InitAssetManager(); // load assets
-    InitAudioManager(); // load audios
-    InitInventory(); // load backpack assets
+    InitAssetManager(); // 初始化素材
+    InitAudioManager(); // 初始化音效
+    InitInventory(); // 初始化背包
+    InitMoneySystem();  // 初始化金幣系統
     PlayMusicStream(music[MUSIC_ONE]);
-
-    SetMusicVolume(music[MUSIC_ONE], 0.5f); // adjust the volume
-    SetSoundVolume(sounds[SOUND_ONE], 0.4f); // adjust the volume
-    SetSoundVolume(sounds[SOUND_TWO], 0.2f); // adjust the volume
-    SetSoundVolume(sounds[SOUND_THREE], 0.4f); // adjust the volume
     GOTO(MAIN_MENU);
 }
 
 void GameShutdown() {
-    ShutdownAssetManager(); // unload assets
-    ShutdownAudioManager(); // unload audios
-    // unload inventory?
+    ShutdownAssetManager(); // 卸載素材
+    ShutdownAudioManager(); // 卸載音效
+    ShutdownMoneySystem();  // 釋放金幣系統資源
 }

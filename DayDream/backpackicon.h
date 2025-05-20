@@ -10,6 +10,12 @@ void UpdateBackpackIcon(Vector2 mousePos);
 void DrawBackpackIcon(void);
 void ExitBackpackIcon(void);
 
+// 背包狀態函數（用於檢查是否開啟）
+bool IsBackpackOpen(void);
+
+// 獲取背包畫面區域（Rectangle）
+Rectangle GetBackpackScreenRect(void);
+
 // 背包狀態變數
 extern bool isBackpackOpen;
 
