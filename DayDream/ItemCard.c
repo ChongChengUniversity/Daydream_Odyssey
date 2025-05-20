@@ -7,6 +7,7 @@
 #include "CharacterStats.h"
 #include "inventory.h"
 #include "CardManager.h"
+#include "money.h"
 
 typedef struct
 {
@@ -45,7 +46,11 @@ static void OnInteractItem(CardBase *self)
     // switch case, finish the function, replace by empty cards
 
     ItemCard *card = (ItemCard *)self;
-    AddItemToInventory(card->type); // add items into backpack(**not every item!)
+    if (card->type == ITEM_COIN) {
+        AddCoins(10);
+    } else {
+        AddItemToInventory(card->type);
+    }
 
     if (self->isRevealed)
     {   

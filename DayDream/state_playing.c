@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include "shopicon.h" // shop picture mode: including display, interact, and states
 #include "backpackicon.h"
+#include "inventory.h"
+#include "money.h"
 
 void EnterPlaying(void)
 {
@@ -30,6 +32,21 @@ void UpdatePlaying(void)
         Vector2 mousePos = GetMousePosition();
         //OnMouseClick(mousePos);
     //}
+
+    if (IsBackpackOpen()) {
+        UpdateBackpackIcon(mousePos);
+        return; // 阻止其他互動
+    }
+
+    if (IsReturningFromShop()) {
+        UpdateShopIcon();
+        return; // 阻止其他互動
+    }
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        OnMouseClick(mousePos); // 只有這裡處理地圖卡片點擊
+    }
+
     UpdateBackpackIcon(mousePos);
     UpdateShopIcon();
 }
@@ -43,6 +60,12 @@ void RenderPlaying(void)
     DrawPlayerUI();
     DrawShopIcon(); // on right top of the screen
     DrawBackpackIcon();
+
+    if (IsBackpackOpen()) {
+         DrawInventoryUI((Vector2){0, 0}, GetBackpackScreenRect()); 
+    }
+
+    DrawMoneyUI();
 
     // draw current level on middle top
     char buffer[32];
