@@ -3,13 +3,14 @@
 #include "levelManager.h" // 需要樓層倍率
 #include <stdlib.h>
 #include "stateController.h"
+#include <stdio.h>
 
 static PlayerStats player;
 
 //數值假定之後再考慮平衡
 void InitPlayerStats() {
-    player.maxHp = 10;
-    player.currentHp = 10;
+    player.maxHp = 200;
+    player.currentHp = 200;
     player.atk = 10;
     player.def = 5;
 }
@@ -23,32 +24,6 @@ void ApplyEquipmentToPlayer(int bonusHp, int bonusAtk, int bonusDef) {
 PlayerStats* GetPlayerStats() {
     return &player;
 }
-
-// EnemyStats CreateEnemyStats(int baseHp, int baseAtk, int baseDef, bool isBuffer) {
-//     float multiplier = GetEnemyStatMultiplier();
-
-//     EnemyStats enemy = {
-//         .maxHp = (int)(baseHp * multiplier),
-//         .currentHp = (int)(baseHp * multiplier),
-//         .atk = (int)(baseAtk * multiplier),
-//         .def = (int)(baseDef * multiplier),
-//         .isBuffer = isBuffer
-//     };
-//     return enemy;
-// }
-
-EnemyStats* CreateEnemyStats(int baseHp, int baseAtk, int baseDef, bool isBuffer) {
-    EnemyStats* enemy = malloc(sizeof(EnemyStats));  // 分配記憶體
-
-    enemy->maxHp = baseHp;
-    enemy->currentHp = baseHp;
-    enemy->atk = baseAtk;
-    enemy->def = baseDef;
-    enemy->isBuffer = isBuffer;
-
-    return enemy;
-}
-
 
 bool ApplyDamageToEnemy(EnemyStats* enemy, int damageToEnemy){
     if(enemy->currentHp - damageToEnemy > 0){
@@ -75,3 +50,46 @@ void HealPlayer(int amount) {
         player.currentHp = player.maxHp;
     }
 }
+
+void GetBaseStatsByTypeAndFloor(MonsterType type, int floor, EnemyStats* outStats) {
+    // 初始化屬性
+    outStats->bonusAtk = 0;
+    outStats->bonusDef = 0;
+    outStats->isBuffer = false;
+    outStats->type = type;
+
+    switch (type) {
+        case MONSTER_NORMAL:
+            outStats->maxHp = 10 + floor * 2;
+            outStats->baseAtk = 5 + floor;
+            outStats->baseDef = 2 + floor / 2;
+            break;
+        case MONSTER_SAME_TYPE_BUFF:
+            outStats->maxHp = 12 + floor * 2;
+            outStats->baseAtk = 6 + floor;
+            outStats->baseDef = 3 + floor / 2;
+            outStats->isBuffer = true;
+            break;
+        case MONSTER_GLOBAL_BUFF:
+            outStats->maxHp = 15 + floor * 2;
+            outStats->baseAtk = 7 + floor;
+            outStats->baseDef = 4 + floor / 2;
+            outStats->isBuffer = true;
+            break;
+        default:
+            // 預設值（安全備援）
+            outStats->maxHp = 10;
+            outStats->baseAtk = 5;
+            outStats->baseDef = 2;
+            break;
+    }
+
+    // 統一計算 atk / def
+    outStats->atk = outStats->baseAtk + outStats->bonusAtk;
+    outStats->def = outStats->baseDef + outStats->bonusDef;
+
+    // 設定初始血量
+    outStats->currentHp = outStats->maxHp;
+}
+
+

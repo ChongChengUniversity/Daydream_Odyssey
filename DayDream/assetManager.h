@@ -8,9 +8,11 @@
 #define TEXTURE_BG_WINTER 3
 
 #define TEXTURE_DOOR 4
-#define TEXTURE_ENEMY 5
+#define TEXTURE_CHARACTER 5
 #define TEXTURE_KEY 6
 #define MAX_TEXTURES 7
+
+#define ENEMY_TYPE_COUNT 3
 
 typedef enum {
     ITEM_HP,
@@ -36,7 +38,9 @@ extern Season currentSeason;
 
 extern Texture2D textures[MAX_TEXTURES];
 extern Texture2D seasonalItems[SEASON_COUNT][ITEM_TYPE_COUNT];
+extern Texture2D monsters[ENEMY_TYPE_COUNT];
 extern Texture2D TEX_SHOP_ICON;
 
 void InitAssetManager();
 void ShutdownAssetManager();
+ItemType GetRandomItemType(void);

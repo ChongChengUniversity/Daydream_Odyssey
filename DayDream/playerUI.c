@@ -25,7 +25,7 @@ void DrawPlayerUI() {
     int fontSize = 16;
     int thickness = 1;
 
-    Texture2D texture = textures[TEXTURE_ENEMY]; // should be player's texture
+    Texture2D texture = textures[TEXTURE_CHARACTER]; // should be player's texture
     float scale = (float)TILE_SIZE * 1.5f / texture.width;
     float texW = texture.width * scale;
     float texH = texture.height * scale;
@@ -39,8 +39,8 @@ void DrawPlayerUI() {
     DrawTextureEx(texture, pos, 0.0f, scale, WHITE);
 
     // draw HP, red text
-    DrawBoldText(TextFormat("%d", player->currentHp), pos.x + 4, pos.y + 4, fontSize, RED, thickness);
+    DrawBoldText(TextFormat("%d", player->atk), pos.x + 4, pos.y + 4, fontSize, YELLOW, thickness);
 
     // draw attack, yellow text
-    DrawBoldText(TextFormat("%d", player->atk), pos.x + 4, pos.y + texH - fontSize - 4, fontSize, YELLOW, thickness);
+    DrawBoldText(TextFormat("%d", player->currentHp), pos.x + 4, pos.y + texH - fontSize - 4, fontSize, RED, thickness);
 }

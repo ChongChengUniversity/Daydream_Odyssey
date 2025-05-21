@@ -22,9 +22,10 @@ static void OnInteractEmpty(CardBase* self) {
     // no interaction for empty cards
 }
 
-CardBase* CreateEmptyCard(float x, float y, int index) {
+CardBase* CreateEmptyCard(float x, float y, int index, int row, int col)
+{
     CardBase* card = malloc(sizeof(CardBase));
-    if (!card) return NULL; // check malloc
+    if (!card) return NULL;
 
     card->bounds = (Rectangle){ x, y, TILE_SIZE, TILE_SIZE };
     card->isRevealed = false;
@@ -33,5 +34,8 @@ CardBase* CreateEmptyCard(float x, float y, int index) {
     card->onReveal = OnRevealEmpty;
     card->onInteract = OnInteractEmpty;
     card->indexInArray = index;
+    card->row = row;
+    card->col = col;
+    card->type = TYPE_EMPTY;
     return card;
 }

@@ -2,4 +2,6 @@
 #pragma once
 #include "CardBase.h"
 
-CardBase* CreateEnemyCard(float x, float y, int index);
+void DrawEnemy(CardBase* self);
+
+CardBase* CreateEnemyCard(float x, float y, int index, int row, int col);

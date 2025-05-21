@@ -1,4 +1,5 @@
 // CardManager.c
+#include "CardManager.h"
 #include "CardBase.h"
 #include "EnemyCard.h"
 #include "ItemCard.h"
@@ -10,19 +11,12 @@
 #include "assetManager.h"
 #include <stdlib.h>
 #include <string.h>
-
-#define TOTAL_CARDS (COLS * ROWS)
+#include "CharacterStats.h"
+#include "enemyManager.h"
+#include "levelManager.h"
+#include "KeyCard.h"
 
 CardBase *cards[TOTAL_CARDS];
-
-typedef enum
-{
-    TYPE_DOOR,
-    TYPE_ITEM,
-    TYPE_ENEMY,
-    TYPE_EMPTY,
-    TYPE_KEY
-} CardType;
 
 CardType cardTypes[TOTAL_CARDS];
 
@@ -33,7 +27,7 @@ void InitCardTypes()
     cardTypes[index++] = TYPE_DOOR; // only one
     for (int i = 0; i < 14; ++i)
         cardTypes[index++] = TYPE_ITEM;
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < 6; ++i)
         cardTypes[index++] = TYPE_ENEMY;
     cardTypes[index++] = TYPE_KEY; // only one
     while (index < TOTAL_CARDS)
@@ -76,21 +70,25 @@ void InitCards()
             switch (cardTypes[card_index])
             {
             case TYPE_DOOR:
-                cards[card_index] = CreateDoorCard(x, y, card_index);
-                indexdoorRow = row; // pos of the door
+                cards[card_index] = CreateDoorCard(x, y, card_index, row, col);
+                indexdoorRow = row;  // 紀錄門的格子位置
                 indexdoorCol = col;
                 break;
+
             case TYPE_ITEM:
-                cards[card_index] = CreateItemCard(x, y, card_index, GetRandomItemType());
+                cards[card_index] = CreateItemCard(x, y, card_index, row, col, GetRandomItemType());
                 break;
+
             case TYPE_ENEMY:
-                cards[card_index] = CreateEnemyCard(x, y, card_index);
+                cards[card_index] = CreateEnemyCard(x, y, card_index, row, col);
                 break;
+
             case TYPE_EMPTY:
-                cards[card_index] = CreateEmptyCard(x, y, card_index);
+                cards[card_index] = CreateEmptyCard(x, y, card_index, row, col);
                 break;
+
             case TYPE_KEY:
-                cards[card_index] = CreateKeyCard(x, y, card_index);
+                cards[card_index] = CreateKeyCard(x, y, card_index, row, col);
                 break;
             }
             card_index++;
@@ -98,144 +96,220 @@ void InitCards()
     }
 }
 
-// 表示格子位置
+// 控制哪些格子允許被翻開
+int abletoReveal[ROWS][COLS] = {0}; 
 
-typedef struct
-{
-    int row;
-    int col;
-} GridPos;
-
-// turn to 5*5 blocks
-GridPos GetCardGridPosition(Rectangle bounds)
-{
-    GridPos pos;
-
-    int start_x = BOARD_START_X;
-
-    int start_y = BOARD_START_Y;
-
-    pos.col = (bounds.x - start_x - TILE_GAP) / (TILE_SIZE + TILE_GAP);
-
-    pos.row = (bounds.y - start_y - TILE_GAP) / (TILE_SIZE + TILE_GAP);
-
-    return pos;
+//該格是不可視已翻開還活著的怪物
+bool IsRevealedInvisibleEnemy(int row, int col) {
+    CardBase* card = GetCardAt(row, col);
+    return card &&
+           card->type == TYPE_ENEMY &&  // 確保還是怪物卡
+           enemyInfo[row][col].isHidden &&
+           card->isRevealed;
 }
 
-// control how many blocks should be revealed
-int abletoReveal[ROWS][COLS] = {0};
+//檢查我們所在這格周圍四格是否有會封鎖周邊的不可視已翻開還活著的怪物
+bool IsBlockedByEnemy(int row, int col) {
+    if (row > 0 && IsRevealedInvisibleEnemy(row - 1, col)) return true;
+    if (row < ROWS - 1 && IsRevealedInvisibleEnemy(row + 1, col)) return true;
+    if (col > 0 && IsRevealedInvisibleEnemy(row, col - 1)) return true;
+    if (col < COLS - 1 && IsRevealedInvisibleEnemy(row, col + 1)) return true;
 
-// scan all the blocks everytime
-void AbleToReveal()
-{
-    memset(abletoReveal, 0, sizeof(abletoReveal)); // reset every time
+    return false;
+}
 
-    for (int i = 0; i < COLS * ROWS; ++i)
-    {
-        if (cards[i] != NULL && cards[i]->isRevealed == 1)
-        {
+//每次掃描全部格子紀錄允許翻開的卡片
+void AbleToReveal() {
+    memset(abletoReveal, 0, sizeof(abletoReveal));
 
-            GridPos pos = GetCardGridPosition(cards[i]->bounds);
+    for (int i = 0; i < TOTAL_CARDS; ++i) {
+        if (!cards[i] || !cards[i]->isRevealed) continue;
 
-            if (pos.row > 0)
-                abletoReveal[pos.row - 1][pos.col] = 1;
+        int row = cards[i]->row;
+        int col = cards[i]->col;
 
-            if (pos.row < ROWS - 1)
-                abletoReveal[pos.row + 1][pos.col] = 1;
-
-            if (pos.col > 0)
-                abletoReveal[pos.row][pos.col - 1] = 1;
-
-            if (pos.col < COLS - 1)
-                abletoReveal[pos.row][pos.col + 1] = 1;
-        }
+        // 這格四周都沒有會封鎖的怪就允許翻開
+        if (row > 0 && !IsBlockedByEnemy(row - 1, col))
+            abletoReveal[row - 1][col] = 1;
+        if (row < ROWS - 1 && !IsBlockedByEnemy(row + 1, col))
+            abletoReveal[row + 1][col] = 1;
+        if (col > 0 && !IsBlockedByEnemy(row, col - 1))
+            abletoReveal[row][col - 1] = 1;
+        if (col < COLS - 1 && !IsBlockedByEnemy(row, col + 1))
+            abletoReveal[row][col + 1] = 1;
     }
 }
 
-void RevealDoorCardAtStart()
-{
-    for (int i = 0; i < COLS * ROWS; ++i)
-    {
+//一開始自動翻開門並更新可翻開卡片
+void RevealDoorCardAtStart(){
+    for (int i = 0; i < COLS * ROWS; ++i){
         GridPos pos = GetCardGridPosition(cards[i]->bounds);
-
-        if (indexdoorCol == pos.col && indexdoorRow == pos.row)
-        {
-
+        if(indexdoorCol == pos.col && indexdoorRow == pos.row){
             cards[i]->onReveal(cards[i]);
-
             AbleToReveal();
-
             break;
         }
     }
 }
 
-void DrawAllCards()
-{
-    AbleToReveal();
-    for (int i = 0; i < TOTAL_CARDS; ++i)
-    {
-        GridPos pos = GetCardGridPosition(cards[i]->bounds);
+//判斷該格是否為怪物
+bool IsEnemyCardAt(int row, int col) {
+    CardBase* card = GetCardAt(row, col); 
+    return card && card->type == TYPE_ENEMY;
+}
 
-        if (cards[i])
-        {
-            if (abletoReveal[pos.row][pos.col] == 1 && cards[i]->isRevealed != 1)
-            {
-                DrawRectangleRec(cards[i]->bounds, BLUE);
+// 畫出粗體字（加黑邊）
+static void DrawBoldText(const char* text, int posX, int posY, int fontSize, Color color) {
+    for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+            if (dx != 0 || dy != 0) {
+                DrawText(text, posX + dx, posY + dy, fontSize, BLACK); // 黑邊
             }
-            else
-            {
-                cards[i]->draw(cards[i]);
+        }
+    }
+    DrawText(text, posX, posY, fontSize, color); // 主文字
+}
+
+void DrawAllCards() {
+    for (int i = 0; i < TOTAL_CARDS; ++i) {
+        if (!cards[i]) continue;
+
+        int row = cards[i]->row;
+        int col = cards[i]->col;
+        bool canReveal = abletoReveal[row][col];
+        bool isEnemy = IsEnemyCardAt(row, col);
+        bool isVisible = false;
+        EnemyInfo* enemy = NULL;
+
+        int type = -1; // 預設-1代表沒有怪物類型
+        if (isEnemy) {
+            enemy = &enemyInfo[row][col];
+            type = enemy->type;
+            isVisible = enemy->isVisible;
+
+            // // 防呆：怪物類型範圍檢查
+            // if (type < 0 || type >= 3) {
+            //     printf("Warning: Invalid monster type %d at (%d,%d)\n", type, row, col);
+            //     type = -1;  // 設為無效，避免畫錯圖
+            // }
+        }
+
+        if (cards[i]->isRevealed) {
+            cards[i]->draw(cards[i]);
+        }
+        else if (isEnemy && isVisible) {
+            if (enemy && type >= 0) {
+                Rectangle bounds = cards[i]->bounds;
+
+                // ✅ 根據 bonusAtk / bonusDef 加底色
+                bool hasAtkBuff = enemy->stats.bonusAtk > 0;
+                bool hasDefBuff = enemy->stats.bonusDef > 0;
+
+                if (hasAtkBuff && hasDefBuff) {
+                    DrawRectangleRec(bounds, (Color){230, 200, 255, 255}); // 淺紫
+                } else if (hasAtkBuff) {
+                    DrawRectangleRec(bounds, (Color){255, 200, 200, 255}); // 淺紅
+                } else if (hasDefBuff) {
+                    DrawRectangleRec(bounds, (Color){200, 200, 255, 255}); // 淺藍
+                }
+
+                // ✅ 畫怪物圖片（蓋在底色上）
+                DrawTextureEx(monsters[type],
+                            (Vector2){bounds.x, bounds.y},
+                            0.0f,
+                            (float)TILE_SIZE / monsters[type].width,
+                            WHITE);
+
+                // ✅ 畫數值
+                int fontSize = 16;
+                DrawBoldText(TextFormat("%d", enemy->stats.atk), bounds.x + 2, bounds.y + 2, fontSize, YELLOW); // 攻擊
+                DrawBoldText(TextFormat("%d", enemy->stats.currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED); // 血量
+                DrawBoldText(TextFormat("%d", enemy->stats.def), bounds.x + bounds.width - fontSize - 2, bounds.y + bounds.height - fontSize - 2, fontSize, YELLOW); // 防禦
             }
+            // else {
+            //     // 畫一個紅框提醒，表示怪物類型錯誤
+            //     DrawRectangleLinesEx(cards[i]->bounds, 2.0f, PINK);
+            // }
+            // DrawRectangleLinesEx(cards[i]->bounds, 2.0f, GREEN);
+        }
+        else if (canReveal) {
+            DrawRectangleRec(cards[i]->bounds, BLUE);
+        }
+        else {
+            cards[i]->draw(cards[i]);
+        }
+
+        if (IsBlockedByEnemy(row, col) && !cards[i]->isRevealed && !isVisible) {
+            DrawRectangleLinesEx(cards[i]->bounds, 2.0f, RED);
         }
     }
 }
 
-// 1. click once: reveal card; 2. click twice: interactions
+//滑鼠點到的卡片第一次狀態改為已翻開 第二次以上執行互動
 void OnMouseClick(Vector2 mousePos)
 {
-    AbleToReveal();
-
-    for (int i = 0; i < TOTAL_CARDS; ++i)
+    AbleToReveal();     //滑鼠點擊後先確定好允許翻開的格子
+    for (int i = 0; i < TOTAL_CARDS; ++i)   
     {
-        // if click
-        if (cards[i] && CheckCollisionPointRec(mousePos, cards[i]->bounds))
-        {
-            GridPos pos = GetCardGridPosition(cards[i]->bounds);
+        //如果這格被點到
+        if (cards[i] && CheckCollisionPointRec(mousePos, cards[i]->bounds)) {
+            int row = cards[i]->row, col = cards[i]->col;
+            bool isEnemy = IsEnemyCardAt(row, col);
+            bool isVisible = false;
 
-            if (abletoReveal[pos.row][pos.col] == 1)
-            {
-                if (!cards[i]->isRevealed)
-                {
-                    cards[i]->onReveal(cards[i]);
-                }
-                else
-                {
-                    if (cards[i]->onInteract)
-                    {
+            if (isEnemy) {
+                isVisible = enemyInfo[row][col].isVisible;
+            }
+
+            if (abletoReveal[row][col] == 1) {
+                // 合法可以互動的格子
+                if (isEnemy && isVisible) {
+                    // 可視敵人 → 可攻擊
+                    if (cards[i]->onInteract) {
                         cards[i]->onInteract(cards[i]);
                     }
                 }
-                break;
+                else if (!cards[i]->isRevealed) {
+                    // 一般未翻開卡 → 翻開
+                    if (cards[i]->onReveal) {
+                        cards[i]->onReveal(cards[i]);
+                    }
+                }
+                else {
+                    // 其他可互動卡片
+                    if (cards[i]->onInteract) {
+                        cards[i]->onInteract(cards[i]);
+                    }
+                }
             }
+            else {
+                // 不在允許翻開區域，但是「已翻開」或是「不可視怪物」的特例仍允許互動
+                if ((cards[i]->isRevealed || isEnemy) && cards[i]->onInteract) {
+                    cards[i]->onInteract(cards[i]);
+                }
+            }
+
+            // 更新 buff 狀態
+            UpdateVisibleBufferCounts();
+            ApplyBuffsToVisibleEnemies();
         }
+
     }
 }
 
-// 1. if enemy died, turn into empty cards; 2. if get key or items turn into empty cards
-void ReplaceCardWithEmpty(int index)
-{
+//死亡的怪物卡變為翻開狀態空卡(不能在這邊就主動把空卡打開)
+void ReplaceCardWithEmpty(int index, bool shouldReveal) {
     float x = cards[index]->bounds.x;
-
     float y = cards[index]->bounds.y;
+    int row = cards[index]->row;
+    int col = cards[index]->col;
 
-    free(cards[index]); // free the EnemyCard
+    SafeDestroyCard(&cards[index]);
+    cards[index] = CreateEmptyCard(x, y, index, row, col);  // 換成空卡
 
-    cards[index] = CreateEmptyCard(x, y, index); // replace by empty card
-
-    cards[index]->onReveal(cards[index]);
-
-    cardTypes[index] = TYPE_EMPTY; // change its type
+    if (shouldReveal) {
+        cards[index]->onReveal(cards[index]);  // 只有需要時才觸發翻開
+    }
 }
 
 void ResetAllCards()
@@ -247,4 +321,28 @@ void ResetAllCards()
             cards[i]->reset(cards[i]);
         }
     }
+}
+
+void DestroyCard(CardBase* card) {
+    if (!card) return;
+
+    switch (card->type) {
+        case TYPE_ENEMY:
+            if (card->data != NULL) {
+                free(card->data);
+                card->data = NULL;
+            }
+            break;
+        default:
+            break;
+    }
+
+    free(card);
+}
+
+// 修改呼叫端範例
+void SafeDestroyCard(CardBase** pCard) {
+    if (pCard == NULL || *pCard == NULL) return;
+    DestroyCard(*pCard);
+    *pCard = NULL;  // 釋放後將指標設 NULL，避免野指標
 }

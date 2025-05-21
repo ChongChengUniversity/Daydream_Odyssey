@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include "shopicon.h" // shop picture mode: including display, interact, and states
 #include "backpackicon.h"
+#include "enemyManager.h"
+#include "inventory.h"
+#include "money.h"
 
 void EnterPlaying(void)
 {
@@ -15,6 +18,7 @@ void EnterPlaying(void)
     {
         InitCards();
         RevealDoorCardAtStart();
+        InitFloor();    //載入怪物資訊
     }
 
     // if return from shop, no need to reset the map(originally used for level change)
@@ -25,13 +29,29 @@ void EnterPlaying(void)
 
 void UpdatePlaying(void)
 {
-    //if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can run properly??
-    //{
+    // if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can run properly??
+    // {
         Vector2 mousePos = GetMousePosition();
-        //OnMouseClick(mousePos);
-    //}
+    //     OnMouseClick(mousePos);
+    // }
+
+    if (IsBackpackOpen()) {
+        UpdateBackpackIcon(mousePos);
+        return; // 阻止其他互動
+    }
+
+    if (IsReturningFromShop()) {
+        UpdateShopIcon();
+        return; // 阻止其他互動
+    }
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        OnMouseClick(mousePos); // 只有這裡處理地圖卡片點擊
+    }
+
     UpdateBackpackIcon(mousePos);
     UpdateShopIcon();
+    AbleToReveal(); //這行可以讓畫面即時更新啊啊
 }
 
 void RenderPlaying(void)
@@ -43,6 +63,12 @@ void RenderPlaying(void)
     DrawPlayerUI();
     DrawShopIcon(); // on right top of the screen
     DrawBackpackIcon();
+
+    if (IsBackpackOpen()) {
+         DrawInventoryUI((Vector2){0, 0}, GetBackpackScreenRect()); 
+    }
+
+    DrawMoneyUI();
 
     // draw current level on middle top
     char buffer[32];

@@ -1,5 +1,4 @@
 // KeyCard.c
-
 #include "KeyCard.h"
 #include "config.h"
 #include <stdlib.h>
@@ -34,15 +33,14 @@ static void OnInteractKey(CardBase *self)
     if (self->isRevealed)
     {
         AcquireKey(); // hasKey = true
-        ReplaceCardWithEmpty(self->indexInArray);
+        ReplaceCardWithEmpty(self->indexInArray, true);
     }
 }
 
-CardBase *CreateKeyCard(float x, float y, int index)
-{
+CardBase *CreateKeyCard(float x, float y, int index, int row, int col)
+{ 
     CardBase *card = malloc(sizeof(CardBase));
-    if (!card)
-        return NULL;
+    if (!card)return NULL;
 
     card->bounds = (Rectangle){x, y, TILE_SIZE, TILE_SIZE};
     card->isRevealed = false;
@@ -51,5 +49,7 @@ CardBase *CreateKeyCard(float x, float y, int index)
     card->onReveal = OnRevealKey;
     card->onInteract = OnInteractKey;
     card->indexInArray = index;
+    card->row = row;
+    card->col = col;
     return card;
 }

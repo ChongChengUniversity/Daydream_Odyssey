@@ -2,18 +2,40 @@
 #pragma once
 #include "raylib.h"
 
+// �e�V�ŧi�]���F�i�H�� CardBase* ���С^
 typedef struct CardBase CardBase;
 
-// Card's father type
-struct CardBase
+typedef enum
 {
-    Rectangle bounds;
-    bool isRevealed;
+    TYPE_DOOR,
+    TYPE_ITEM,
+    TYPE_ENEMY,
+    TYPE_EMPTY,
+    TYPE_KEY
+} CardType;
 
-    void (*reset)(CardBase *self);
-    void (*draw)(CardBase *self);
-    void (*onReveal)(CardBase *self);
-    void (*onInteract)(CardBase *self);
-    int indexInArray; // for what?
-    void* data; // for what?
+// �w�q�d���@�q���c
+struct CardBase {
+    int row;
+    int col;
+    Rectangle bounds;           
+    bool isRevealed;            
+    void (*reset)(CardBase* self);    
+    void (*draw)(CardBase* self);     
+    void (*onReveal)(CardBase* self); 
+    void (*onInteract)(CardBase* self); 
+    int indexInArray;
+    void* data;
+    CardType type;
 };
+
+typedef struct {
+    int row;
+    int col;
+} GridPos;
+
+GridPos GetCardGridPosition(Rectangle bounds);
+
+int GetCardIndexByGridPos(int row, int col);
+
+CardBase* GetCardAt(int row, int col);

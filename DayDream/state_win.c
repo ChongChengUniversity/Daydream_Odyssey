@@ -5,6 +5,7 @@
 #include "audioManager.h"
 #include "levelManager.h"
 #include "CardManager.h"
+#include "CharacterStats.h"
 
 const char* labelGameWin = "YOU WIN";
 static const char* labelEnter = "PRESS ENTER FOR MAIN MENU";
@@ -16,6 +17,7 @@ static void UpdateWin() {
     {
         GamePlaySound(SOUND_TWO);
         InitLevelManager();
+        InitPlayerStats();
         GOTO(MAIN_MENU);
     }
 }

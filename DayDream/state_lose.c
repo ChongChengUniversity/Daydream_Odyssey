@@ -5,6 +5,7 @@
 #include "audioManager.h"
 #include "CardManager.h"
 #include "levelManager.h"
+#include "CharacterStats.h"
 
 static const char* labelGameLose = "GAME OVER";
 static const char* labelEnter = "TRY AGAIN (PRESS ENTER)";
@@ -17,6 +18,7 @@ static void UpdateLose() {
         GamePlaySound(SOUND_TWO);
         InitLevelManager();
         ResetAllCards();
+        InitPlayerStats();
         GOTO(PLAYING);
     }
 }

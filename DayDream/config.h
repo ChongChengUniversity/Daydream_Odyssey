@@ -6,6 +6,7 @@
 
 #define COLS 5
 #define ROWS 5
+#define TOTAL_CARDS (COLS * ROWS)
 
 #define TILE_SIZE 100
 #define TILE_GAP 10
