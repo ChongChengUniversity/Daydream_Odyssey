@@ -4,11 +4,13 @@
 #include "audioManager.h"
 #include "assetManager.h"
 #include "inventory.h"
+#include "money.h"
 
 void GameStartup() {
     InitAssetManager(); // load assets
     InitAudioManager(); // load audios
     InitInventory(); // load backpack assets
+    InitMoneySystem();
     PlayMusicStream(music[MUSIC_ONE]);
 
     SetMusicVolume(music[MUSIC_ONE], 0.5f); // adjust the volume
@@ -21,5 +23,6 @@ void GameStartup() {
 void GameShutdown() {
     ShutdownAssetManager(); // unload assets
     ShutdownAudioManager(); // unload audios
+    ShutdownMoneySystem();
     // unload inventory?
 }
