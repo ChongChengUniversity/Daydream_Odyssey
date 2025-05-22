@@ -34,23 +34,19 @@ SRC = \
     CharacterStats.c \
     CombatSystem.c \
     playerUI.c \
-    enemyManager.c \
-    CardBase.c \
-    KeyCard.c \
-    backpackicon.c \
-    inventory.c \
     shopicon.c \
     state_shop.c \
-    money.c
-
+    inventory.c \
+    backpackicon.c \
+    money.c \
+	KeyCard.c
 
 # 輸出檔案名稱
 TARGET = test.exe
 
 # 預設規則
 all:
-	$(CC) $(CFLAGS) $(SRC) -o $(TARGET) $(INCLUDES) $(LIBS)  # 編譯並生成 test.exe
-	# $(TARGET)  # 執行編譯後的檔案
+	$(CC) $(CFLAGS) $(SRC) -o $(TARGET) $(INCLUDES) $(LIBS)
 
 # 清除物件檔和執行檔
 clean:
