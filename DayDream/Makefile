@@ -39,7 +39,12 @@ SRC = \
     inventory.c \
     backpackicon.c \
     money.c \
-	KeyCard.c
+	KeyCard.c \
+    cardbase.c \
+    enemyManager.c \
+    equipmentSystem.c \
+    itemSystem.c \
+    scrollManager.c 
 
 # 輸出檔案名稱
 TARGET = test.exe

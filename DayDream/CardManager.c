@@ -25,7 +25,7 @@ void InitCardTypes()
 {
     int index = 0;
     cardTypes[index++] = TYPE_DOOR; // only one
-    for (int i = 0; i < 14; ++i)
+    for (int i = 0; i < 12; ++i)
         cardTypes[index++] = TYPE_ITEM;
     for (int i = 0; i < 6; ++i)
         cardTypes[index++] = TYPE_ENEMY;

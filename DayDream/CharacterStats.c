@@ -13,16 +13,18 @@ void InitPlayerStats() {
     player.currentHp = 200;
     player.atk = 10;
     player.def = 5;
+    player.magic = 15;  // 初始魔力數值可再調
+    player.currentBuff = BUFF_NONE;
+}
+
+PlayerStats* GetPlayerStats() {
+    return &player;
 }
 
 void ApplyEquipmentToPlayer(int bonusHp, int bonusAtk, int bonusDef) {
     player.maxHp += bonusHp;
     player.atk += bonusAtk;
     player.def += bonusDef;
-}
-
-PlayerStats* GetPlayerStats() {
-    return &player;
 }
 
 bool ApplyDamageToEnemy(EnemyStats* enemy, int damageToEnemy){
@@ -49,6 +51,23 @@ void HealPlayer(int amount) {
     if (player.currentHp > player.maxHp) {
         player.currentHp = player.maxHp;
     }
+}
+
+void HealPlayerBySource(HealSource source) {
+    int healAmount = 0;
+
+    switch (source) {
+        case HEAL_FROM_POTION:
+            healAmount = 15 + 2 * GetCurrentLevel();
+            printf("你喝下補血藥水，恢復了 %d 點 HP！\n", healAmount);
+            break;
+
+        case HEAL_FROM_SCROLL:
+            // 預留邏輯，先不實作
+            break;
+    }
+
+    HealPlayer(healAmount);
 }
 
 void GetBaseStatsByTypeAndFloor(MonsterType type, int floor, EnemyStats* outStats) {

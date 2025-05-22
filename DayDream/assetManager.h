@@ -16,7 +16,6 @@
 
 typedef enum {
     ITEM_HP,
-    ITEM_MP,
     ITEM_COIN,
     SCROLL_TIME,
     SCROLL_AOE,

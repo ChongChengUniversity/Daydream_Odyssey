@@ -9,6 +9,7 @@
 #include "CharacterStats.h"
 #include "CardManager.h"
 #include "money.h"
+#include "CharacterStats.h"
 
 typedef struct {
     CardBase base;
@@ -53,6 +54,8 @@ static void OnInteractItem(CardBase* self) {
     ItemCard *card = (ItemCard *)self;
     if (card->type == ITEM_COIN) {
         AddCoins(10);
+    } else if (card->type == ITEM_HP) {
+        HealPlayerBySource(HEAL_FROM_POTION);
     } else {
         AddItemToInventory(card->type);
     }
@@ -61,15 +64,9 @@ static void OnInteractItem(CardBase* self) {
     {   
         switch (card->type)
         {
-        case ITEM_HP: // apply when collected
-            ApplyEquipmentToPlayer(5, 0, 0);
-            break;
-        case ITEM_MP:
-            break;
         case ITEM_COIN:
             break;
         case SCROLL_AOE:
-            // ApplyDamageToEnemy(all_enemy, 5);
             break;
         case SCROLL_HEAL:
             // put into backpack
@@ -80,9 +77,9 @@ static void OnInteractItem(CardBase* self) {
         case SCROLL_SINGLE:
             // put into backpack
             break;
-        case SCROLL_TIME:
-            // put into backpack
-            break;
+        // case SCROLL_TIME:
+        //     // put into backpack
+        //     break;
         default:
             break;
         }

@@ -20,7 +20,7 @@ Season currentSeason = SEASON_SPRING;
 // 四季前綴 物品圖片後綴
 const char *seasonPrefix[SEASON_COUNT] = {"sp", "su", "au", "wi"};
 const char *itemSuffix[ITEM_TYPE_COUNT] = {
-    "_hp.png", "_mp.png", "_coin.png",
+    "_hp.png", "_coin.png",
     "_t_scroll.png", "_aoe_scroll.png", "_sd_scroll.png",
     "_h_scroll.png", "_single_scroll.png"};
 
@@ -33,23 +33,37 @@ const char *enemyImagePaths[ENEMY_TYPE_COUNT] = {
 
 ItemType GetRandomItemType()
 {
-    float r = (float)rand() / RAND_MAX; // RAND_MAX defined in stdlib.h
-    if (r < 0.25f)
-        return ITEM_HP; // 25% for hp
-    else if (r < 0.50f)
-        return ITEM_MP; // 25%
-    else if (r < 0.60f)
-        return ITEM_COIN; // 10%
-    else if (r < 0.68f)
-        return SCROLL_TIME; // all the scrolls are 8% each
-    else if (r < 0.76f)
-        return SCROLL_AOE;
-    else if (r < 0.84f)
-        return SCROLL_SHIELD;
-    else if (r < 0.92f)
-        return SCROLL_HEAL;
+    float r = (float)rand() / RAND_MAX;
+    if (r < 0.20f)
+        return ITEM_HP;       // 補血藥水 20%
+    else if (r < 0.20f + 0.15f)
+        return ITEM_COIN;     // 金幣 15%
+    else if (r < 0.20f + 0.15f + 0.25f)
+        return SCROLL_SINGLE; // 單體傷害卷軸 25%
+    else if (r < 0.20f + 0.15f + 0.25f + 0.15f)
+        return SCROLL_AOE;    // 群體傷害卷軸 15%
+    else if (r < 0.20f + 0.15f + 0.25f + 0.15f + 0.15f)
+        return SCROLL_HEAL;   // 補血卷軸 15%
     else
-        return SCROLL_SINGLE;
+        return SCROLL_SHIELD; // 護盾卷軸 10%
+
+    // float r = (float)rand() / RAND_MAX; // RAND_MAX defined in stdlib.h
+    // if (r < 0.25f)
+    //     return ITEM_HP; // 25% for hp
+    // else if (r < 0.50f)
+    //     return ITEM_MP; // 25%
+    // else if (r < 0.60f)
+    //     return ITEM_COIN; // 10%
+    // else if (r < 0.68f)
+    //     return SCROLL_TIME; // all the scrolls are 8% each
+    // else if (r < 0.76f)
+    //     return SCROLL_AOE;
+    // else if (r < 0.84f)
+    //     return SCROLL_SHIELD;
+    // else if (r < 0.92f)
+    //     return SCROLL_HEAL;
+    // else
+    //     return SCROLL_SINGLE;
 }
 
 void InitAssetManager() {
