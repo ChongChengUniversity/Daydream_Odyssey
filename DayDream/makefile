@@ -39,13 +39,12 @@ SRC = \
     inventory.c \
     backpackicon.c \
     money.c \
-    KeyCard.c \
-    CardBase.c \
+	KeyCard.c \
+    cardbase.c \
     enemyManager.c \
     equipmentSystem.c \
     itemSystem.c \
-    scrollManager.c \
-    itemUse.c
+    scrollManager.c 
 
 # 輸出檔案名稱
 TARGET = test.exe
@@ -54,6 +53,6 @@ TARGET = test.exe
 all:
 	$(CC) $(CFLAGS) $(SRC) -o $(TARGET) $(INCLUDES) $(LIBS)
 
-# 清除物件檔和執行檔（適用 Git Bash / MinGW）
+# 清除物件檔和執行檔
 clean:
-	rm -f *.exe *.o
+	del /Q *.exe *.o
