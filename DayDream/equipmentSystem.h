@@ -1,7 +1,7 @@
 // equipmentSystem.h
 #pragma once
 
-#define MAX_EQUIPMENTS 20
+#define MAX_EQUIPMENTS 46
 #define EQUIP_SLOT_COUNT 5
 #include "assetManager.h"  // 提供 Season 定義與 currentSeason
 
