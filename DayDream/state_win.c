@@ -6,11 +6,16 @@
 #include "levelManager.h"
 #include "CardManager.h"
 #include "CharacterStats.h"
+#include "inventory.h"
+#include "money.h"
 
 const char* labelGameWin = "YOU WIN";
 static const char* labelEnter = "PRESS ENTER FOR MAIN MENU";
 
-static void EnterWin() {}
+static void EnterWin() {
+    ResetInventory();
+    ResetPlayerCoins();
+}
 
 static void UpdateWin() {
     if (IsKeyPressed(KEY_ENTER))

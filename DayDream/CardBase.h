@@ -2,7 +2,6 @@
 #pragma once
 #include "raylib.h"
 
-// �e�V�ŧi�]���F�i�H�� CardBase* ���С^
 typedef struct CardBase CardBase;
 
 typedef enum
@@ -14,7 +13,6 @@ typedef enum
     TYPE_KEY
 } CardType;
 
-// �w�q�d���@�q���c
 struct CardBase {
     int row;
     int col;

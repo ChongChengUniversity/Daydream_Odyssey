@@ -1,5 +1,6 @@
-// item.h
+// itemSystem.h
 #pragma once
+#include "assetManager.h"
 
 #define MAX_ITEMS 20
 
@@ -16,7 +17,7 @@ typedef struct {
 } ItemData;
 
 void InitAllItems(void);
-ItemData* GetItemByIndex(int index);
+ItemData* GetItemByType(ItemType type);
 int GetTotalItems(void);
 
 

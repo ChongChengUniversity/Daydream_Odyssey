@@ -27,3 +27,5 @@ void ReplaceCardWithEmpty(int index, bool shouldReveal);
 void DestroyCard(CardBase* card);
 
 void SafeDestroyCard(CardBase** pCard);
+
+GridPos GetClickedGrid(Vector2 mousePos);

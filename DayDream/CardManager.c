@@ -346,3 +346,12 @@ void SafeDestroyCard(CardBase** pCard) {
     DestroyCard(*pCard);
     *pCard = NULL;  // 釋放後將指標設 NULL，避免野指標
 }
+
+GridPos GetClickedGrid(Vector2 mousePos) {
+    for (int i = 0; i < TOTAL_CARDS; i++) {
+        if (cards[i] && CheckCollisionPointRec(mousePos, cards[i]->bounds)) {
+            return (GridPos){ cards[i]->row, cards[i]->col };
+        }
+    }
+    return (GridPos){ -1, -1 }; // 沒有點到任何卡片
+}

@@ -21,6 +21,10 @@ void InitInventory();
 // 增加物品到背包
 void AddItemToInventory(ItemType type);
 // 從背包移除物品
-
+void RemoveInventoryItem(int index);
 // 繪製背包 UI
 void DrawInventoryUI(Vector2 position, Rectangle screenRect);
+
+// 道具互動
+int GetClickedInventoryIndex(Vector2 mousePos, Rectangle screenRect);
+void ResetInventory(void);

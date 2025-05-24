@@ -6,11 +6,16 @@
 #include "CardManager.h"
 #include "levelManager.h"
 #include "CharacterStats.h"
+#include "inventory.h"
+#include "money.h"
 
 static const char* labelGameLose = "GAME OVER";
 static const char* labelEnter = "TRY AGAIN (PRESS ENTER)";
 
-static void EnterLose() {}
+static void EnterLose() {
+    ResetInventory();
+    ResetPlayerCoins();
+}
 
 static void UpdateLose() {
     if (IsKeyPressed(KEY_ENTER))

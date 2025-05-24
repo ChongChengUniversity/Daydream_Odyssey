@@ -12,6 +12,8 @@
 #include "inventory.h"
 #include "money.h"
 
+#include "itemUse.h"
+
 void EnterPlaying(void)
 {
     if (!IsReturningFromShop())
@@ -25,15 +27,17 @@ void EnterPlaying(void)
     InitShopIcon();
     SetReturningFromShop(false); // reset shop's state
     InitBackpackIcon(); // load backpack icon
+    InitItemUseSystem();
 }
 
 void UpdatePlaying(void)
 {
-    // if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can run properly??
-    // {
-        Vector2 mousePos = GetMousePosition();
-    //     OnMouseClick(mousePos);
-    // }
+    Vector2 mousePos = GetMousePosition();
+
+    if (GetItemUseState() != ITEM_STATE_NONE) {
+        UpdateItemUse(mousePos);
+        return;
+    }
 
     if (IsBackpackOpen()) {
         UpdateBackpackIcon(mousePos);
@@ -54,6 +58,13 @@ void UpdatePlaying(void)
     AbleToReveal(); //這行可以讓畫面即時更新啊啊
 }
 
+
+
+void ExitPlaying(void)
+{
+    ExitBackpackIcon();
+    UnloadItemUseSystem();
+}
 void RenderPlaying(void)
 {
     ClearBackground(RAYWHITE);
@@ -61,11 +72,12 @@ void RenderPlaying(void)
     DrawTexture(textures[currentSeason], 0, 0, WHITE);
     DrawAllCards();
     DrawPlayerUI();
-    DrawShopIcon(); // on right top of the screen
-    DrawBackpackIcon();
 
-    if (IsBackpackOpen()) {
-         DrawInventoryUI((Vector2){0, 0}, GetBackpackScreenRect()); 
+    if (GetItemUseState() == ITEM_STATE_NONE) {
+        DrawBackpackIcon();
+        DrawShopIcon();
+    } else {
+        DrawItemUseUI(); // 顯示 quit 按鈕
     }
 
     DrawMoneyUI();
@@ -76,12 +88,6 @@ void RenderPlaying(void)
     int textWidth = MeasureText(buffer, 24);
     DrawText(buffer, (GetScreenWidth() - textWidth) / 2, 10, 24, WHITE);
 }
-
-void ExitPlaying(void)
-{
-    ExitBackpackIcon();
-}
-
 const GameState STATE_PLAYING = {
     .enter = EnterPlaying,
     .update = UpdatePlaying,

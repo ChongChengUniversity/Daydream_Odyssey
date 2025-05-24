@@ -1,113 +1,47 @@
-// item.c
+// itemSystem.c
 #include "itemSystem.h"
 #include <string.h>
+#include "assetManager.h"
 
-static ItemData items[MAX_ITEMS];
-static int itemCount = 0;
+static ItemData items[ITEM_TYPE_COUNT];
 
-// 數值需修改
 void InitAllItems(void) {
-    itemCount = 0;
-
-    // 0 血瓶
-    items[itemCount++] = (ItemData){
-        .name = "HP Potion",
-        .description = "Recover 50 HP",
-        .price = 100,
-        .hpRestore = 50,
-        .atkBoost = 0,
-        .shield = 0,
-        .time = 0,
-        .isOwned = 0,
-        .isUsed = 0
+    items[ITEM_HP] = (ItemData){
+        .name = "HP Potion", .description = "Recover 50 HP", .price = 100, .hpRestore = 50
     };
 
-    // 1 護盾卷軸
-    items[itemCount++] = (ItemData){
-        .name = "Shield Scroll",
-        .description = "Reduce damage by 10",
-        .price = 100,
-        .hpRestore = 0,
-        .atkBoost = 0,
-        .shield = 10,
-        .time = 0,
-        .isOwned = 0,
-        .isUsed = 0
+    items[ITEM_COIN] = (ItemData){
+        .name = "Coin", .description = "Just a coin (not usable)", .price = 0
     };
 
-    // 2 時間卷軸
-    items[itemCount++] = (ItemData){
-        .name = "Time Scroll",
-        .description = "Delay Boss CD by 5s",
-        .price = 100,
-        .hpRestore = 0,
-        .atkBoost = 0,
-        .shield = 0,
-        .time = 5,
-        .isOwned = 0,
-        .isUsed = 0
+    items[SCROLL_TIME] = (ItemData){
+        .name = "Time Scroll", .description = "Delay Boss CD by 5s", .price = 100, .time = 5
     };
 
-    // 3 Single attack卷軸
-    items[itemCount++] = (ItemData){
-        .name = "Single attack Scroll",
-        .description = "Increase single target attack by 10",
-        .price = 100,
-        .hpRestore = 0,
-        .atkBoost = 10,
-        .shield = 0,
-        .time = 0,
-        .isOwned = 0,
-        .isUsed = 0
+    items[SCROLL_AOE] = (ItemData){
+        .name = "AOE Scroll", .description = "AOE +10 atk", .price = 100, .atkBoost = 10
     };
 
-     // 4 AOE卷軸
-     items[itemCount++] = (ItemData){
-        .name = "AOE Scroll",
-        .description = "Increase group attack by 10",
-        .price = 100,
-        .hpRestore = 0,
-        .atkBoost = 10,
-        .shield = 0,
-        .time = 0,
-        .isOwned = 0,
-        .isUsed = 0
+    items[SCROLL_SHIELD] = (ItemData){
+        .name = "Shield Scroll", .description = "Gain 10 shield", .price = 100, .shield = 10
     };
 
-    // 4 AOE卷軸
-    items[itemCount++] = (ItemData){
-        .name = "AOE Scroll",
-        .description = "Increase group attack by 10",
-        .price = 100,
-        .hpRestore = 0,
-        .atkBoost = 10,
-        .shield = 0,
-        .time = 0,
-        .isOwned = 0,
-        .isUsed = 0
+    items[SCROLL_HEAL] = (ItemData){
+        .name = "Heal Scroll", .description = "Recover 50 HP", .price = 100, .hpRestore = 50
     };
 
-    // 5 治療卷軸
-    items[itemCount++] = (ItemData){
-        .name = "Heal Scroll",
-        .description = "Recover 50 HP",
-        .price = 100,
-        .hpRestore = 50,
-        .atkBoost = 0,
-        .shield = 0,
-        .time = 0,
-        .isOwned = 0,
-        .isUsed = 0
+    items[SCROLL_SINGLE] = (ItemData){
+        .name = "Single Scroll", .description = "Single attack +10", .price = 100, .atkBoost = 10
     };
-
-    // 可繼續加入更多項目
 }
 
-ItemData* GetItemByIndex(int index) {
-    if (index < 0 || index >= itemCount) return NULL;
-    return &items[index];
+ItemData* GetItemByType(ItemType type) {
+    if (type >= 0 && type < MAX_ITEMS) {
+        return &items[type];
+    }
+    return NULL;
 }
 
 int GetTotalItems(void) {
-    return itemCount;
+    return ITEM_TYPE_COUNT;
 }

@@ -8,3 +8,4 @@ void AddCoins(int amount);
 void SubtractCoins(int amount);
 int GetPlayerCoins(void);
 void DrawMoneyUI(void);
+void ResetPlayerCoins(void);

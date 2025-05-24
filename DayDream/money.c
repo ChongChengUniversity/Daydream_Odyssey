@@ -47,3 +47,7 @@ void DrawMoneyUI() {
     // 顯示金幣數量
     DrawText(TextFormat("%d", playerCoins), uiPos.x + 95, uiPos.y + 15, 30, WHITE);
 }
+
+void ResetPlayerCoins(void) {
+    playerCoins = 0;
+}
