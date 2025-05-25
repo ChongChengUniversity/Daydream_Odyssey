@@ -14,16 +14,21 @@
 
 #define ENEMY_TYPE_COUNT 3
 
+#define EQUIP_TYPE_COUNT 46 
+
+
 typedef enum {
-    ITEM_HP,
-    ITEM_COIN,
-    SCROLL_TIME,
-    SCROLL_AOE,
-    SCROLL_SHIELD,
-    SCROLL_HEAL,
-    SCROLL_SINGLE,
-    ITEM_TYPE_COUNT,
+    ITEM_HP,         // 0
+    ITEM_MP,         // 1
+    ITEM_COIN,       // 2
+    SCROLL_TIME,     // 3
+    SCROLL_AOE,      // 4
+    SCROLL_SHIELD,   // 5
+    SCROLL_HEAL,     // 6
+    SCROLL_SINGLE,   // 7
+    ITEM_TYPE_COUNT
 } ItemType;
+
 
 typedef enum {
     SEASON_SPRING, // 0
@@ -33,12 +38,14 @@ typedef enum {
     SEASON_COUNT, // 4
 } Season;
 
+
 extern Season currentSeason;
 
 extern Texture2D textures[MAX_TEXTURES];
 extern Texture2D seasonalItems[SEASON_COUNT][ITEM_TYPE_COUNT];
 extern Texture2D monsters[ENEMY_TYPE_COUNT];
 extern Texture2D TEX_SHOP_ICON;
+extern Texture2D equipmentImages[EQUIP_TYPE_COUNT];
 
 void InitAssetManager();
 void ShutdownAssetManager();

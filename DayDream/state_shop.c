@@ -1,100 +1,265 @@
-// state_shop.c
-
+// === state_shop.c===
+// 包含所有必要的標頭檔，提供音效、遊戲設定、樓層控制、圖像繪製、商店操作等功能
 #include "audioManager.h"
-#include "config.h"          // screen size settings
-#include "levelManager.h"    // controll different level
-#include "raylib.h"          // outside's function library
-#include "shopicon.h"        // click into shop state
+#include "config.h"
+#include "levelManager.h"
+#include "raylib.h"
+#include "shopicon.h"
 #include "stateController.h"
+#include "equipmentSystem.h"
+#include "itemSystem.h"
+#include "assetManager.h"
+#include "money.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "shopSystem.h"
 
-
-// screen title and some UI constants
-static const char *labelTitle = "SHOP";
-static const char *labelEnter = "[ENTER] Return to Game";
-static const char *labelCoin = "COIN: 1543"; // default coin amount, should change to a variable
-
-// 商店格子排版設定：3x3 格子、每格尺寸、間距
+// 商店格子排版設定：3x3 共 9 格，每格尺寸與間距
 #define SHOP_ROWS 3
 #define SHOP_COLS 3
 #define SHOP_ITEM_SIZE 160
 #define SHOP_GAP 36
+#define LABEL_BUFFER 64 // 名稱與描述字元緩衝大小
 
-// 商店每格的位置與大小資訊（Rectangle 陣列）
-static Rectangle shopItems[SHOP_ROWS * SHOP_COLS];
-static const char *itemLabels[SHOP_ROWS * SHOP_COLS]; // 每格對應的文字標籤
+extern Season currentSeason; // 外部變數：當前季節，用來選對應圖片
 
-// 進入商店狀態時呼叫：初始化每一格的顯示位置與販售項目（以第1層為例）
+// === 商店內每格商品的資料 ===
+typedef struct {
+    char name[LABEL_BUFFER];     // 商品名稱
+    char description[128];       // 商品描述
+    int price;                   // 商品價格
+    Rectangle bounds;            // 商品在畫面上的區域（繪圖與滑鼠碰撞用）
+    bool active;                 // 此格是否有商品
+    Texture2D* image;            // 商品圖片指標
+    bool selected;               // 是否被選取（目前未使用）
+} ShopItem;
+
+// 9 格商店商品格子
+static ShopItem shopGrid[SHOP_ROWS * SHOP_COLS];
+
+// 當前滑鼠懸停與資訊顯示的格子編號
+static int hoverIndex = -1;
+static int infoIndex = -1;
+
+// === 給第九層樓的卷軸隨機器（依照指定機率）===
+static ItemType GetRandomScrollTypeForLevel9() {
+    float r = (float)rand() / RAND_MAX;
+    if (r < 0.45f) return SCROLL_SINGLE;        // 45%
+    else if (r < 0.70f) return SCROLL_AOE;       // +25% = 70%
+    else if (r < 0.85f) return SCROLL_HEAL;      // +15% = 85%
+    else return SCROLL_SHIELD;                   // 剩下15%
+}
+
+// === 商店填入裝備與卷軸 ===
+static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
+    int filled = 0;
+    int base = (currentFloor - 1) * 5;
+
+    // 初始化商店格子為空
+    for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
+        shopGrid[i].active = false;
+        shopGrid[i].selected = false;
+        shopGrid[i].name[0] = '\0';
+        shopGrid[i].description[0] = '\0';
+        shopGrid[i].image = NULL;
+    }
+
+    // 上架對應樓層的裝備（每層最多5個）
+    for (int i = 0; i < GetTotalEquipments(); ++i) {
+        EquipmentData* eq = GetEquipmentByIndex(i);
+        if (!eq || i < base || i >= base + 5) continue;
+
+        snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", eq->name);
+        snprintf(shopGrid[filled].description, 128, "%s", eq->description);
+        shopGrid[filled].price = eq->price;
+        shopGrid[filled].active = true;
+        shopGrid[filled].image = eq->image;
+        filled++;
+        if (filled >= SHOP_ROWS * SHOP_COLS) return;
+    }
+    // === 第九層樓：強制出現延長Boss CD卷軸 + 兩種不重複的隨機卷軸 ===
+    if (currentFloor == 9) {
+        // 1. 固定出現時間卷軸 SCROLL_TIME
+        ItemData* fixed = GetItemByType(SCROLL_TIME);
+        if (fixed && filled < SHOP_ROWS * SHOP_COLS) {
+            snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", fixed->name);
+            snprintf(shopGrid[filled].description, 128, "%s", fixed->description);
+            shopGrid[filled].price = fixed->price;
+            shopGrid[filled].active = true;
+            shopGrid[filled].image = &seasonalItems[currentSeason][SCROLL_TIME];
+            filled++;
+        }
+
+        // 2. 隨機加入兩種不重複的卷軸
+        ItemType selectedScrolls[2];  // 紀錄已經挑過的卷軸類型
+        int scrollCount = 0;
+
+        while (scrollCount < 2 && filled < SHOP_ROWS * SHOP_COLS) {
+            ItemType scrollType = GetRandomScrollTypeForLevel9();
+
+            // 檢查是否重複
+            bool duplicate = false;
+            for (int j = 0; j < scrollCount; ++j) {
+                if (selectedScrolls[j] == scrollType) {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (duplicate) continue;
+
+            // 若沒重複，加入商店格子
+            ItemData* item = GetItemByType(scrollType);
+            if (item) {
+                selectedScrolls[scrollCount++] = scrollType;
+
+                snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", item->name);
+                snprintf(shopGrid[filled].description, 128, "%s", item->description);
+                shopGrid[filled].price = item->price;
+                shopGrid[filled].active = true;
+                shopGrid[filled].image = &seasonalItems[currentSeason][scrollType];
+                filled++;
+            }
+        }
+    }
+
+    // === 第3層以上：有機率出現 1 種卷軸（不重複處理，可重複）===
+    else if (currentFloor >= 3) {
+        float r = (float)rand() / RAND_MAX;
+        ItemType scrollType;
+        if (r < 0.40f) scrollType = SCROLL_SINGLE;
+        else if (r < 0.65f) scrollType = SCROLL_AOE;
+        else if (r < 0.80f) scrollType = SCROLL_TIME;
+        else if (r < 0.90f) scrollType = SCROLL_HEAL;
+        else scrollType = SCROLL_SHIELD;
+
+        ItemData* item = GetItemByType(scrollType);
+        if (item && filled < SHOP_ROWS * SHOP_COLS) {
+            snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", item->name);
+            snprintf(shopGrid[filled].description, 128, "%s", item->description);
+            shopGrid[filled].price = item->price;
+            shopGrid[filled].active = true;
+            shopGrid[filled].image = &seasonalItems[currentSeason][scrollType];
+            filled++;
+        }
+    }
+}
+
+
+// === 進入商店階段時呼叫，初始化商店內容與格子座標 ===
 static void EnterShop() {
-  // 計算整體寬高，使商店區域置中
-  int totalWidth = SHOP_COLS * SHOP_ITEM_SIZE + (SHOP_COLS - 1) * SHOP_GAP;
-  int totalHeight = SHOP_ROWS * SHOP_ITEM_SIZE + (SHOP_ROWS - 1) * SHOP_GAP;
-  int startX = SCREEN_WIDTH / 2 - totalWidth / 2;
-  int startY = SCREEN_HEIGHT / 2 - totalHeight / 2 + 40;
+    InitAllEquipments();
+    InitAllItems();
 
-  // 定義第1層的商品內容（固定3裝備＋2欄位）
-  itemLabels[0] = "Head Gear Lv1";
-  itemLabels[1] = "Body Armor Lv1";
-  itemLabels[2] = "Hand Guard Lv1";
-  itemLabels[3] = "Slot +1";
-  itemLabels[4] = "Slot +1";
+    // 商店整體寬高計算
+    int totalWidth = SHOP_COLS * SHOP_ITEM_SIZE + (SHOP_COLS - 1) * SHOP_GAP;
+    int totalHeight = SHOP_ROWS * SHOP_ITEM_SIZE + (SHOP_ROWS - 1) * SHOP_GAP;
+    int startX = SCREEN_WIDTH / 2 - totalWidth / 2;
+    int startY = SCREEN_HEIGHT / 2 - totalHeight / 2 + 40;
 
-  // 剩餘格子設為空（未販售）
-  for (int i = 5; i < SHOP_ROWS * SHOP_COLS; ++i)
-    itemLabels[i] = "-"; // 空格子
-
-  // 計算每一格的位置，存在 shopItems 陣列
-  for (int row = 0; row < SHOP_ROWS; ++row) {
-    for (int col = 0; col < SHOP_COLS; ++col) {
-      int index = row * SHOP_COLS + col;
-      shopItems[index] = (Rectangle){startX + col * (SHOP_ITEM_SIZE + SHOP_GAP),
-                                     startY + row * (SHOP_ITEM_SIZE + SHOP_GAP),
-                                     SHOP_ITEM_SIZE, SHOP_ITEM_SIZE};
+    // 每個格子座標設定
+    for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
+        int row = i / SHOP_COLS;
+        int col = i % SHOP_COLS;
+        shopGrid[i].bounds = (Rectangle){
+            startX + col * (SHOP_ITEM_SIZE + SHOP_GAP),
+            startY + row * (SHOP_ITEM_SIZE + SHOP_GAP),
+            SHOP_ITEM_SIZE, SHOP_ITEM_SIZE
+        };
     }
-  }
+
+    FillShopWithEquipmentsAndScrolls(GetCurrentLevel());
 }
 
-// 處理商店邏輯：偵測是否按下 ENTER 返回遊戲
+// === 每幀更新商店狀態：按鍵偵測與滑鼠互動 ===
 static void UpdateShop() {
-  if (IsKeyPressed(KEY_ENTER)) {
-    GamePlaySound(SOUND_ONE);   // 播放音效
-    SetReturningFromShop(true); // 設定旗標：我們是從商店回來的
-    GOTO(PLAYING);              // 切換回遊玩中狀態
-  }
-}
-
-// 畫出商店畫面內容
-static void RenderShop() {
-  ClearBackground((Color){24, 66, 42, 255}); // 深綠背景
-
-  // 畫上方橫條與標題
-  DrawRectangle(0, 0, SCREEN_WIDTH, 80, (Color){193, 117, 56, 255});
-  DrawText(labelTitle, SCREEN_WIDTH / 2 - MeasureText(labelTitle, 48) / 2, 20,
-           48, YELLOW);
-  DrawText(labelCoin, SCREEN_WIDTH - 200, 30, 24, GOLD);
-
-  // 繪製所有商店格子
-  for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
-    DrawRectangleRounded(shopItems[i], 0.1f, 12, (Color){245, 199, 110, 255});
-    DrawRectangleRoundedLines(shopItems[i], 0.1f, 12, BROWN);
-
-    // 顯示物品文字
-    if (itemLabels[i]) {
-      int textWidth = MeasureText(itemLabels[i], 18);
-      DrawText(itemLabels[i],
-               shopItems[i].x + SHOP_ITEM_SIZE / 2 - textWidth / 2,
-               shopItems[i].y + SHOP_ITEM_SIZE / 2 - 10, 18, DARKBROWN);
+    if (IsKeyPressed(KEY_ENTER)) {
+        SetReturningFromShop(true);
+        GOTO(PLAYING);
     }
-  }
 
-  // 下方提示文字：「按 ENTER 返回遊戲」
-  DrawText(labelEnter, SCREEN_WIDTH / 2 - MeasureText(labelEnter, 20) / 2,
-           SCREEN_HEIGHT - 50, 20, LIGHTGRAY);
+    Rectangle itemBounds[SHOP_ROWS * SHOP_COLS];
+    bool activeArray[SHOP_ROWS * SHOP_COLS];
+    for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
+        itemBounds[i] = shopGrid[i].bounds;
+        activeArray[i] = shopGrid[i].active;
+    }
+
+    UpdateShopInteraction(itemBounds, SHOP_ROWS * SHOP_COLS, &hoverIndex, &infoIndex, activeArray);
 }
 
-static void ExitShop() {} // 離開商店狀態時執行（目前沒特別要清理的）
+// === 繪製整個商店畫面（商品格子、圖片、名稱、價格、資訊等）===
+static void RenderShop() {
+    ClearBackground((Color){77, 51, 25, 255});
+    DrawRectangle(0, 0, SCREEN_WIDTH, 80, (Color){193, 117, 56, 255});
+    DrawText("SHOP", SCREEN_WIDTH / 2 - MeasureText("SHOP", 48) / 2, 20, 48, YELLOW);
 
+    char coinText[64];
+    snprintf(coinText, sizeof(coinText), "COIN: %d", GetPlayerCoins());
+    DrawText(coinText, SCREEN_WIDTH - 200, 30, 24, GOLD);
+
+    Rectangle itemBounds[SHOP_ROWS * SHOP_COLS];
+    for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) itemBounds[i] = shopGrid[i].bounds;
+    RenderItemHover(hoverIndex, itemBounds, SHOP_ROWS * SHOP_COLS);
+
+    for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
+        DrawRectangleRounded(shopGrid[i].bounds, 0.1f, 12, (Color){236, 204, 158, 255});
+        DrawRectangleRoundedLines(shopGrid[i].bounds, 0.1f, 12, BROWN);
+
+        // 若有圖就畫圖
+        if (shopGrid[i].active && shopGrid[i].image && shopGrid[i].image->id > 0) {
+            DrawTexturePro(
+                *shopGrid[i].image,
+                (Rectangle){0, 0, shopGrid[i].image->width, shopGrid[i].image->height},
+                (Rectangle){shopGrid[i].bounds.x, shopGrid[i].bounds.y, shopGrid[i].bounds.width, shopGrid[i].bounds.height},
+                (Vector2){0, 0}, 0.0f, WHITE
+            );
+        }
+
+        // 商品名稱
+        int nameW = MeasureText(shopGrid[i].name, 16);
+        DrawText(shopGrid[i].name,
+                 shopGrid[i].bounds.x + SHOP_ITEM_SIZE / 2 - nameW / 2,
+                 shopGrid[i].bounds.y + SHOP_ITEM_SIZE - 30,
+                 16, WHITE);
+
+        // 價格
+        if (shopGrid[i].active) {
+            char priceStr[32];
+            snprintf(priceStr, sizeof(priceStr), "$%d", shopGrid[i].price);
+            int priceWidth = MeasureText(priceStr, 14);
+            DrawText(priceStr,
+                     shopGrid[i].bounds.x + SHOP_ITEM_SIZE / 2 - priceWidth / 2,
+                     shopGrid[i].bounds.y + SHOP_ITEM_SIZE - 15,
+                     14, WHITE);
+        }
+    }
+
+    // 商品資訊框（滑鼠右鍵顯示）
+    if (infoIndex >= 0) {
+        char infoText[256];
+        snprintf(infoText, sizeof(infoText), "%s\n%s", shopGrid[infoIndex].name, shopGrid[infoIndex].description);
+        RenderItemInfo(infoIndex, itemBounds, infoText);
+    }
+
+    DrawText("[ENTER] Return to Game", SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT - 50, 20, LIGHTGRAY);
+}
+
+// === 離開商店階段，目前不需處理 ===
+static void ExitShop() {}
+
+// === 商店狀態結構：提供給 stateController 切換使用 ===
 const GameState STATE_SHOP = {
-    .enter = EnterShop,   // 進入商店狀態時要做的事
-    .update = UpdateShop, // 每幀更新邏輯（例如偵測鍵盤）
-    .render = RenderShop, // 每幀畫畫面
-    .exit = ExitShop};    // 離開商店狀態時要清理的事（目前無）
+    .enter = EnterShop,
+    .update = UpdateShop,
+    .render = RenderShop,
+    .exit = ExitShop
+};
+
+
+
+
+
+
+
+

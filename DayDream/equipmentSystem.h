@@ -25,6 +25,7 @@ typedef struct {
     int isEquipped;           // 是否裝備中
     int isPurchased;          // 是否已購買
     Season season;            // 所屬季節
+    Texture2D* image;
 } EquipmentData;
 
 // 裝備初始化與管理函式

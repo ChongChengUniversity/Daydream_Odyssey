@@ -1,8 +1,10 @@
-// itemSystem.h
 #pragma once
-#include "assetManager.h"
 
-#define MAX_ITEMS 20
+#include <raylib.h>         // ✅ 放最上面
+#include "assetManager.h"   // ✅ 若有用到季節或圖片陣列
+
+#define INVENTORY_SIZE 20
+#define EQUIP_SIZE 10
 
 typedef struct {
     const char* name;       // 道具名稱
@@ -19,8 +21,4 @@ typedef struct {
 void InitAllItems(void);
 ItemData* GetItemByType(ItemType type);
 int GetTotalItems(void);
-
-
-#define INVENTORY_SIZE 20
-#define EQUIP_SIZE 10
 

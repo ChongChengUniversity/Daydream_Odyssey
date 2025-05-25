@@ -14,15 +14,26 @@ Texture2D monsters[ENEMY_TYPE_COUNT];
 
 Texture2D TEX_SHOP_ICON;
 
+Texture2D equipmentImages[EQUIP_TYPE_COUNT];  
+
+
+
 // 當前季節（可供外部引用）
 Season currentSeason = SEASON_SPRING;
 
 // 四季前綴 物品圖片後綴
 const char *seasonPrefix[SEASON_COUNT] = {"sp", "su", "au", "wi"};
 const char *itemSuffix[ITEM_TYPE_COUNT] = {
-    "_hp.png", "_coin.png",
-    "_t_scroll.png", "_aoe_scroll.png", "_sd_scroll.png",
-    "_h_scroll.png", "_single_scroll.png"};
+    "_hp.png",             // ITEM_HP
+    "_mp.png",             // ITEM_MP
+    "_coin.png",           // ITEM_COIN
+    "_t_scroll.png",       // SCROLL_TIME
+    "_aoe_scroll.png",     // SCROLL_AOE
+    "_sd_scroll.png",      // SCROLL_SHIELD ← ✅ 要注意這裡不是 "_shield_scroll.png"
+    "_h_scroll.png",       // SCROLL_HEAL
+    "_single_scroll.png"   // SCROLL_SINGLE
+};
+
 
 // 怪物圖片路徑
 const char *enemyImagePaths[ENEMY_TYPE_COUNT] = {
@@ -66,6 +77,7 @@ ItemType GetRandomItemType()
     //     return SCROLL_SINGLE;
 }
 
+
 void InitAssetManager() {
     // background image
     textures[TEXTURE_BG_SPRING] = LoadTexture("assets/scene/1.png");
@@ -92,24 +104,38 @@ void InitAssetManager() {
     {
         monsters[i] = LoadTexture(enemyImagePaths[i]);
     }
+
+    // 裝備圖載入（9層 * 5件 = 45）
+    int index = 0;
+    for (int level = 1; level <= 9; ++level) {
+        for (int slot = 1; slot <= 5; ++slot) {
+            snprintf(path, sizeof(path), "assets/equipment/level%d/%d.png", level, slot);
+            equipmentImages[index++] = LoadTexture(path);
+        }
+    }
+
+    equipmentImages[45] = LoadTexture("assets/equipment/level10/1.png");
 }
 
-void ShutdownAssetManager()
-{
-    for (int i = 0; i < MAX_TEXTURES; i++)
-    {
+
+void ShutdownAssetManager() {
+    for (int i = 0; i < MAX_TEXTURES; i++) {
         UnloadTexture(textures[i]);
     }
-    for (int season = 0; season < SEASON_COUNT; season++)
-    {
-        for (int item = 0; item < ITEM_TYPE_COUNT; item++)
-        {
+
+    for (int season = 0; season < SEASON_COUNT; season++) {
+        for (int item = 0; item < ITEM_TYPE_COUNT; item++) {
             UnloadTexture(seasonalItems[season][item]);
         }
     }
-    for (int i = 0; i < ENEMY_TYPE_COUNT; i++)
-    {
+
+    for (int i = 0; i < ENEMY_TYPE_COUNT; i++) {
         UnloadTexture(monsters[i]);
     }
+
     UnloadTexture(TEX_SHOP_ICON);
+
+    for (int i = 0; i < EQUIP_TYPE_COUNT; ++i) {
+        UnloadTexture(equipmentImages[i]);
+    }
 }

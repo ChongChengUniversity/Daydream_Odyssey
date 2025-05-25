@@ -41,7 +41,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[0]
     };
 
     // 1 身體
@@ -56,7 +57,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[1]
     };
 
     // 2 手
@@ -71,7 +73,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[2]
     };
 
     // 3 首飾
@@ -86,7 +89,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[3]
     };
 
     // 4 腳
@@ -101,7 +105,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[4]
     };
 
     // 第二層
@@ -117,7 +122,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[5]
     };
 
     // 6 身體
@@ -132,7 +138,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[6]
     };
 
     // 7 手
@@ -147,7 +154,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[7]
     };
 
     // 8 首飾
@@ -162,7 +170,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[8]
     };
 
     //9 腳
@@ -177,7 +186,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[9]
     };
 
     // 第三層
@@ -193,7 +203,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[10]
     };
 
     // 11 身體
@@ -208,7 +219,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[11]
     };
 
     // 12 手
@@ -223,7 +235,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[12]
     };
 
     // 13 首飾
@@ -238,7 +251,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[13]
     };
 
     //14 腳
@@ -253,7 +267,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SPRING
+        .season = SEASON_SPRING,
+        .image = &equipmentImages[14]
     };
 
     // 第四層
@@ -269,7 +284,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[15]
     };
 
     // 16 身體
@@ -284,7 +300,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[16]
     };
 
     // 17 手
@@ -299,7 +316,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[17]
     };
 
     // 18 首飾
@@ -314,7 +332,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[18]
     };
 
     // 19 腳
@@ -329,7 +348,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[19]
     };
 
     // 第五層
@@ -345,7 +365,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[20]
     };
 
     // 21 身體
@@ -360,7 +381,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[21]
     };
 
     // 22 手
@@ -375,7 +397,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[22]
     };
 
     //23 首飾
@@ -390,7 +413,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[23]
     };
 
     // 24 腳
@@ -405,7 +429,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[24]
     };
 
     // 第六層
@@ -421,7 +446,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[25]
     };
 
     // 26 身體
@@ -436,7 +462,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[26]
     };
 
     // 27 手
@@ -451,7 +478,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[27]
     };
 
     //28 首飾
@@ -466,7 +494,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[28]
     };
 
     // 29 腳
@@ -481,7 +510,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_SUMMER
+        .season = SEASON_SUMMER,
+        .image = &equipmentImages[29]
     };
 
     //第七層
@@ -497,7 +527,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[30]
     };
 
     // 31 身體
@@ -512,7 +543,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[31]
     };
 
     // 32 手
@@ -527,7 +559,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[32]
     };
 
     // 33 首飾
@@ -542,7 +575,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[33]
     };
 
     // 34 腳
@@ -557,7 +591,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[34]
     };
 
     //第八層
@@ -573,7 +608,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[35]
     };
 
     // 36 身體
@@ -588,7 +624,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[36]
     };
 
     // 37 手
@@ -603,7 +640,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[37]
     };
 
     // 38 首飾
@@ -618,7 +656,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[38]
     };
 
     // 39 腳
@@ -633,7 +672,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[39]
     };
 
     //第九層
@@ -649,7 +689,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[40]
     };
 
     // 41 身體
@@ -664,7 +705,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[41]
     };
 
     // 42 手
@@ -679,7 +721,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[42]
     };
 
     //  43 首飾
@@ -694,7 +737,8 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[43]
     };
 
     // 44 腳
@@ -709,7 +753,8 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_AUTUMN
+        .season = SEASON_AUTUMN,
+        .image = &equipmentImages[44]
     };
 
     // 第十層
@@ -725,7 +770,8 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
-        .season = SEASON_WINTER
+        .season = SEASON_WINTER,
+        .image = &equipmentImages[45]
     };
 }
 
@@ -740,7 +786,7 @@ EquipmentData* GetEquipmentByIndex(int index) {
 
 
 // 回傳目前已初始化的裝備總數
-// - 通常最大為 20（MAX_EQUIPMENTS）
+// - 通常最大為 46（MAX_EQUIPMENTS）
 int GetTotalEquipments(void) {
     return equipmentCount;
 }

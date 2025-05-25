@@ -5,13 +5,16 @@
 #include "assetManager.h"
 #include "inventory.h"
 #include "money.h"
+#include "equipmentSystem.h"  // 提供 InitAllEquipments()
 #include "itemSystem.h"
+#include "state_shop.h"       // 提供 InitShopState()
 
 void GameStartup() {
     InitAssetManager(); // load assets
     InitAudioManager(); // load audios
     InitInventory(); // load backpack assets
     InitMoneySystem();
+    InitAllEquipments();
     InitAllItems();
     PlayMusicStream(music[MUSIC_ONE]);
 
