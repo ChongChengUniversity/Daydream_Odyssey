@@ -15,6 +15,8 @@
 #include "enemyManager.h"
 #include "levelManager.h"
 #include "KeyCard.h"
+#include "bossManager.h"
+
 
 CardBase *cards[TOTAL_CARDS];
 
@@ -67,6 +69,13 @@ void InitCards()
             float x = start_x + TILE_GAP + col * (TILE_SIZE + TILE_GAP);
             float y = start_y + TILE_GAP + row * (TILE_SIZE + TILE_GAP);
 
+            //第十關boss位置(可更改)
+            if (GetCurrentLevel() == 10 && row == 2 && col == 2) {
+                cards[card_index] = CreateBossCard(x, y, card_index, row, col);
+                card_index++;
+                continue; // 避免重複插卡
+            }
+            
             switch (cardTypes[card_index])
             {
             case TYPE_DOOR:
@@ -91,6 +100,8 @@ void InitCards()
                 cards[card_index] = CreateKeyCard(x, y, card_index, row, col);
                 break;
             }
+
+            
             card_index++;
         }
     }
@@ -221,10 +232,12 @@ void DrawAllCards() {
                             WHITE);
 
                 // ✅ 畫數值
-                int fontSize = 16;
-                DrawBoldText(TextFormat("%d", enemy->stats.atk), bounds.x + 2, bounds.y + 2, fontSize, YELLOW); // 攻擊
-                DrawBoldText(TextFormat("%d", enemy->stats.currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED); // 血量
-                DrawBoldText(TextFormat("%d", enemy->stats.def), bounds.x + bounds.width - fontSize - 2, bounds.y + bounds.height - fontSize - 2, fontSize, YELLOW); // 防禦
+                if (CheckCollisionPointRec(GetMousePosition(), cards[i]->bounds)){
+                    int fontSize = 16;
+                    DrawBoldText(TextFormat("%d", enemy->stats.atk), bounds.x + 2, bounds.y + 2, fontSize, YELLOW); // 攻擊
+                    DrawBoldText(TextFormat("%d", enemy->stats.currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED); // 血量
+                    DrawBoldText(TextFormat("%d", enemy->stats.def), bounds.x + bounds.width - fontSize - 2, bounds.y + bounds.height - fontSize - 2, fontSize, YELLOW); // 防禦
+                }
             }
             // else {
             //     // 畫一個紅框提醒，表示怪物類型錯誤
