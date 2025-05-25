@@ -69,9 +69,11 @@ void ApplyBuffsToVisibleEnemies() {
         if (cards[i]->type != TYPE_ENEMY) continue;
 
         GridPos pos = GetCardGridPosition(cards[i]->bounds);
+        
         EnemyInfo* info = &enemyInfo[pos.row][pos.col];
 
         if (!info->isVisible && !cards[i]->isRevealed) continue;
+        if (info->type == MONSTER_BOSS) continue; // 不覆蓋 Boss 數值
 
         // 攻擊 buff：只有對 S_T_BUFF 類型的怪有效
         if (gSameTypeBuffCount >= 2 && info->type == MONSTER_SAME_TYPE_BUFF) {
@@ -88,8 +90,8 @@ void ApplyBuffsToVisibleEnemies() {
         }
 
         // 最終值統一更新
-        info->stats.atk = info->stats.baseAtk + info->stats.bonusAtk;
-        info->stats.def = info->stats.baseDef + info->stats.bonusDef;
+        info->stats.atk = info->stats.baseAtk + info->stats.bonusAtk + info->stats.externalBonusAtk;
+        info->stats.def = info->stats.baseDef + info->stats.bonusDef + info->stats.externalBonusDef;
     }
 }
 
@@ -163,6 +165,9 @@ EnemyInfo enemyInfo[ROWS][COLS];
 void ResetEnemyInfo() {
     for (int row = 0; row < ROWS; ++row) {
         for (int col = 0; col < COLS; ++col) {
+
+            if (enemyInfo[row][col].type == MONSTER_BOSS) continue; //  不清空 boss
+
             enemyInfo[row][col].isVisible = false;
             enemyInfo[row][col].isHidden = false;
             enemyInfo[row][col].type = -1;
@@ -209,10 +214,16 @@ void UpdateEnemyVisibility() {
     int enemyCount = 0;
 
     for (int i = 0; i < TOTAL_CARDS; ++i) {
-        if (cards[i]->type == TYPE_ENEMY) {
-            enemyIndices[enemyCount++] = i;
-        }
+        if (cards[i]->type != TYPE_ENEMY) continue;
+
+        int row = cards[i]->row;
+        int col = cards[i]->col;
+
+        if (enemyInfo[row][col].type == MONSTER_BOSS) continue; //  跳過 boss
+
+        enemyIndices[enemyCount++] = i;
     }
+
 
     // 避免超出實際怪物數量
     if (visibleEnemies > enemyCount) {
@@ -235,6 +246,7 @@ void UpdateEnemyVisibility() {
         }
 
         GridPos pos = GetCardGridPosition(cards[index]->bounds);
+
         EnemyInfo* enemy = &enemyInfo[pos.row][pos.col];
 
         enemy->isVisible = true;

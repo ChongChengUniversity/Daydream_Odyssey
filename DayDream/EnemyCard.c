@@ -29,6 +29,8 @@ static void ResetEnemy(CardBase* self) {
 }
 
 void DrawEnemy(CardBase* self) {
+    if (enemyInfo[self->row][self->col].type == MONSTER_BOSS) return; //  避免畫到 boss
+
     if (self->isRevealed) {
         EnemyInfo* enemyInfoPtr = &enemyInfo[self->row][self->col];
         EnemyStats* enemy = &enemyInfoPtr->stats;
@@ -59,17 +61,21 @@ void DrawEnemy(CardBase* self) {
             0.0f,
             (float)TILE_SIZE / monsters[enemy->type].width,
             WHITE);
-
-        int fontSize = 16;
-        // 左上角：攻擊力（黃色）
-        DrawBoldText(TextFormat("%d", enemy->atk), bounds.x + 2, bounds.y + 2, fontSize, YELLOW);
-        // 左下角：血量（紅色）
-        DrawBoldText(TextFormat("%d", enemy->currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED);
-        // 右下角：防禦力（黃色）
-        DrawBoldText(TextFormat("%d", enemy->def),bounds.x + bounds.width - fontSize - 2,bounds.y + bounds.height - fontSize - 2,fontSize, YELLOW);
+        
+        if (CheckCollisionPointRec(GetMousePosition(), self->bounds)){
+            int fontSize = 16;
+            //printf("▶ SHOW INFO for enemy at (%d, %d)\n", self->row, self->col);
+            // 左上角：攻擊力（黃色）
+            DrawBoldText(TextFormat("%d", enemy->atk), bounds.x + 2, bounds.y + 2, fontSize, YELLOW);
+            // 左下角：血量（紅色）
+            DrawBoldText(TextFormat("%d", enemy->currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED);
+            // 右下角：防禦力（黃色）
+            DrawBoldText(TextFormat("%d", enemy->def),bounds.x + bounds.width - fontSize - 2,bounds.y + bounds.height - fontSize - 2,fontSize, YELLOW);
+        }
     } else {
         DrawRectangleLinesEx(self->bounds, 2.0f, WHITE); // 未翻開時只畫邊框
     }
+
 }
 
 
@@ -80,6 +86,8 @@ static void OnRevealEnemy(CardBase* self) {
 
 // 當與卡片互動時（點擊怪物）
 static void OnInteractEnemy(CardBase* self) {
+    if (enemyInfo[self->row][self->col].type == MONSTER_BOSS) return; //  避免打到 boss
+
     PlayerStats* player = GetPlayerStats();
     EnemyInfo* enemyInfoPtr = &enemyInfo[self->row][self->col];
     EnemyStats* enemy = &enemyInfoPtr->stats;

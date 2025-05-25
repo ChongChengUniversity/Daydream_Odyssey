@@ -8,7 +8,7 @@ typedef enum {
     MONSTER_NORMAL,
     MONSTER_SAME_TYPE_BUFF,
     MONSTER_GLOBAL_BUFF,
-    // MONSTER_BOSS
+    MONSTER_BOSS
 } MonsterType;
 
 typedef struct EnemyStats {
@@ -21,6 +21,9 @@ typedef struct EnemyStats {
     int def;
     int baseDef;
     int bonusDef;
+
+    int externalBonusAtk;   // 🔼 Boss 給的額外攻擊力
+    int externalBonusDef;   // 🔼 Boss 給的額外防禦力
 
     bool isBuffer;
     MonsterType type;
