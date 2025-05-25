@@ -7,13 +7,29 @@
 #include "enemyManager.h"
 #include "CardManager.h"
 #include <stdio.h>
-
+#include "scrollManager.h"
+#include "CardManager.h"
+#include "EnemyStats.h"
 
 static ItemUseState itemState = ITEM_STATE_NONE;
 static int selectedItemIndex = -1;
 
 static Rectangle quitButtonRect = { SCREEN_WIDTH - 130, SCREEN_HEIGHT - 60, 100, 40 };
 static Texture2D quitTexture;
+
+static int targetRow = -1;
+static int targetCol = -1;
+
+ScrollType GetScrollTypeFromItemType(ItemType type) {
+    switch (type) {
+        case SCROLL_SINGLE: return SCROLL_TYPE_SINGLE;
+        case SCROLL_AOE:    return SCROLL_TYPE_AOE;
+        case SCROLL_HEAL:   return SCROLL_TYPE_HEAL;
+        case SCROLL_SHIELD: return SCROLL_TYPE_SHIELD;
+        case SCROLL_TIME:   return SCROLL_TYPE_TIME;
+        default: return SCROLL_TYPE_COUNT; // 不合法
+    }
+}
 
 void InitItemUseSystem(void) {
     quitTexture = LoadTexture("assets/quit.png");
@@ -44,6 +60,7 @@ void UpdateItemUse(Vector2 mousePos) {
 
         // 點地圖格子：呼叫卡片互動（可擴充邏輯）
         GridPos pos = GetClickedGrid(mousePos);
+        int row = pos.row, col = pos.col;
         if (pos.row == -1 || pos.col == -1) return;
 
         ItemType type = inventory[selectedItemIndex].type;
@@ -51,18 +68,31 @@ void UpdateItemUse(Vector2 mousePos) {
 
         bool valid = false;
 
+        //讀取怪物資訊
+        bool isEnemy = IsEnemyCardAt(row, col);
+        bool isVisible = false;
+        EnemyInfo* enemy = NULL;
+
+        enemy = &enemyInfo[row][col]; 
+        isVisible = enemy->isVisible;
+
         // 判斷是否為合法格子
         if (type == SCROLL_AOE || type == SCROLL_HEAL || type == SCROLL_SHIELD || type == SCROLL_TIME) {
             valid = true; // 可任意點擊
-        } else if (type == SCROLL_SINGLE) {
-            if (card && card->type == TYPE_ENEMY) { // 會有怪物卡還沒被翻開之前就可以點擊使用道具的問題!!!
+        } 
+        else if (type == SCROLL_SINGLE && card && isEnemy) {
+            if (isVisible || card->isRevealed) {
                 valid = true;
+                //使用單體攻擊卷軸時紀錄施放的座標
+                targetRow = row;
+                targetCol = col;
             }
         }
 
         if (!valid) return;
 
         // 執行對應道具的效果?
+        UseScrollEffect(GetScrollTypeFromItemType(type), pos);
 
         // 完成使用，減道具數量並結束狀態
         inventory[selectedItemIndex].quantity--;

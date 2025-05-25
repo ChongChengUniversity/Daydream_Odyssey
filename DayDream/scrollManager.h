@@ -2,14 +2,16 @@
 #pragma once
 #include "raylib.h"
 #include "EnemyStats.h"
+#include "CardBase.h"
 
+// 用前綴 SCROLL_TYPE_ 避免和 assetManager 的 SCROLL_ 衝突
 typedef enum {
-    SCROLL_SINGLE,
-    SCROLL_AOE,
-    SCROLL_HEAL,
-    SCROLL_SHIELD,
-    SCROLL_TIME,
-    SCROLL_TYPE_COUNT  // ✨作為總數，不會重複定義，維護方便
+    SCROLL_TYPE_SINGLE,
+    SCROLL_TYPE_AOE,
+    SCROLL_TYPE_HEAL,
+    SCROLL_TYPE_SHIELD,
+    SCROLL_TYPE_TIME,
+    SCROLL_TYPE_COUNT
 } ScrollType;
 
 typedef enum {
@@ -20,4 +22,4 @@ typedef enum {
 int GetSingleTargetMagicDamage(int magicPower, int floor, MonsterType type);
 int GetAOEMagicDamage(int magicPower, int floor);
 
-void UseScrollEffect(ScrollType scroll);
+void UseScrollEffect(ScrollType scroll, GridPos targetPos);

@@ -131,23 +131,32 @@ bool IsBlockedByEnemy(int row, int col) {
 
 //每次掃描全部格子紀錄允許翻開的卡片
 void AbleToReveal() {
+    // 步驟 1：預設所有格子不可翻開
     memset(abletoReveal, 0, sizeof(abletoReveal));
 
+    // 步驟 2：所有已翻開格子四周變成「可以嘗試翻開」
     for (int i = 0; i < TOTAL_CARDS; ++i) {
-        if (!cards[i] || !cards[i]->isRevealed) continue;
+        CardBase* card = cards[i];
+        if (!card || !card->isRevealed) continue;
 
-        int row = cards[i]->row;
-        int col = cards[i]->col;
+        int row = card->row;
+        int col = card->col;
 
-        // 這格四周都沒有會封鎖的怪就允許翻開
-        if (row > 0 && !IsBlockedByEnemy(row - 1, col))
-            abletoReveal[row - 1][col] = 1;
-        if (row < ROWS - 1 && !IsBlockedByEnemy(row + 1, col))
-            abletoReveal[row + 1][col] = 1;
-        if (col > 0 && !IsBlockedByEnemy(row, col - 1))
-            abletoReveal[row][col - 1] = 1;
-        if (col < COLS - 1 && !IsBlockedByEnemy(row, col + 1))
-            abletoReveal[row][col + 1] = 1;
+        if (row > 0) abletoReveal[row - 1][col] = 1;
+        if (row < ROWS - 1) abletoReveal[row + 1][col] = 1;
+        if (col > 0) abletoReveal[row][col - 1] = 1;
+        if (col < COLS - 1) abletoReveal[row][col + 1] = 1;
+    }
+
+    // 步驟 3：如果某格本來是允許，但它的上下左右有「封鎖怪」，則把它封掉
+    for (int row = 0; row < ROWS; ++row) {
+        for (int col = 0; col < COLS; ++col) {
+            if (!abletoReveal[row][col]) continue;
+
+            if (IsBlockedByEnemy(row, col)) {
+                abletoReveal[row][col] = 0; // 取消允許翻開
+            }
+        }
     }
 }
 
@@ -297,7 +306,7 @@ void OnMouseClick(Vector2 mousePos)
             }
             else {
                 // 不在允許翻開區域，但是「已翻開」或是「不可視怪物」的特例仍允許互動
-                if ((cards[i]->isRevealed || isEnemy) && cards[i]->onInteract) {
+                if (cards[i]->isRevealed && cards[i]->onInteract) {
                     cards[i]->onInteract(cards[i]);
                 }
             }

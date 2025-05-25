@@ -13,7 +13,7 @@ void InitPlayerStats() {
     player.currentHp = 200;
     player.atk = 10;
     player.def = 5;
-    player.magic = 15;  // 初始魔力數值可再調
+    player.magic = 5;  // 初始魔力數值可再調
     player.currentBuff = BUFF_NONE;
 }
 
@@ -28,13 +28,17 @@ void ApplyEquipmentToPlayer(int bonusHp, int bonusAtk, int bonusDef) {
 }
 
 bool ApplyDamageToEnemy(EnemyStats* enemy, int damageToEnemy){
-    if(enemy->currentHp - damageToEnemy > 0){
-        enemy->currentHp = enemy->currentHp - damageToEnemy;
-        return false;
+    if (enemy == NULL) return false;
+
+    enemy->currentHp -= damageToEnemy;
+    printf("對怪物造成 %d 傷害，剩餘 HP: %d\n", damageToEnemy, enemy->currentHp);
+
+    if (enemy->currentHp <= 0) {
+        enemy->currentHp = 0;  // 防止負數，死亡設為 0
+        return true;
     }
-    else{
-        return true; //怪物死亡
-    }
+
+    return false;
 }
 
 void ApplyDamageToPlayer(PlayerStats* player, int damageToPlayer){
