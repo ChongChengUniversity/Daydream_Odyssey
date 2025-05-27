@@ -16,31 +16,18 @@
 #include "shopSystem.h"
 
 // 商店格子排版設定：3x3 共 9 格，每格尺寸與間距
-#define SHOP_ROWS 3
-#define SHOP_COLS 3
 #define SHOP_ITEM_SIZE 160
 #define SHOP_GAP 36
 #define LABEL_BUFFER 64 // 名稱與描述字元緩衝大小
 
 extern Season currentSeason; // 外部變數：當前季節，用來選對應圖片
 
-// === 商店內每格商品的資料 ===
-typedef struct {
-    char name[LABEL_BUFFER];     // 商品名稱
-    char description[128];       // 商品描述
-    int price;                   // 商品價格
-    Rectangle bounds;            // 商品在畫面上的區域（繪圖與滑鼠碰撞用）
-    bool active;                 // 此格是否有商品
-    Texture2D* image;            // 商品圖片指標
-    bool selected;               // 是否被選取（目前未使用）
-} ShopItem;
-
 // 9 格商店商品格子
-static ShopItem shopGrid[SHOP_ROWS * SHOP_COLS];
+ShopItem shopGrid[SHOP_ROWS * SHOP_COLS];
 
 // 當前滑鼠懸停與資訊顯示的格子編號
-static int hoverIndex = -1;
-static int infoIndex = -1;
+int hoverIndex = -1;
+int infoIndex = -1;
 
 // === 給第九層樓的卷軸隨機器（依照指定機率）===
 static ItemType GetRandomScrollTypeForLevel9() {
@@ -56,27 +43,28 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
     int filled = 0;
     int base = (currentFloor - 1) * 5;
 
-    // 初始化商店格子為空
-    for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
+      // 清空商店格子狀態
+      for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
         shopGrid[i].active = false;
         shopGrid[i].selected = false;
+        shopGrid[i].isSoldOut = false;
         shopGrid[i].name[0] = '\0';
         shopGrid[i].description[0] = '\0';
         shopGrid[i].image = NULL;
     }
 
-    // 上架對應樓層的裝備（每層最多5個）
-    for (int i = 0; i < GetTotalEquipments(); ++i) {
+     // 放裝備
+     for (int i = 0; i < GetTotalEquipments() && filled < SHOP_ROWS * SHOP_COLS; ++i) {
         EquipmentData* eq = GetEquipmentByIndex(i);
         if (!eq || i < base || i >= base + 5) continue;
 
         snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", eq->name);
         snprintf(shopGrid[filled].description, 128, "%s", eq->description);
         shopGrid[filled].price = eq->price;
-        shopGrid[filled].active = true;
+        shopGrid[filled].active = !eq->isPurchased;
+        shopGrid[filled].isSoldOut = eq->isPurchased;
         shopGrid[filled].image = eq->image;
         filled++;
-        if (filled >= SHOP_ROWS * SHOP_COLS) return;
     }
     // === 第九層樓：強制出現延長Boss CD卷軸 + 兩種不重複的隨機卷軸 ===
     if (currentFloor == 9) {
@@ -86,7 +74,8 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
             snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", fixed->name);
             snprintf(shopGrid[filled].description, 128, "%s", fixed->description);
             shopGrid[filled].price = fixed->price;
-            shopGrid[filled].active = true;
+            shopGrid[filled].active = !fixed->isPurchased;
+            shopGrid[filled].isSoldOut = fixed->isPurchased;
             shopGrid[filled].image = &seasonalItems[currentSeason][SCROLL_TIME];
             filled++;
         }
@@ -116,7 +105,8 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
                 snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", item->name);
                 snprintf(shopGrid[filled].description, 128, "%s", item->description);
                 shopGrid[filled].price = item->price;
-                shopGrid[filled].active = true;
+                shopGrid[filled].active = !item->isPurchased;
+                shopGrid[filled].isSoldOut = item->isPurchased;
                 shopGrid[filled].image = &seasonalItems[currentSeason][scrollType];
                 filled++;
             }
@@ -138,7 +128,8 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
             snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", item->name);
             snprintf(shopGrid[filled].description, 128, "%s", item->description);
             shopGrid[filled].price = item->price;
-            shopGrid[filled].active = true;
+            shopGrid[filled].active = !item->isPurchased;
+            shopGrid[filled].isSoldOut = item->isPurchased;
             shopGrid[filled].image = &seasonalItems[currentSeason][scrollType];
             filled++;
         }
@@ -148,8 +139,6 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
 
 // === 進入商店階段時呼叫，初始化商店內容與格子座標 ===
 static void EnterShop() {
-    InitAllEquipments();
-    InitAllItems();
 
     // 商店整體寬高計算
     int totalWidth = SHOP_COLS * SHOP_ITEM_SIZE + (SHOP_COLS - 1) * SHOP_GAP;
@@ -233,6 +222,11 @@ static void RenderShop() {
                      shopGrid[i].bounds.y + SHOP_ITEM_SIZE - 15,
                      14, WHITE);
         }
+
+        if (shopGrid[i].isSoldOut) {
+            DrawTexture(SOLD_OUT, shopGrid[i].bounds.x, shopGrid[i].bounds.y, (Color){255, 255, 255, 180});  // 半透明覆蓋
+        }
+        
     }
 
     // 商品資訊框（滑鼠右鍵顯示）
@@ -241,7 +235,7 @@ static void RenderShop() {
         snprintf(infoText, sizeof(infoText), "%s\n%s", shopGrid[infoIndex].name, shopGrid[infoIndex].description);
         RenderItemInfo(infoIndex, itemBounds, infoText);
     }
-
+    RenderPurchaseConfirmation();
     DrawText("[ENTER] Return to Game", SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT - 50, 20, LIGHTGRAY);
 }
 
@@ -255,6 +249,7 @@ const GameState STATE_SHOP = {
     .render = RenderShop,
     .exit = ExitShop
 };
+
 
 
 

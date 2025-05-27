@@ -33,7 +33,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Vine Circlet",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -49,7 +49,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Beast Skin Cloak",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -65,7 +65,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Beast Bone Saber",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -81,7 +81,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Fang Necklace",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -97,7 +97,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Beast Skin Leggings",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -114,7 +114,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Flower Crown",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -130,7 +130,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Leaf Shawl",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -146,7 +146,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Wand",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -162,7 +162,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Flower Collar",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -178,7 +178,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Grass Woven Sandals",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -195,7 +195,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Elven Crown",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -211,7 +211,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Elven Robe",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -227,7 +227,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Staff of light",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -243,7 +243,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Fairy Elf Wings",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -259,7 +259,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Gladiator Sandals",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -276,7 +276,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Straw Hat",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -292,7 +292,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Aloha Shirt",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -308,7 +308,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Watch",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -324,7 +324,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Shell Necklace",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -340,7 +340,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Flip-flops",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -357,7 +357,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Diving Mask",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -373,7 +373,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Wetsuit",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -389,7 +389,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Flashlight",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -405,7 +405,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Scuba Tank",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -421,7 +421,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Swim Fins",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -438,7 +438,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Sailor Hat",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -454,7 +454,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Sailor Suit",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -470,7 +470,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Compass",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -486,7 +486,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Binoculars",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -502,7 +502,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Canvas Shoes",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -519,7 +519,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Ninja Headband",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -535,7 +535,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Ninja Suit",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -551,7 +551,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Hand Wraps",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -567,7 +567,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Shuriken",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -583,7 +583,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Geta Footwear",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -600,7 +600,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Soldier Helmet",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -616,7 +616,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Soldier Suit",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -632,7 +632,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Half Finger Gloves",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -648,7 +648,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Dog Tag",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -664,7 +664,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Soldier Boots",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -681,7 +681,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Knight Helmet",
         .description = "Head.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HEAD,
         .atkPhysical = 5,
         .atkMagical = 10,
@@ -697,7 +697,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Knight Armor",
         .description = "Body.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_BODY,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -713,7 +713,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Knight Gauntlets",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -729,7 +729,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Coat of arms",
         .description = "Accessory.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_ACCESSORY,
         .atkPhysical = 8,
         .atkMagical = 8,
@@ -745,7 +745,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "Knight Boots",
         .description = "Foot.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_FOOT,
         .atkPhysical = 5,
         .atkMagical = 5,
@@ -762,7 +762,7 @@ void InitAllEquipments(void) {
     equipmentList[equipmentCount++] = (EquipmentData){
         .name = "The Infinity Gauntlet",
         .description = "Hand.",
-        .price = 100,
+        .price = 1,
         .slot = SLOT_HAND,
         .atkPhysical = 10,
         .atkMagical = 5,
@@ -840,3 +840,4 @@ EquipmentData* GetEquipmentForSeason(Season season, EquipSlot slot) {
     }
     return NULL;
 }
+

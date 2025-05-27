@@ -58,8 +58,6 @@ void UpdatePlaying(void)
     AbleToReveal(); //這行可以讓畫面即時更新啊啊
 }
 
-
-
 void ExitPlaying(void)
 {
     ExitBackpackIcon();
@@ -88,6 +86,7 @@ void RenderPlaying(void)
     int textWidth = MeasureText(buffer, 24);
     DrawText(buffer, (GetScreenWidth() - textWidth) / 2, 10, 24, WHITE);
 }
+
 const GameState STATE_PLAYING = {
     .enter = EnterPlaying,
     .update = UpdatePlaying,

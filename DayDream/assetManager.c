@@ -13,6 +13,7 @@ Texture2D seasonalItems[SEASON_COUNT][ITEM_TYPE_COUNT];
 Texture2D monsters[ENEMY_TYPE_COUNT];
 
 Texture2D TEX_SHOP_ICON;
+Texture2D SOLD_OUT;
 
 Texture2D equipmentImages[EQUIP_TYPE_COUNT];  
 
@@ -89,7 +90,10 @@ void InitAssetManager() {
     textures[TEXTURE_DOOR] = LoadTexture("assets/door.png");
     textures[TEXTURE_KEY] = LoadTexture("assets/items/key.png");
     textures[TEXTURE_CHARACTER] = LoadTexture("assets/monsters/enemy111.png");
-    TEX_SHOP_ICON = LoadTexture("assets/shop.png");
+
+    // SHOP
+    TEX_SHOP_ICON = LoadTexture("assets/shop/shop_icon.png");
+    SOLD_OUT = LoadTexture("assets/shop/soldout.png");
 
     // 四季道具
     char path[128];
@@ -134,6 +138,7 @@ void ShutdownAssetManager() {
     }
 
     UnloadTexture(TEX_SHOP_ICON);
+    UnloadTexture(SOLD_OUT);
 
     for (int i = 0; i < EQUIP_TYPE_COUNT; ++i) {
         UnloadTexture(equipmentImages[i]);

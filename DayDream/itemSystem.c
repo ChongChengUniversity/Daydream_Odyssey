@@ -11,12 +11,14 @@ void InitAllItems(void) {
         .description = "Recover 50 HP",
         .price = 100,
         .hpRestore = 50,
+        .isPurchased = 0,
     };
 
     items[ITEM_COIN] = (ItemData){
         .name = "Coin",
         .description = "Just a coin (not usable)",
         .price = 0,
+        .isPurchased = 0,
     };
 
     items[SCROLL_TIME] = (ItemData){
@@ -24,6 +26,7 @@ void InitAllItems(void) {
         .description = "Delay Boss CD by 5s",
         .price = 100,
         .time = 5,
+        .isPurchased = 0,
     };
 
     items[SCROLL_AOE] = (ItemData){
@@ -31,6 +34,7 @@ void InitAllItems(void) {
         .description = "AOE +10 atk",
         .price = 100,
         .atkBoost = 10,
+        .isPurchased = 0,
     };
 
     items[SCROLL_SHIELD] = (ItemData){
@@ -38,6 +42,7 @@ void InitAllItems(void) {
         .description = "Gain 10 shield",
         .price = 100,
         .shield = 10,
+        .isPurchased = 0,
     };
 
     items[SCROLL_HEAL] = (ItemData){
@@ -45,6 +50,7 @@ void InitAllItems(void) {
         .description = "Recover 50 HP",
         .price = 100,
         .hpRestore = 50,
+        .isPurchased = 0,
     };
 
     items[SCROLL_SINGLE] = (ItemData){
@@ -52,6 +58,7 @@ void InitAllItems(void) {
         .description = "Single attack +10",
         .price = 100,
         .atkBoost = 10,
+        .isPurchased = 0,
     };
 }
 
@@ -61,6 +68,14 @@ ItemData* GetItemByType(ItemType type) {
     }
     return NULL;
 }
+
+ItemData* GetItemByIndex(int index) {
+    if (index >= 0 && index < ITEM_TYPE_COUNT) {
+        return &items[index];
+    }
+    return NULL;
+}
+
 
 int GetTotalItems(void) {
     return ITEM_TYPE_COUNT;

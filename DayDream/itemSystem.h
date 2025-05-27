@@ -15,10 +15,12 @@ typedef struct {
     int time;               // 時間加成 
     int shield;             // 護盾值
     int isOwned;            // 是否已擁有（0 = 沒有, 1 = 擁有）
+    int isPurchased;          // 是否已購買
     int isUsed;             // 是否已使用（0 = 未使用, 1 = 已使用）
 } ItemData;
 
 void InitAllItems(void);
 ItemData* GetItemByType(ItemType type);
-int GetTotalItems(void);
+ItemData* GetItemByIndex(int index);  // ✅ 補上這一行
 
+int GetTotalItems(void);
