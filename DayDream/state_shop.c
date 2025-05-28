@@ -64,6 +64,7 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
         shopGrid[filled].active = !eq->isPurchased;
         shopGrid[filled].isSoldOut = eq->isPurchased;
         shopGrid[filled].image = eq->image;
+        shopGrid[filled].type = -1;
         filled++;
     }
     // === 第九層樓：強制出現延長Boss CD卷軸 + 兩種不重複的隨機卷軸 ===
@@ -77,6 +78,7 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
             shopGrid[filled].active = !fixed->isPurchased;
             shopGrid[filled].isSoldOut = fixed->isPurchased;
             shopGrid[filled].image = &seasonalItems[currentSeason][SCROLL_TIME];
+            shopGrid[filled].type = SCROLL_TIME;
             filled++;
         }
 
@@ -108,6 +110,7 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
                 shopGrid[filled].active = !item->isPurchased;
                 shopGrid[filled].isSoldOut = item->isPurchased;
                 shopGrid[filled].image = &seasonalItems[currentSeason][scrollType];
+                shopGrid[filled].type = scrollType;
                 filled++;
             }
         }
@@ -131,6 +134,7 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
             shopGrid[filled].active = !item->isPurchased;
             shopGrid[filled].isSoldOut = item->isPurchased;
             shopGrid[filled].image = &seasonalItems[currentSeason][scrollType];
+            shopGrid[filled].type = scrollType;
             filled++;
         }
     }
@@ -196,13 +200,20 @@ static void RenderShop() {
         DrawRectangleRoundedLines(shopGrid[i].bounds, 0.1f, 12, BROWN);
 
         // 若有圖就畫圖
-        if (shopGrid[i].active && shopGrid[i].image && shopGrid[i].image->id > 0) {
-            DrawTexturePro(
-                *shopGrid[i].image,
-                (Rectangle){0, 0, shopGrid[i].image->width, shopGrid[i].image->height},
-                (Rectangle){shopGrid[i].bounds.x, shopGrid[i].bounds.y, shopGrid[i].bounds.width, shopGrid[i].bounds.height},
-                (Vector2){0, 0}, 0.0f, WHITE
-            );
+        if (shopGrid[i].active) {
+            if (!shopGrid[i].image) {
+                printf("[RenderShop] Warning: item %d (%s) image is NULL\n", i, shopGrid[i].name);
+            } else if (shopGrid[i].image->id == 0) {
+                printf("[RenderShop] Warning: item %d (%s) image ID is 0\n", i, shopGrid[i].name);
+            } else {
+                // 圖片正常，才畫圖
+                DrawTexturePro(
+                    *shopGrid[i].image,
+                    (Rectangle){0, 0, shopGrid[i].image->width, shopGrid[i].image->height},
+                    (Rectangle){shopGrid[i].bounds.x, shopGrid[i].bounds.y, shopGrid[i].bounds.width, shopGrid[i].bounds.height},
+                    (Vector2){0, 0}, 0.0f, WHITE
+                );
+            }
         }
 
         // 商品名稱

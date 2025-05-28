@@ -171,45 +171,60 @@ void RenderPurchaseConfirmation() {
 bool TryPurchaseAtIndex(int index) {
     ShopItem* item = &shopGrid[index];
 
-    // 嘗試購買裝備
-    for (int i = 0; i < GetTotalEquipments(); ++i) {
-        EquipmentData* eq = GetEquipmentByIndex(i);
-        if (eq && strcmp(eq->name, item->name) == 0) {
-            if (eq->isPurchased) return false; // 已購買
-            if (GetPlayerCoins() >= eq->price) {
-                SubtractCoins(eq->price);
-                eq->isPurchased = 1;
-                item->isSoldOut = true;
-                item->active = false; 
-                ShowMessageBoxBlocking("Purchase Successful!", GREEN);
-                return true;
-            } else {
-                ShowMessageBoxBlocking("Not enough coins!", RED);
-                return false;
+    // === 嘗試購買裝備 ===
+    if (item->type == -1) {  // 裝備的 type = -1，代表這是裝備
+        for (int i = 0; i < GetTotalEquipments(); ++i) {
+            EquipmentData* eq = GetEquipmentByIndex(i);
+            if (eq && strcmp(eq->name, item->name) == 0) {
+                if (eq->isPurchased) {
+                    ShowMessageBoxBlocking("Already purchased!", YELLOW);
+                    return false;
+                }
+
+                if (GetPlayerCoins() >= eq->price) {
+                    SubtractCoins(eq->price);
+                    eq->isPurchased = 1;
+                    item->isSoldOut = true;
+                    item->active = false;
+                    ShowMessageBoxBlocking("Purchase Successful!", GREEN);
+                    return true;
+                } else {
+                    ShowMessageBoxBlocking("Not enough coins!", RED);
+                    return false;
+                }
             }
         }
     }
 
-    // 嘗試購買道具
-    for (int i = 0; i < GetTotalItems(); ++i) {
-        ItemData* it = GetItemByIndex(i);
-        if (it && strcmp(it->name, item->name) == 0) {
-            if (it->isPurchased) return false; // 已購買
-            if (GetPlayerCoins() >= it->price) {
-                SubtractCoins(it->price);
-                it->isPurchased = 1;
-                item->active = false; 
-                item->isSoldOut = true;
-                ShowMessageBoxBlocking("Purchase Successful!", GREEN);
-                return true;
-            } else {
-                ShowMessageBoxBlocking("Not enough coins!", RED);
-                return false;
-            }
+    // === 嘗試購買道具（使用 item->type 直接比對）===
+    if (item->type >= 0 && item->type < ITEM_TYPE_COUNT) {
+        ItemData* it = GetItemByType(item->type);
+        if (!it) {
+            ShowMessageBoxBlocking("Item not found!", RED);
+            return false;
+        }
+
+        if (it->isPurchased) {
+            ShowMessageBoxBlocking("Already purchased!", YELLOW);
+            return false;
+        }
+
+        if (GetPlayerCoins() >= it->price) {
+            SubtractCoins(it->price);
+            it->isPurchased = 1;
+            item->active = false;
+            item->isSoldOut = true;
+            ShowMessageBoxBlocking("Purchase Successful!", GREEN);
+            return true;
+        } else {
+            ShowMessageBoxBlocking("Not enough coins!", RED);
+            return false;
         }
     }
 
+    // === 萬一不是道具也不是裝備（防呆）===
     ShowMessageBoxBlocking("Item not found!", RED);
     return false;
 }
+
 

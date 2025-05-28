@@ -1,5 +1,6 @@
 #pragma once
 #include "raylib.h"
+#include "assetManager.h"
 #include <stdbool.h>
 
 #define SHOP_ROWS 3
@@ -15,6 +16,8 @@ typedef struct {
     Texture2D* image;
     bool selected;
     bool isSoldOut;      //  新增這個欄位表示是否已售出
+
+    ItemType type; 
 } ShopItem;
 
 
@@ -27,3 +30,4 @@ void RenderItemInfo(int infoIndex, Rectangle* itemBounds, const char* infoText);
 void RenderPurchaseConfirmation(void);
 void RenderPurchaseMessage(void);
 bool TryPurchaseAtIndex(int index);
+
