@@ -41,6 +41,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[0]
     };
@@ -57,6 +58,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[1]
     };
@@ -73,6 +75,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[2]
     };
@@ -89,6 +92,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SPRING,
         .image = &equipmentImages[3]
     };
@@ -105,6 +109,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SPRING,
         .image = &equipmentImages[4]
     };
@@ -122,6 +127,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[5]
     };
@@ -138,6 +144,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[6]
     };
@@ -154,6 +161,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[7]
     };
@@ -170,6 +178,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SPRING,
         .image = &equipmentImages[8]
     };
@@ -186,6 +195,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SPRING,
         .image = &equipmentImages[9]
     };
@@ -203,6 +213,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[10]
     };
@@ -219,6 +230,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[11]
     };
@@ -235,6 +247,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SPRING,
         .image = &equipmentImages[12]
     };
@@ -251,6 +264,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SPRING,
         .image = &equipmentImages[13]
     };
@@ -267,6 +281,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SPRING,
         .image = &equipmentImages[14]
     };
@@ -284,6 +299,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[15]
     };
@@ -300,6 +316,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[16]
     };
@@ -316,6 +333,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[17]
     };
@@ -332,6 +350,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[18]
     };
@@ -348,6 +367,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[19]
     };
@@ -365,6 +385,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[20]
     };
@@ -381,6 +402,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[21]
     };
@@ -397,6 +419,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[22]
     };
@@ -413,6 +436,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[23]
     };
@@ -429,6 +453,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[24]
     };
@@ -446,6 +471,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[25]
     };
@@ -462,6 +488,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[26]
     };
@@ -478,6 +505,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[27]
     };
@@ -494,6 +522,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[28]
     };
@@ -510,6 +539,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_SUMMER,
         .image = &equipmentImages[29]
     };
@@ -527,6 +557,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[30]
     };
@@ -543,6 +574,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[31]
     };
@@ -559,6 +591,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[32]
     };
@@ -575,6 +608,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[33]
     };
@@ -591,6 +625,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[34]
     };
@@ -608,6 +643,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[35]
     };
@@ -624,6 +660,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[36]
     };
@@ -640,6 +677,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[37]
     };
@@ -656,6 +694,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[38]
     };
@@ -672,6 +711,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[39]
     };
@@ -689,6 +729,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[40]
     };
@@ -705,6 +746,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[41]
     };
@@ -721,6 +763,7 @@ void InitAllEquipments(void) {
         .maxHP = 5,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 0,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[42]
     };
@@ -737,6 +780,7 @@ void InitAllEquipments(void) {
         .maxHP = 8,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[43]
     };
@@ -753,6 +797,7 @@ void InitAllEquipments(void) {
         .maxHP = 10,
         .isEquipped = 0,
         .isPurchased = 0,
+        .locked = 1,
         .season = SEASON_AUTUMN,
         .image = &equipmentImages[44]
     };
@@ -840,4 +885,23 @@ EquipmentData* GetEquipmentForSeason(Season season, EquipSlot slot) {
     }
     return NULL;
 }
+
+void UnlockAllAccessorySlots() {
+    for (int i = 0; i < GetTotalEquipments(); ++i) {
+        EquipmentData* eq = GetEquipmentByIndex(i);
+        if (eq && eq->slot == SLOT_ACCESSORY) {
+            eq->locked = false;
+        }
+    }
+}
+
+void UnlockAllBootSlots() {
+    for (int i = 0; i < GetTotalEquipments(); ++i) {
+        EquipmentData* eq = GetEquipmentByIndex(i);
+        if (eq && eq->slot == SLOT_FOOT) {
+            eq->locked = false;
+        }
+    }
+}
+
 

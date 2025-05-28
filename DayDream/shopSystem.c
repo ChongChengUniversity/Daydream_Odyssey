@@ -11,18 +11,22 @@
 #include <stdio.h>
 #include <string.h>
 
-static double confirmStartTime = 0; 
-
 extern Texture2D SOLD_OUT;
 extern ShopItem shopGrid[]; // 提供商店格子資料給購買邏輯
 
-// === 購買提示框狀態 ===
-static const char* purchaseMessage = NULL;
-static Color purchaseMessageColor;
+// 商品資訊
+double infoStartTime = 0;
+
 
 // === 購買視窗狀態 ===
 static bool confirmVisible = false;
 static int confirmIndex = -1;
+static double confirmStartTime = 0; 
+
+// === 上鎖視窗狀態 ===
+static bool unlockConfirmVisible = false;
+static int unlockIndex = -1;
+static double unlockStartTime = 0;
 
 // === 顯示簡單訊息框（暫停式） ===
 // 簡易訊息框
@@ -57,6 +61,7 @@ void UpdateShopInteraction(Rectangle* itemBounds, int itemCount, int* hoverIndex
 
             if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
                 *infoIndex = i; // 顯示道具資訊
+                infoStartTime = GetTime();  
             }
         }
     }
@@ -65,17 +70,22 @@ void UpdateShopInteraction(Rectangle* itemBounds, int itemCount, int* hoverIndex
         *infoIndex = -1; // 點空白區域關閉資訊框
     }
 
-    // 左鍵觸發購買視窗（裝備與道具皆可）
     if (!confirmVisible && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && *hoverIndex >= 0 && isActive[*hoverIndex]) {
         ShopItem* item = &shopGrid[*hoverIndex];
-        if (!item->isSoldOut) {  // **新增此判斷，已售出商品不彈視窗**
+    
+        if (item->locked) {
+            // 鎖住的商品 -> 顯示解鎖視窗
+            TryOpenUnlockDialog(*hoverIndex);  
+            return;
+        }
+    
+        if (!item->isSoldOut) {
+            // 可購買的商品才顯示購買視窗
             confirmIndex = *hoverIndex;
             confirmVisible = true;
             confirmStartTime = 0;
         }
     }
-    
-    
     
 }
 
@@ -105,8 +115,6 @@ void RenderItemInfo(int infoIndex, Rectangle* itemBounds, const char* infoText) 
 }
 
 void RenderPurchaseConfirmation() {
-    printf("[RenderConfirm] confirmVisible=%d confirmIndex=%d time=%.2f\n", confirmVisible, confirmIndex, GetTime());
-
     if (!confirmVisible || confirmIndex < 0) return;
 
     if (confirmStartTime == 0) confirmStartTime = GetTime();
@@ -169,11 +177,109 @@ void RenderPurchaseConfirmation() {
     
 }
 
+void RenderUnlockConfirmation() {
+    if (!unlockConfirmVisible || unlockIndex < 0) return;
+
+    // ✅ 初始化時間
+    if (unlockStartTime == 0) unlockStartTime = GetTime();
+
+    // ✅ 自動關閉視窗（超過3秒）
+    if (GetTime() - unlockStartTime > 3.0) {
+        unlockConfirmVisible = false;
+        unlockIndex = -1;
+        unlockStartTime = 0;
+        return;
+    }
+
+    ShopItem* item = &shopGrid[unlockIndex];
+
+    // 找出該裝備對象
+    EquipmentData* eq = NULL;
+    for (int i = 0; i < GetTotalEquipments(); ++i) {
+        EquipmentData* temp = GetEquipmentByIndex(i);
+        if (temp && strcmp(temp->name, item->name) == 0) {
+            eq = temp;
+            break;
+        }
+    }
+
+    const int w = 320, h = 160;
+    Rectangle box = {
+        SCREEN_WIDTH / 2 - w / 2,
+        SCREEN_HEIGHT / 2 - h / 2,
+        w, h
+    };
+
+    Vector2 mouse = GetMousePosition();
+
+    // ✅ 點擊外部視窗則關閉（包含非商品格）
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        bool clickOutsideBox = !CheckCollisionPointRec(mouse, box);
+        bool clickOutsideAllItems = true;
+
+        for (int i = 0; i < SHOP_ROWS * SHOP_COLS; i++) {
+            if (CheckCollisionPointRec(mouse, shopGrid[i].bounds)) {
+                clickOutsideAllItems = false;
+                break;
+            }
+        }
+
+        if (clickOutsideBox && clickOutsideAllItems) {
+            unlockConfirmVisible = false;
+            unlockIndex = -1;
+            unlockStartTime = 0;
+            return;
+        }
+    }
+
+    // === 視窗繪製 ===
+    DrawRectangleRec(box, (Color){50, 30, 30, 250});
+    DrawRectangleLinesEx(box, 2, GOLD);
+    DrawText("Unlock this slot?", box.x + 20, box.y + 20, 24, WHITE);
+
+    char priceText[64];
+    snprintf(priceText, sizeof(priceText), "Unlock cost: 1 coins");
+    DrawText(priceText, box.x + 20, box.y + 60, 20, GOLD);
+
+    DrawText("[Y] Yes", box.x + 40, box.y + 110, 20, GREEN);
+    DrawText("[N] No", box.x + 180, box.y + 110, 20, RED);
+
+    // === 處理輸入 ===
+    if (IsKeyPressed(KEY_Y)) {
+        if (GetPlayerCoins() >= 1) {
+            SubtractCoins(1);
+            GamePlaySound(SOUND_FIVE);
+            ShowMessageBoxBlocking("Unlocked!", GREEN);
+
+            if (eq->slot == SLOT_ACCESSORY) 
+                UnlockAllAccessorySlots();  
+            if (eq->slot == SLOT_FOOT) 
+                UnlockAllBootSlots();        
+
+            item->locked = false;
+            eq->locked = false;
+        } else {
+            GamePlaySound(SOUND_FOUR);
+            ShowMessageBoxBlocking("Not enough coins!", RED);
+        }
+
+        unlockConfirmVisible = false;
+        unlockIndex = -1;
+        unlockStartTime = 0;
+    }
+
+    if (IsKeyPressed(KEY_N)) {
+        unlockConfirmVisible = false;
+        unlockIndex = -1;
+        unlockStartTime = 0;
+    }
+}
+
 bool TryPurchaseAtIndex(int index) {
     ShopItem* item = &shopGrid[index];
 
     // === 嘗試購買裝備 ===
-    if (item->type == -1) {  // 裝備的 type = -1，代表這是裝備
+    if ((int)item->type == -1) {  // 裝備的 type = -1，代表這是裝備
         for (int i = 0; i < GetTotalEquipments(); ++i) {
             EquipmentData* eq = GetEquipmentByIndex(i);
             if (eq && strcmp(eq->name, item->name) == 0) {
@@ -195,7 +301,7 @@ bool TryPurchaseAtIndex(int index) {
         }
     }
 
-    // === 嘗試購買道具（使用 item->type 直接比對）===
+    // === 嘗試購買道具 ===
     if (item->type >= 0 && item->type < ITEM_TYPE_COUNT) {
         ItemData* it = GetItemByType(item->type);
 
@@ -214,8 +320,16 @@ bool TryPurchaseAtIndex(int index) {
         }
     }
 
-    // === 萬一不是道具也不是裝備（防呆）===
+    // 防呆結尾
     ShowMessageBoxBlocking("Item not found!", RED);
     return false;
 }
+
+
+void TryOpenUnlockDialog(int index) {
+    unlockIndex = index;
+    unlockConfirmVisible = true;
+    unlockStartTime = GetTime(); 
+}
+
 

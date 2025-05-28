@@ -12,10 +12,12 @@ typedef struct {
     char description[128];
     int price;
     Rectangle bounds;
-    bool active;         // 控制是否可互動（例如點擊）
     Texture2D* image;
+
+    bool active;         // 控制是否可互動（例如點擊）
     bool selected;
     bool isSoldOut;      //  新增這個欄位表示是否已售出
+    bool locked;         // 是否上鎖
 
     ItemType type; 
 } ShopItem;
@@ -30,3 +32,6 @@ void RenderItemInfo(int infoIndex, Rectangle* itemBounds, const char* infoText);
 void RenderPurchaseConfirmation(void);
 void RenderPurchaseMessage(void);
 bool TryPurchaseAtIndex(int index);
+void RenderUnlockConfirmation(void);
+void TryOpenUnlockDialog(int index);
+

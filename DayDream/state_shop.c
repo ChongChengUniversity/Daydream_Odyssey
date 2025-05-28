@@ -21,6 +21,8 @@
 #define LABEL_BUFFER 64 // 名稱與描述字元緩衝大小
 
 extern Season currentSeason; // 外部變數：當前季節，用來選對應圖片
+extern double infoStartTime;
+
 
 // 9 格商店商品格子
 ShopItem shopGrid[SHOP_ROWS * SHOP_COLS];
@@ -65,6 +67,8 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
         shopGrid[filled].isSoldOut = eq->isPurchased;
         shopGrid[filled].image = eq->image;
         shopGrid[filled].type = -1;
+        if(eq->locked)
+            shopGrid[filled].locked = true;
         filled++;
     }
     // === 第九層樓：強制出現延長Boss CD卷軸 + 兩種不重複的隨機卷軸 ===
@@ -232,15 +236,24 @@ static void RenderShop() {
             DrawTexture(SOLD_OUT, shopGrid[i].bounds.x, shopGrid[i].bounds.y, (Color){255, 255, 255, 180});  // 半透明覆蓋
         }
         
+        if (shopGrid[i].locked) {
+            DrawTexture(LOCK, shopGrid[i].bounds.x, shopGrid[i].bounds.y, (Color){255, 255, 255, 200});  // 半透明覆蓋
+        }
     }
 
     // 商品資訊框（滑鼠右鍵顯示）
     if (infoIndex >= 0) {
-        char infoText[256];
-        snprintf(infoText, sizeof(infoText), "%s\n%s", shopGrid[infoIndex].name, shopGrid[infoIndex].description);
-        RenderItemInfo(infoIndex, itemBounds, infoText);
+        if (GetTime() - infoStartTime > 3.0) {
+            infoIndex = -1;  
+        } else {
+            char infoText[256];
+            snprintf(infoText, sizeof(infoText), "%s\n%s", shopGrid[infoIndex].name, shopGrid[infoIndex].description);
+            RenderItemInfo(infoIndex, itemBounds, infoText);
+        }
     }
+    
     RenderPurchaseConfirmation();
+    RenderUnlockConfirmation();
     DrawText("[ENTER] Return to Game", SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT - 50, 20, LIGHTGRAY);
 }
 
@@ -254,7 +267,6 @@ const GameState STATE_SHOP = {
     .render = RenderShop,
     .exit = ExitShop
 };
-
 
 
 

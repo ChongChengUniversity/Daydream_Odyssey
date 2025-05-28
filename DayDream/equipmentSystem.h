@@ -24,6 +24,7 @@ typedef struct {
     int maxHP;                // 最大 HP 上限加成
     int isEquipped;           // 是否裝備中
     int isPurchased;          // 是否已購買
+    int locked;               //是否上鎖
     Season season;            // 所屬季節
     Texture2D* image;
 } EquipmentData;
@@ -49,4 +50,8 @@ void UnequipSlot(EquipSlot slot);
 
 // 根據指定的季節與裝備欄位，自動尋找該季節適合的裝備
 EquipmentData* GetEquipmentForSeason(Season season, EquipSlot slot);
+
+void UnlockAllAccessorySlots(void);
+
+void UnlockAllBootSlots(void);
 
