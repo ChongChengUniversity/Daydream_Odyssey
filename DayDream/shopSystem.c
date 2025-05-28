@@ -7,6 +7,7 @@
 #include "raylib.h"
 #include "config.h"
 #include "state_shop.h"
+#include "audioManager.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -34,7 +35,7 @@ static void ShowMessageBoxBlocking(const char* message, Color color) {
     };
 
     double start = GetTime();
-    while (GetTime() - start < 0.8) {
+    while (GetTime() - start < 0.4) {
         BeginDrawing();
         DrawRectangleRec(box, (Color){30, 30, 30, 230});
         DrawRectangleLinesEx(box, 2, color);
@@ -176,10 +177,6 @@ bool TryPurchaseAtIndex(int index) {
         for (int i = 0; i < GetTotalEquipments(); ++i) {
             EquipmentData* eq = GetEquipmentByIndex(i);
             if (eq && strcmp(eq->name, item->name) == 0) {
-                if (eq->isPurchased) {
-                    ShowMessageBoxBlocking("Already purchased!", YELLOW);
-                    return false;
-                }
 
                 if (GetPlayerCoins() >= eq->price) {
                     SubtractCoins(eq->price);
@@ -187,9 +184,11 @@ bool TryPurchaseAtIndex(int index) {
                     item->isSoldOut = true;
                     item->active = false;
                     ShowMessageBoxBlocking("Purchase Successful!", GREEN);
+                    GamePlaySound(SOUND_FIVE);
                     return true;
                 } else {
                     ShowMessageBoxBlocking("Not enough coins!", RED);
+                    GamePlaySound(SOUND_FOUR);
                     return false;
                 }
             }
@@ -199,15 +198,6 @@ bool TryPurchaseAtIndex(int index) {
     // === 嘗試購買道具（使用 item->type 直接比對）===
     if (item->type >= 0 && item->type < ITEM_TYPE_COUNT) {
         ItemData* it = GetItemByType(item->type);
-        if (!it) {
-            ShowMessageBoxBlocking("Item not found!", RED);
-            return false;
-        }
-
-        if (it->isPurchased) {
-            ShowMessageBoxBlocking("Already purchased!", YELLOW);
-            return false;
-        }
 
         if (GetPlayerCoins() >= it->price) {
             SubtractCoins(it->price);
@@ -215,9 +205,11 @@ bool TryPurchaseAtIndex(int index) {
             item->active = false;
             item->isSoldOut = true;
             ShowMessageBoxBlocking("Purchase Successful!", GREEN);
+            GamePlaySound(SOUND_FIVE);
             return true;
         } else {
             ShowMessageBoxBlocking("Not enough coins!", RED);
+            GamePlaySound(SOUND_FOUR);
             return false;
         }
     }
@@ -226,5 +218,4 @@ bool TryPurchaseAtIndex(int index) {
     ShowMessageBoxBlocking("Item not found!", RED);
     return false;
 }
-
 

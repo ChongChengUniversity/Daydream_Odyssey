@@ -30,4 +30,3 @@ void RenderItemInfo(int infoIndex, Rectangle* itemBounds, const char* infoText);
 void RenderPurchaseConfirmation(void);
 void RenderPurchaseMessage(void);
 bool TryPurchaseAtIndex(int index);
-

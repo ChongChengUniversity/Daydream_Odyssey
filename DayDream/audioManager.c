@@ -17,6 +17,8 @@ void InitAudioManager()
     sounds[SOUND_ONE] = LoadSound("assets/music/click.wav");        // 點擊音效
     sounds[SOUND_TWO] = LoadSound("assets/music/explosion.wav");    // 爆炸音效
     sounds[SOUND_THREE] = LoadSound("assets/music/pickupCoin.wav"); // 撿金幣音效
+    sounds[SOUND_FOUR] = LoadSound("assets/music/fail.mp3");
+    sounds[SOUND_FIVE] = LoadSound("assets/music/success.mp3");
 
     // 載入一種背景音樂流（支援長時間播放）
     music[MUSIC_ONE] = LoadMusicStream("assets/music/8-bit-game-158815.mp3");

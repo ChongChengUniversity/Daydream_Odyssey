@@ -201,20 +201,14 @@ static void RenderShop() {
 
         // 若有圖就畫圖
         if (shopGrid[i].active) {
-            if (!shopGrid[i].image) {
-                printf("[RenderShop] Warning: item %d (%s) image is NULL\n", i, shopGrid[i].name);
-            } else if (shopGrid[i].image->id == 0) {
-                printf("[RenderShop] Warning: item %d (%s) image ID is 0\n", i, shopGrid[i].name);
-            } else {
-                // 圖片正常，才畫圖
-                DrawTexturePro(
-                    *shopGrid[i].image,
-                    (Rectangle){0, 0, shopGrid[i].image->width, shopGrid[i].image->height},
-                    (Rectangle){shopGrid[i].bounds.x, shopGrid[i].bounds.y, shopGrid[i].bounds.width, shopGrid[i].bounds.height},
-                    (Vector2){0, 0}, 0.0f, WHITE
-                );
-            }
-        }
+            // 圖片正常，才畫圖
+            DrawTexturePro(
+                *shopGrid[i].image,
+                (Rectangle){0, 0, shopGrid[i].image->width, shopGrid[i].image->height},
+                (Rectangle){shopGrid[i].bounds.x, shopGrid[i].bounds.y, shopGrid[i].bounds.width, shopGrid[i].bounds.height},
+                (Vector2){0, 0}, 0.0f, WHITE
+            );
+        }            
 
         // 商品名稱
         int nameW = MeasureText(shopGrid[i].name, 16);
@@ -260,6 +254,7 @@ const GameState STATE_SHOP = {
     .render = RenderShop,
     .exit = ExitShop
 };
+
 
 
 
