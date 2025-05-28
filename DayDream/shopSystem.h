@@ -34,4 +34,3 @@ void RenderPurchaseMessage(void);
 bool TryPurchaseAtIndex(int index);
 void RenderUnlockConfirmation(void);
 void TryOpenUnlockDialog(int index);
-

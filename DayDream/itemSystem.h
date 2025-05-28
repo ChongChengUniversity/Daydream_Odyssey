@@ -24,3 +24,4 @@ ItemData* GetItemByType(ItemType type);
 ItemData* GetItemByIndex(int index);  // ✅ 補上這一行
 
 int GetTotalItems(void);
+

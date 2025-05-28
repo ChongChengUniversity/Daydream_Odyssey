@@ -23,6 +23,8 @@
 extern Season currentSeason; // 外部變數：當前季節，用來選對應圖片
 extern double infoStartTime;
 
+static bool scrollsFilledForFloor[10] = { false }; // 假設最多10層樓
+
 
 // 9 格商店商品格子
 ShopItem shopGrid[SHOP_ROWS * SHOP_COLS];
@@ -30,6 +32,7 @@ ShopItem shopGrid[SHOP_ROWS * SHOP_COLS];
 // 當前滑鼠懸停與資訊顯示的格子編號
 int hoverIndex = -1;
 int infoIndex = -1;
+
 
 // === 給第九層樓的卷軸隨機器（依照指定機率）===
 static ItemType GetRandomScrollTypeForLevel9() {
@@ -45,8 +48,8 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
     int filled = 0;
     int base = (currentFloor - 1) * 5;
 
-      // 清空商店格子狀態
-      for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
+    // 清空商店格子狀態
+    for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
         shopGrid[i].active = false;
         shopGrid[i].selected = false;
         shopGrid[i].isSoldOut = false;
@@ -55,8 +58,8 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
         shopGrid[i].image = NULL;
     }
 
-     // 放裝備
-     for (int i = 0; i < GetTotalEquipments() && filled < SHOP_ROWS * SHOP_COLS; ++i) {
+    // 放裝備
+    for (int i = 0; i < GetTotalEquipments() && filled < SHOP_ROWS * SHOP_COLS; ++i) {
         EquipmentData* eq = GetEquipmentByIndex(i);
         if (!eq || i < base || i >= base + 5) continue;
 
@@ -67,47 +70,69 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
         shopGrid[filled].isSoldOut = eq->isPurchased;
         shopGrid[filled].image = eq->image;
         shopGrid[filled].type = -1;
-        if(eq->locked)
+        if (eq->locked)
             shopGrid[filled].locked = true;
         filled++;
     }
-    // === 第九層樓：強制出現延長Boss CD卷軸 + 兩種不重複的隨機卷軸 ===
-    if (currentFloor == 9) {
-        // 1. 固定出現時間卷軸 SCROLL_TIME
-        ItemData* fixed = GetItemByType(SCROLL_TIME);
-        if (fixed && filled < SHOP_ROWS * SHOP_COLS) {
-            snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", fixed->name);
-            snprintf(shopGrid[filled].description, 128, "%s", fixed->description);
-            shopGrid[filled].price = fixed->price;
-            shopGrid[filled].active = !fixed->isPurchased;
-            shopGrid[filled].isSoldOut = fixed->isPurchased;
-            shopGrid[filled].image = &seasonalItems[currentSeason][SCROLL_TIME];
-            shopGrid[filled].type = SCROLL_TIME;
-            filled++;
-        }
 
-        // 2. 隨機加入兩種不重複的卷軸
-        ItemType selectedScrolls[2];  // 紀錄已經挑過的卷軸類型
-        int scrollCount = 0;
+    if (!scrollsFilledForFloor[currentFloor]) {
+        scrollsFilledForFloor[currentFloor] = true;  // 記錄這層樓已經填過卷軸
+        InitAllItems();
+        if (currentFloor == 9) {
+            // 固定出現時間卷軸 SCROLL_TIME
+            ItemData* fixed = GetItemByType(SCROLL_TIME);
+            if (fixed && filled < SHOP_ROWS * SHOP_COLS) {
+                snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", fixed->name);
+                snprintf(shopGrid[filled].description, 128, "%s", fixed->description);
+                shopGrid[filled].price = fixed->price;
+                shopGrid[filled].active = !fixed->isPurchased;
+                shopGrid[filled].isSoldOut = fixed->isPurchased;
+                shopGrid[filled].image = &seasonalItems[currentSeason][SCROLL_TIME];
+                shopGrid[filled].type = SCROLL_TIME;
+                filled++;
+            }
 
-        while (scrollCount < 2 && filled < SHOP_ROWS * SHOP_COLS) {
-            ItemType scrollType = GetRandomScrollTypeForLevel9();
+            // 隨機加入兩種不重複的卷軸
+            ItemType selectedScrolls[2];
+            int scrollCount = 0;
 
-            // 檢查是否重複
-            bool duplicate = false;
-            for (int j = 0; j < scrollCount; ++j) {
-                if (selectedScrolls[j] == scrollType) {
-                    duplicate = true;
-                    break;
+            while (scrollCount < 2 && filled < SHOP_ROWS * SHOP_COLS) {
+                ItemType scrollType = GetRandomScrollTypeForLevel9();
+
+                bool duplicate = false;
+                for (int j = 0; j < scrollCount; ++j) {
+                    if (selectedScrolls[j] == scrollType) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (duplicate) continue;
+
+                ItemData* item = GetItemByType(scrollType);
+                if (item) {
+                    selectedScrolls[scrollCount++] = scrollType;
+
+                    snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", item->name);
+                    snprintf(shopGrid[filled].description, 128, "%s", item->description);
+                    shopGrid[filled].price = item->price;
+                    shopGrid[filled].active = !item->isPurchased;
+                    shopGrid[filled].isSoldOut = item->isPurchased;
+                    shopGrid[filled].image = &seasonalItems[currentSeason][scrollType];
+                    shopGrid[filled].type = scrollType;
+                    filled++;
                 }
             }
-            if (duplicate) continue;
+        } else if (currentFloor >= 3) {
+            float r = (float)rand() / RAND_MAX;
+            ItemType scrollType;
+            if (r < 0.40f) scrollType = SCROLL_SINGLE;
+            else if (r < 0.65f) scrollType = SCROLL_AOE;
+            else if (r < 0.80f) scrollType = SCROLL_TIME;
+            else if (r < 0.90f) scrollType = SCROLL_HEAL;
+            else scrollType = SCROLL_SHIELD;
 
-            // 若沒重複，加入商店格子
             ItemData* item = GetItemByType(scrollType);
-            if (item) {
-                selectedScrolls[scrollCount++] = scrollType;
-
+            if (item && filled < SHOP_ROWS * SHOP_COLS) {
                 snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", item->name);
                 snprintf(shopGrid[filled].description, 128, "%s", item->description);
                 shopGrid[filled].price = item->price;
@@ -119,30 +144,8 @@ static void FillShopWithEquipmentsAndScrolls(int currentFloor) {
             }
         }
     }
-
-    // === 第3層以上：有機率出現 1 種卷軸（不重複處理，可重複）===
-    else if (currentFloor >= 3) {
-        float r = (float)rand() / RAND_MAX;
-        ItemType scrollType;
-        if (r < 0.40f) scrollType = SCROLL_SINGLE;
-        else if (r < 0.65f) scrollType = SCROLL_AOE;
-        else if (r < 0.80f) scrollType = SCROLL_TIME;
-        else if (r < 0.90f) scrollType = SCROLL_HEAL;
-        else scrollType = SCROLL_SHIELD;
-
-        ItemData* item = GetItemByType(scrollType);
-        if (item && filled < SHOP_ROWS * SHOP_COLS) {
-            snprintf(shopGrid[filled].name, LABEL_BUFFER, "%s", item->name);
-            snprintf(shopGrid[filled].description, 128, "%s", item->description);
-            shopGrid[filled].price = item->price;
-            shopGrid[filled].active = !item->isPurchased;
-            shopGrid[filled].isSoldOut = item->isPurchased;
-            shopGrid[filled].image = &seasonalItems[currentSeason][scrollType];
-            shopGrid[filled].type = scrollType;
-            filled++;
-        }
-    }
 }
+
 
 
 // === 進入商店階段時呼叫，初始化商店內容與格子座標 ===
