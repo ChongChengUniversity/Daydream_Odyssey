@@ -51,5 +51,6 @@ CardBase *CreateKeyCard(float x, float y, int index, int row, int col)
     card->indexInArray = index;
     card->row = row;
     card->col = col;
+    card->type = TYPE_KEY;
     return card;
 }
