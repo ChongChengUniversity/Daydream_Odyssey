@@ -47,6 +47,7 @@ extern Texture2D monsters[ENEMY_TYPE_COUNT];
 extern Texture2D TEX_SHOP_ICON;
 extern Texture2D SOLD_OUT;
 extern Texture2D LOCK;
+extern Texture2D OPEN;
 extern Texture2D equipmentImages[EQUIP_TYPE_COUNT];
 
 void InitAssetManager();

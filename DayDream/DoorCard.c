@@ -7,15 +7,32 @@
 #include "levelManager.h" // ���F�P�_�O�_�̫�@��
 // #include "CardBase.h"
 
+// DoorCard.c
+#include "DoorCard.h"
+#include "config.h"
+#include <stdlib.h>
+#include "stateController.h"
+#include "assetManager.h"
+#include "levelManager.h"
+// #include "CardBase.h"
+
 static void ResetDoor(CardBase *self)
 {
     self->isRevealed = false;
 }
 
 static void DrawDoor(CardBase *self)
-{
-    DrawTextureEx(textures[TEXTURE_DOOR], (Vector2){self->bounds.x, self->bounds.y}, 0.0f,
+{   
+    if (HasKey()) {
+        DrawTextureEx(OPEN, (Vector2){self->bounds.x, self->bounds.y}, 0.0f,
                 (float)TILE_SIZE / textures[TEXTURE_DOOR].width, WHITE);
+    }
+
+    else {
+        DrawTextureEx(textures[TEXTURE_DOOR], (Vector2){self->bounds.x, self->bounds.y}, 0.0f,
+                (float)TILE_SIZE / textures[TEXTURE_DOOR].width, WHITE);
+    }
+    
 }
 
 static void OnRevealDoor(CardBase *self)

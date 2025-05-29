@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 // 通用圖片：背景、門等
 Texture2D textures[MAX_TEXTURES];
 
@@ -14,6 +16,8 @@ Texture2D monsters[ENEMY_TYPE_COUNT];
 
 Texture2D TEX_SHOP_ICON;
 Texture2D SOLD_OUT;
+Texture2D LOCK;
+Texture2D OPEN;
 
 Texture2D equipmentImages[EQUIP_TYPE_COUNT];  
 
@@ -87,13 +91,15 @@ void InitAssetManager() {
     textures[TEXTURE_BG_WINTER] = LoadTexture("assets/scene/4.png");
 
     // Door, Enemy, Key, character
-    textures[TEXTURE_DOOR] = LoadTexture("assets/door.png");
+    textures[TEXTURE_DOOR] = LoadTexture("assets/DOOR/door.png");
     textures[TEXTURE_KEY] = LoadTexture("assets/items/key.png");
     textures[TEXTURE_CHARACTER] = LoadTexture("assets/monsters/enemy111.png");
 
+    OPEN = LoadTexture("assets/DOOR/OPEN.png");
     // SHOP
     TEX_SHOP_ICON = LoadTexture("assets/shop/shop_icon.png");
     SOLD_OUT = LoadTexture("assets/shop/soldout.png");
+    LOCK = LoadTexture("assets/shop/lock.png");
 
     // 四季道具
     char path[128];
@@ -136,9 +142,10 @@ void ShutdownAssetManager() {
     for (int i = 0; i < ENEMY_TYPE_COUNT; i++) {
         UnloadTexture(monsters[i]);
     }
-
+    UnloadTexture(OPEN);
     UnloadTexture(TEX_SHOP_ICON);
     UnloadTexture(SOLD_OUT);
+    UnloadTexture(LOCK);
 
     for (int i = 0; i < EQUIP_TYPE_COUNT; ++i) {
         UnloadTexture(equipmentImages[i]);

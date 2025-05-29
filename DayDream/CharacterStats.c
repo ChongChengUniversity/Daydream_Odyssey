@@ -9,8 +9,8 @@ static PlayerStats player;
 
 //數值假定之後再考慮平衡
 void InitPlayerStats() {
-    player.maxHp = 200;
-    player.currentHp = 200;
+    player.maxHp = 10000;
+    player.currentHp = 1000;
     player.atk = 10;
     player.def = 5;
     player.magic = 5;  // 初始魔力數值可再調
@@ -114,5 +114,6 @@ void GetBaseStatsByTypeAndFloor(MonsterType type, int floor, EnemyStats* outStat
     // 設定初始血量
     outStats->currentHp = outStats->maxHp;
 }
+
 
 
