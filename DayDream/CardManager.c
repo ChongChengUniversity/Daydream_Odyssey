@@ -16,6 +16,7 @@
 #include "levelManager.h"
 #include "KeyCard.h"
 #include "bossManager.h"
+#include <stdio.h>
 
 
 CardBase *cards[TOTAL_CARDS];
@@ -98,13 +99,13 @@ void InitCards()
 
             case TYPE_KEY:
                 cards[card_index] = CreateKeyCard(x, y, card_index, row, col);
+                printf("Key found at: Row %d, Col %d, Index %d\n", cards[card_index]->row, cards[card_index]->col, card_index);
                 break;
             }
-
             
             card_index++;
         }
-    }
+    }     
 }
 
 // 控制哪些格子允許被翻開
@@ -306,7 +307,8 @@ void OnMouseClick(Vector2 mousePos)
             }
             else {
                 // 不在允許翻開區域，但是「已翻開」或是「不可視怪物」的特例仍允許互動
-                if (cards[i]->isRevealed && cards[i]->onInteract) {
+                if (cards[i]->isRevealed && cards[i]->onInteract ||
+                    IsBlockedByEnemy(row, col) && isVisible) {
                     cards[i]->onInteract(cards[i]);
                 }
             }
