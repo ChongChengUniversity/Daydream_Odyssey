@@ -1,18 +1,25 @@
 // shopSystem.c
 #include "shopSystem.h"
 #include "equipmentSystem.h"
-#include "itemSystem.h"       // ✅ 引入道具系統
+#include "itemSystem.h"       
 #include "money.h"
 #include "assetManager.h"
 #include "raylib.h"
 #include "config.h"
 #include "state_shop.h"
 #include "audioManager.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 extern Texture2D SOLD_OUT;
 extern ShopItem shopGrid[]; // 提供商店格子資料給購買邏輯
+
+#define INVALID_SCROLL_TYPE -99 
+
+// 每層記錄 3 個卷軸（最多）
+ItemType selectedScrollsForFloor[10][3];
+static bool scrollsFilledForFloor[10] = { false }; 
 
 // 商品資訊
 double infoStartTime = 0;
@@ -330,6 +337,78 @@ void TryOpenUnlockDialog(int index) {
     unlockIndex = index;
     unlockConfirmVisible = true;
     unlockStartTime = GetTime(); 
+}
+
+// === 給第九層樓的卷軸隨機器（依照指定機率）===
+ItemType GetRandomScrollTypeForLevel9() {
+    float r = (float)rand() / RAND_MAX;
+    if (r < 0.45f) return SCROLL_SINGLE;        // 45%
+    else if (r < 0.70f) return SCROLL_AOE;       // +25% = 70%
+    else if (r < 0.85f) return SCROLL_HEAL;      // +15% = 85%
+    else return SCROLL_SHIELD;                   // 剩下15%
+}
+
+void FillScrollsForFloor(int floor, int* filled) {
+    if (!scrollsFilledForFloor[floor]) {
+        InitAllItems();
+        scrollsFilledForFloor[floor] = true;
+
+        // 初始清空為 ITEM_NONE
+        for (int i = 0; i < 3; ++i) {
+            selectedScrollsForFloor[floor][i] = INVALID_SCROLL_TYPE;
+        }
+
+        // === 第9層固定 + 兩個隨機卷軸 ===
+        if (floor == 9) {
+            selectedScrollsForFloor[floor][0] = SCROLL_TIME;
+
+            int count = 1;
+            while (count < 3) {
+                ItemType type = GetRandomScrollTypeForLevel9();
+
+                bool duplicate = false;
+                for (int j = 0; j < count; ++j) {
+                    if (selectedScrollsForFloor[floor][j] == type) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (!duplicate) {
+                    selectedScrollsForFloor[floor][count++] = type;
+                }
+            }
+
+        // === 第3~8層：只選一種卷軸 ===
+        } else if (floor >= 3) {
+            float r = (float)rand() / RAND_MAX;
+            ItemType type;
+            if (r < 0.40f) type = SCROLL_SINGLE;
+            else if (r < 0.65f) type = SCROLL_AOE;
+            else if (r < 0.80f) type = SCROLL_TIME;
+            else if (r < 0.90f) type = SCROLL_HEAL;
+            else type = SCROLL_SHIELD;
+
+            selectedScrollsForFloor[floor][0] = type;
+        }
+    }
+
+    // === 將選好的卷軸放進 shopGrid ===
+    for (int i = 0; i < 3 && *filled < SHOP_ROWS * SHOP_COLS; ++i) {
+        ItemType type = selectedScrollsForFloor[floor][i];
+        if (type == INVALID_SCROLL_TYPE) continue;
+
+        ItemData* item = GetItemByType(type);
+        if (!item) continue;
+
+        snprintf(shopGrid[*filled].name, LABEL_BUFFER, "%s", item->name);
+        snprintf(shopGrid[*filled].description, 128, "%s", item->description);
+        shopGrid[*filled].price = item->price;
+        shopGrid[*filled].active = !item->isPurchased;
+        shopGrid[*filled].isSoldOut = item->isPurchased;
+        shopGrid[*filled].image = &seasonalItems[currentSeason][type];
+        shopGrid[*filled].type = type;
+        (*filled)++;
+    }
 }
 
 

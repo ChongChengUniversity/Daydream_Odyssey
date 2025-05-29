@@ -101,6 +101,7 @@ void InitAssetManager() {
     SOLD_OUT = LoadTexture("assets/shop/soldout.png");
     LOCK = LoadTexture("assets/shop/lock.png");
 
+    
     // 四季道具
     char path[128];
     for (int season = 0; season < SEASON_COUNT; season++) {
@@ -151,3 +152,4 @@ void ShutdownAssetManager() {
         UnloadTexture(equipmentImages[i]);
     }
 }
+

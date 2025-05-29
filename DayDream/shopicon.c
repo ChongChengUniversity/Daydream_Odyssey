@@ -4,6 +4,7 @@
 #include "audioManager.h"    // 播放點擊音效
 #include "stateController.h" // 使用 ChangeState() 切換狀態
 #include "state_shop.h"      // 切換到商店狀態所需
+#include "levelManager.h"
 #include <stdbool.h>         // 使用 bool 型別
 
 
@@ -27,20 +28,24 @@ void InitShopIcon(void) {
 // 繪製商店圖示（含背景框與圖示圖片）
 void DrawShopIcon(void) {
   // 背景方框
-  DrawRectangleRec(shopIconBox, DARKGRAY);     // 深灰底色
-  DrawRectangleLinesEx(shopIconBox, 2, WHITE); // 白框邊界
+  int currentFloor = GetCurrentLevel();
+  if (currentFloor != 10) {
+    DrawRectangleRec(shopIconBox, DARKGRAY);     // 深灰底色
+    DrawRectangleLinesEx(shopIconBox, 2, WHITE); // 白框邊界
 
-  // 商店圖示圖片，縮放至合適大小並置中
-  float scale = (float)SHOP_ICON_SIZE / TEX_SHOP_ICON.width;
-  Vector2 pos = {
-      shopIconBox.x + (SHOP_ICON_SIZE - TEX_SHOP_ICON.width * scale) / 2,
-      shopIconBox.y + (SHOP_ICON_SIZE - TEX_SHOP_ICON.height * scale) / 2};
+    // 商店圖示圖片，縮放至合適大小並置中
+    float scale = (float)SHOP_ICON_SIZE / TEX_SHOP_ICON.width;
+    Vector2 pos = {
+    shopIconBox.x + (SHOP_ICON_SIZE - TEX_SHOP_ICON.width * scale) / 2,
+    shopIconBox.y + (SHOP_ICON_SIZE - TEX_SHOP_ICON.height * scale) / 2};
 
-  DrawTextureEx(TEX_SHOP_ICON, pos, 0.0f, scale, WHITE); // 貼上圖示
+    DrawTextureEx(TEX_SHOP_ICON, pos, 0.0f, scale, WHITE); // 貼上圖示
+  }
 }
 
 // 更新商店圖示邏輯：偵測滑鼠點擊進入商店狀態
 void UpdateShopIcon(void) {
+  if (GetCurrentLevel() == 10) return; // 第十層沒商店
   Vector2 mouse = GetMousePosition(); // 取得滑鼠目前位置
 
   if (CheckCollisionPointRec(mouse, shopIconBox)) // 如果滑鼠在圖示範圍內

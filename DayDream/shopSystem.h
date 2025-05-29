@@ -1,3 +1,4 @@
+//shopSystem.h
 #pragma once
 #include "raylib.h"
 #include "assetManager.h"
@@ -6,6 +7,7 @@
 #define SHOP_ROWS 3
 #define SHOP_COLS 3
 #define LABEL_BUFFER 64 // 名稱與描述字元緩衝大小
+
 
 typedef struct {
     char name[LABEL_BUFFER];
@@ -34,3 +36,6 @@ void RenderPurchaseMessage(void);
 bool TryPurchaseAtIndex(int index);
 void RenderUnlockConfirmation(void);
 void TryOpenUnlockDialog(int index);
+void FillScrollsForFloor(int floor, int* filled);
+
+ItemType GetRandomScrollTypeForLevel9();
