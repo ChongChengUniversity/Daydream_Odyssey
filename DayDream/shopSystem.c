@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "CharacterStats.h"
+#include "inventory.h"
 
 extern Texture2D SOLD_OUT;
 extern ShopItem shopGrid[]; // 提供商店格子資料給購買邏輯
@@ -296,6 +298,8 @@ bool TryPurchaseAtIndex(int index) {
                     eq->isPurchased = 1;
                     item->isSoldOut = true;
                     item->active = false;
+                    EquipItem(i);  // 自動穿戴裝備
+                    RecalculatePlayerStats();  // 更新主角能力值
                     ShowMessageBoxBlocking("Purchase Successful!", GREEN);
                     GamePlaySound(SOUND_FIVE);
                     return true;
@@ -319,6 +323,7 @@ bool TryPurchaseAtIndex(int index) {
             item->isSoldOut = true;
             ShowMessageBoxBlocking("Purchase Successful!", GREEN);
             GamePlaySound(SOUND_FIVE);
+            AddItemToInventory(item->type); // 把道具加到背包
             return true;
         } else {
             ShowMessageBoxBlocking("Not enough coins!", RED);

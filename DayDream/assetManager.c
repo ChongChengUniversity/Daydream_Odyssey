@@ -152,3 +152,17 @@ void ShutdownAssetManager() {
         UnloadTexture(equipmentImages[i]);
     }
 }
+
+// 裝備說明卡
+Texture2D EQUIP_INFO_CARD;
+Texture2D CLOSE_BUTTON_IMG;
+
+void LoadEquipAssets(void) {
+    EQUIP_INFO_CARD = LoadTexture("assets/infocard.png");
+    CLOSE_BUTTON_IMG = LoadTexture("assets/closeinfo.png");
+}
+
+void UnloadEquipAssets(void) {
+    UnloadTexture(EQUIP_INFO_CARD);
+    UnloadTexture(CLOSE_BUTTON_IMG);
+}

@@ -8,11 +8,13 @@
 #include "CharacterStats.h"
 #include "inventory.h"
 #include "money.h"
+#include "equipmentSystem.h"
 
 const char* labelGameWin = "YOU WIN";
 static const char* labelEnter = "PRESS ENTER FOR MAIN MENU";
 
 static void EnterWin() {
+    UnequipAllSlots(); // 清空裝備欄
     ResetInventory();
     ResetPlayerCoins();
 }

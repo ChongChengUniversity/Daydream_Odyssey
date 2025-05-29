@@ -122,6 +122,9 @@ void DrawItemUseUI(void) {
                 DrawText(line, lineX, 90, fontSize, BLACK);
             }
         }
-        DrawTextureEx(quitTexture, (Vector2){ quitButtonRect.x, quitButtonRect.y }, 0.0f, 0.5f, WHITE);
+        // 加上 hover 效果
+        Vector2 mouse = GetMousePosition();
+        Color quitButtonTint = CheckCollisionPointRec(mouse, quitButtonRect) ? (Color){255, 255, 255, 200} : WHITE;
+        DrawTextureEx(quitTexture, (Vector2){ quitButtonRect.x, quitButtonRect.y }, 0.0f, 0.5f, quitButtonTint);
     }
 }

@@ -4,16 +4,30 @@
 #include <stdlib.h>
 #include "stateController.h"
 #include <stdio.h>
+#include "equipmentSystem.h" // 取得裝備資料
 
 static PlayerStats player;
 
 //數值假定之後再考慮平衡
 void InitPlayerStats() {
-    player.maxHp = 10000;
-    player.currentHp = 1000;// 測試用
-    player.atk = 10;
-    player.def = 5;
-    player.magic = 5;  // 初始魔力數值可再調
+    // 初始化 base 數值
+    player.basemaxHp = 1000;
+    player.bonusMaxHp = 0;
+    player.maxHp = player.basemaxHp;
+    player.currentHp = 1000; // 測試用(之後可改成初始化為maxHP，如: player.currentHp = player.maxHp;)
+
+    player.baseAtk = 10;
+    player.bonusAtk = 0;
+    player.atk = player.baseAtk; // 初始總 atk
+
+    player.baseDef = 5;
+    player.bonusDef = 0;
+    player.def = player.baseDef; // 初始總 def
+
+    player.baseMagic = 5; // 初始魔力數值可再調
+    player.bonusMagic = 0;
+    player.magic = player.baseMagic;
+
     player.currentBuff = BUFF_NONE;
 }
 
@@ -21,10 +35,45 @@ PlayerStats* GetPlayerStats() {
     return &player;
 }
 
+/*
 void ApplyEquipmentToPlayer(int bonusHp, int bonusAtk, int bonusDef) {
     player.maxHp += bonusHp;
     player.atk += bonusAtk;
     player.def += bonusDef;
+}
+*/
+
+// 加上裝備後重新計算能力值
+void RecalculatePlayerStats() {
+    PlayerStats* player = GetPlayerStats();
+
+    // 先重設為基礎值
+    player->bonusAtk = 0;
+    player->bonusDef = 0;
+    player->bonusMaxHp = 0;
+    player->bonusMagic = 0;
+
+    // 掃描裝備欄，每一件裝備加成對應的欄位
+    for (int i = 0; i < EQUIP_SLOT_COUNT; i++) {
+        EquipmentData* eq = GetEquippedInSlot(i);
+        if (eq) {
+            player->bonusAtk += eq->atkPhysical;
+            player->bonusDef += eq->defValue;
+            player->bonusMaxHp += eq->maxHP;
+            player->bonusMagic += eq->atkMagical;
+        }
+    }
+
+    // 計算最終數值
+    player->atk = player->baseAtk + player->bonusAtk;
+    player->def = player->baseDef + player->bonusDef;
+    player->maxHp = player->basemaxHp + player->bonusMaxHp;
+    player->magic = player->baseMagic + player->bonusMagic;
+
+    // 防止 currentHp 超過 maxHp
+    if (player->currentHp > player->maxHp) {
+        player->currentHp = player->maxHp;
+    }
 }
 
 bool ApplyDamageToEnemy(EnemyStats* enemy, int damageToEnemy){

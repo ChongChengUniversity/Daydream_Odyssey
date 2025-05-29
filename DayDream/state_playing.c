@@ -84,7 +84,7 @@ void RenderPlaying(void)
     char buffer[32];
     snprintf(buffer, sizeof(buffer), "Level %d", GetCurrentLevel());
     int textWidth = MeasureText(buffer, 24);
-    DrawText(buffer, (GetScreenWidth() - textWidth) / 2, 10, 24, WHITE);
+    DrawText(buffer, (GetScreenWidth() - textWidth) / 2, 10, 30, WHITE);
 }
 
 const GameState STATE_PLAYING = {

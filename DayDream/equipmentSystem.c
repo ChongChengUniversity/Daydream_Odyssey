@@ -903,3 +903,29 @@ void UnlockAllBootSlots() {
         }
     }
 }
+
+// 顯示已購買的裝備圖示
+void DrawEquippedItems(Rectangle screenRect) {
+    float cellSize = 81;
+    Vector2 slotPositions[5] = {
+        {screenRect.x + 135, screenRect.y + 122},  // HEAD（左上）
+        {screenRect.x + 245, screenRect.y + 210},  // BODY（中）
+        {screenRect.x + 355, screenRect.y + 122},  // HAND（右上）
+        {screenRect.x + 135, screenRect.y + 300},  // LEG（左下）
+        {screenRect.x + 355, screenRect.y + 300}   // ACCESSORY（右下）
+    };
+
+    for (int i = 0; i < 5; i++) {
+        EquipmentData* eq = GetEquippedInSlot(i);  // 取得當前欄位的裝備
+        if (eq && eq->image) {
+            DrawTextureEx(*eq->image, slotPositions[i], 0.0f, 0.3f, WHITE);
+        }
+    }
+}
+
+// 清空所有裝備欄
+void UnequipAllSlots(void) {
+    for (int i = 0; i < EQUIP_SLOT_COUNT; i++) {
+        UnequipSlot(i);
+    }
+}

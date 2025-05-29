@@ -55,3 +55,8 @@ void UnlockAllAccessorySlots(void);
 
 void UnlockAllBootSlots(void);
 
+// 顯示已購買的裝備圖示
+void DrawEquippedItems(Rectangle screenRect);
+
+// 清空所有裝備欄
+void UnequipAllSlots(void);

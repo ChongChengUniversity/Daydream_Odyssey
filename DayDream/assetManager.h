@@ -53,3 +53,9 @@ extern Texture2D equipmentImages[EQUIP_TYPE_COUNT];
 void InitAssetManager();
 void ShutdownAssetManager();
 ItemType GetRandomItemType(void);
+
+// 裝備說明卡
+extern Texture2D EQUIP_INFO_CARD;
+extern Texture2D CLOSE_BUTTON_IMG;
+void LoadEquipAssets(void);
+void UnloadEquipAssets(void);

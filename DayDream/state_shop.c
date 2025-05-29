@@ -24,6 +24,11 @@
 extern Season currentSeason; // 外部變數：當前季節，用來選對應圖片
 extern double infoStartTime;
 
+// exit按鈕
+static Texture2D exitButtonTexture;
+static Rectangle exitButtonBounds;
+float scale = 0.5f; // 調整按鈕大小
+
 // 9 格商店商品格子
 ShopItem shopGrid[SHOP_ROWS * SHOP_COLS];
 
@@ -91,11 +96,22 @@ static void EnterShop() {
     }
 
     FillShopWithEquipmentsAndScrolls(GetCurrentLevel());
+
+    // 載入 Exit 圖片並設定在下方中央
+    exitButtonTexture = LoadTexture("assets/exitshop.png");
+    exitButtonBounds = (Rectangle){
+        .x = SCREEN_WIDTH / 2 - (exitButtonTexture.width * scale) / 2,
+        .y = SCREEN_HEIGHT - (exitButtonTexture.height * scale) - 10,
+        .width = exitButtonTexture.width * scale,
+        .height = exitButtonTexture.height * scale
+    };
 }
 
 // === 每幀更新商店狀態：按鍵偵測與滑鼠互動 ===
 static void UpdateShop() {
-    if (IsKeyPressed(KEY_ENTER)) {
+    // 偵測按鈕點擊
+    Vector2 mouse = GetMousePosition();
+    if (CheckCollisionPointRec(mouse, exitButtonBounds) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         SetReturningFromShop(true);
         GOTO(PLAYING);
     }
@@ -179,11 +195,16 @@ static void RenderShop() {
     
     RenderPurchaseConfirmation();
     RenderUnlockConfirmation();
-    DrawText("[ENTER] Return to Game", SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT - 50, 20, LIGHTGRAY);
+    // 從按enter鍵離開改成按exit按鈕離開
+    Vector2 mouse = GetMousePosition();
+    Color tint = CheckCollisionPointRec(mouse, exitButtonBounds) ? (Color){255, 255, 255, 200} : WHITE;
+    DrawTextureEx(exitButtonTexture,(Vector2){exitButtonBounds.x, exitButtonBounds.y},0.0f, scale, tint);
 }
 
 // === 離開商店階段，目前不需處理 ===
-static void ExitShop() {}
+static void ExitShop() {
+    UnloadTexture(exitButtonTexture);
+}
 
 // === 商店狀態結構：提供給 stateController 切換使用 ===
 const GameState STATE_SHOP = {
@@ -192,11 +213,3 @@ const GameState STATE_SHOP = {
     .render = RenderShop,
     .exit = ExitShop
 };
-
-
-
-
-
-
-
-

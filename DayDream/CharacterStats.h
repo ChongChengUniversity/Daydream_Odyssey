@@ -40,7 +40,9 @@ void InitPlayerStats();
 bool ApplyDamageToEnemy(EnemyStats* enemy, int damage);
 void ApplyDamageToPlayer(PlayerStats* player, int damageToPlayer);
 
-void ApplyEquipmentToPlayer(int bonusHp, int bonusAtk, int bonusDef);
+//void ApplyEquipmentToPlayer(int bonusHp, int bonusAtk, int bonusDef);
+// 上面的function改成底下這個(加上裝備後重新計算能力值)
+void RecalculatePlayerStats();
 void HealPlayerBySource(HealSource source);
 
 PlayerStats* GetPlayerStats();
