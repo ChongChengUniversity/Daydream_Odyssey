@@ -46,7 +46,7 @@ static void ShowMessageBoxBlocking(const char* message, Color color) {
     };
 
     double start = GetTime();
-    while (GetTime() - start < 0.4) {
+    while (GetTime() - start < 0.2) {
         BeginDrawing();
         DrawRectangleRec(box, (Color){30, 30, 30, 230});
         DrawRectangleLinesEx(box, 2, color);
