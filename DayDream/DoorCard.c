@@ -4,15 +4,6 @@
 #include <stdlib.h>
 #include "stateController.h"
 #include "assetManager.h"
-#include "levelManager.h" // ���F�P�_�O�_�̫�@��
-// #include "CardBase.h"
-
-// DoorCard.c
-#include "DoorCard.h"
-#include "config.h"
-#include <stdlib.h>
-#include "stateController.h"
-#include "assetManager.h"
 #include "levelManager.h"
 // #include "CardBase.h"
 
@@ -74,3 +65,4 @@ CardBase* CreateDoorCard(float x, float y, int index, int row, int col)
     card->type = TYPE_DOOR;
     return card;
 }
+

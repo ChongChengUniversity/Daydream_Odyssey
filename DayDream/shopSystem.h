@@ -1,4 +1,4 @@
-//shopSystem.h
+// shopSystem.h
 #pragma once
 #include "raylib.h"
 #include "assetManager.h"

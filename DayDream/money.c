@@ -3,7 +3,7 @@
 #include "raylib.h"
 #include "config.h"
 
-static int playerCoins = 0;
+static int playerCoins = 100; // 測試用
 static Texture2D moneyUITexture;
 static float moneyUIScale = 0.2f; // 縮放比例
 

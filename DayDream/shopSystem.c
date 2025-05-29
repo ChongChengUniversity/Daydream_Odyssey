@@ -410,6 +410,3 @@ void FillScrollsForFloor(int floor, int* filled) {
         (*filled)++;
     }
 }
-
-
-
