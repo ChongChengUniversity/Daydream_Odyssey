@@ -97,21 +97,31 @@ static void EnterShop() {
 
     FillShopWithEquipmentsAndScrolls(GetCurrentLevel());
 
-    // 載入 Exit 圖片並設定在下方中央
-    exitButtonTexture = LoadTexture("assets/exitshop.png");
+    // 載入 Exit 圖片並設定位置
+    exitButtonTexture = LoadTexture("assets/shop/exitshop.png");
     exitButtonBounds = (Rectangle){
         .x = SCREEN_WIDTH / 2 - (exitButtonTexture.width * scale) / 2,
-        .y = SCREEN_HEIGHT - (exitButtonTexture.height * scale) - 10,
+        .y = SCREEN_HEIGHT - (exitButtonTexture.height * scale) - 5,
         .width = exitButtonTexture.width * scale,
         .height = exitButtonTexture.height * scale
     };
+
 }
 
 // === 每幀更新商店狀態：按鍵偵測與滑鼠互動 ===
 static void UpdateShop() {
-    // 偵測按鈕點擊
     Vector2 mouse = GetMousePosition();
-    if (CheckCollisionPointRec(mouse, exitButtonBounds) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+
+    // ✅ 建立實際縮放後的點擊區域 hitbox
+    Rectangle exitHitbox = {
+        exitButtonBounds.x,
+        exitButtonBounds.y,
+        exitButtonTexture.width * scale,
+        exitButtonTexture.height * scale
+    };
+
+    // ✅ 改為使用 hitbox 做點擊判定
+    if (CheckCollisionPointRec(mouse, exitHitbox) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         SetReturningFromShop(true);
         GOTO(PLAYING);
     }
@@ -125,6 +135,7 @@ static void UpdateShop() {
 
     UpdateShopInteraction(itemBounds, SHOP_ROWS * SHOP_COLS, &hoverIndex, &infoIndex, activeArray);
 }
+
 
 // === 繪製整個商店畫面（商品格子、圖片、名稱、價格、資訊等）===
 static void RenderShop() {
@@ -196,9 +207,19 @@ static void RenderShop() {
     RenderPurchaseConfirmation();
     RenderUnlockConfirmation();
     // 從按enter鍵離開改成按exit按鈕離開
+    // === 在畫 Exit 按鈕之前先取得實際點擊區域（Hitbox）
+    Rectangle exitHitbox = {
+        exitButtonBounds.x,
+        exitButtonBounds.y,
+        exitButtonBounds.width,
+        exitButtonBounds.height
+    };
+
     Vector2 mouse = GetMousePosition();
-    Color tint = CheckCollisionPointRec(mouse, exitButtonBounds) ? (Color){255, 255, 255, 200} : WHITE;
-    DrawTextureEx(exitButtonTexture,(Vector2){exitButtonBounds.x, exitButtonBounds.y},0.0f, scale, tint);
+    Color tint = CheckCollisionPointRec(mouse, exitHitbox) ? (Color){255, 255, 255, 200} : WHITE;
+
+    DrawTextureEx(exitButtonTexture, (Vector2){exitButtonBounds.x, exitButtonBounds.y}, 0.0f, scale, tint);
+
 }
 
 // === 離開商店階段，目前不需處理 ===
