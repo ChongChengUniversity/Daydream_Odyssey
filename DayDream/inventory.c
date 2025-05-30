@@ -43,38 +43,35 @@ void RemoveInventoryItem(int index) {
     inventoryCount--;
 }
 
-// 繪製背包 UI
 void DrawInventoryUI(Vector2 position, Rectangle screenRect) {
-    int cols = 4; // 每列 4 格
-    int rows = 4; // 總共 4 列
-    float cellSize = 64.0f; // 每個格子的大小（正方形）
-    float padding = 45.0f;   // 格子之間的間距
+    int cols = 3; // 每列 3 格
+    int rows = 3; // 總共 3 列
+    float cellSize = 64.0f;
+    float padding = 90.0f;
 
-    // 計算背包區域的起始位置（左上）
-    float startX = screenRect.x + 90.0f;
-    float startY = screenRect.y + 90.0f;
+    float startX = screenRect.x + 170.0f;
+    float startY = screenRect.y + 100.0f;
 
     for (int i = 0; i < inventoryCount; i++) {
         int col = i % cols;
         int row = i / cols;
 
-        // 計算每個道具格子的位置（準確對齊）
+        float yOffset = 0.0f;
+        if (row == 1) yOffset = -20.0f;  // 第二列往上移 20 像素
+
         float x = startX + col * (cellSize + padding);
-        float y = startY + row * (cellSize + padding);
+        float y = startY + row * (cellSize + padding) + yOffset;
 
-        Vector2 mousePos = GetMousePosition(); // 取得滑鼠座標
-
+        Vector2 mousePos = GetMousePosition();
         Rectangle itemRect = {x, y, cellSize, cellSize};
 
-        // 點擊偵測）
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mousePos, itemRect)) {
-            BeginItemUse(i); // 觸發使用道具流程
-            isBackpackOpen = false; // 關閉背包
-            SetCurrentBackpackPage(SCREEN_BACKPACK); // 重設為背包頁
-            return; // 點到就不再畫其他道具
+            BeginItemUse(i);
+            isBackpackOpen = false;
+            SetCurrentBackpackPage(SCREEN_BACKPACK);
+            return;
         }
 
-        // 繪製道具圖片
         Texture2D itemTexture = seasonalItems[currentSeason][inventory[i].type];
         float itemWidth = itemTexture.width * itemScale;
         float itemHeight = itemTexture.height * itemScale;
@@ -84,25 +81,30 @@ void DrawInventoryUI(Vector2 position, Rectangle screenRect) {
 
         DrawTextureEx(itemTexture, (Vector2){itemX, itemY}, 0.0f, itemScale, WHITE);
 
-        // 顯示數量
+        // 顯示道具數量
         DrawText(TextFormat("x%d", inventory[i].quantity), x + cellSize - 20, y + cellSize - 20, 18, WHITE);
     }
 }
 
 // 道具互動
 int GetClickedInventoryIndex(Vector2 mousePos, Rectangle screenRect) {
-    int cols = 4;
+    int cols = 3;
     float cellSize = 64.0f;
-    float padding = 45.0f;
-    float startX = screenRect.x + 90.0f;
-    float startY = screenRect.y + 90.0f;
+    float padding = 90.0f;
+    float startX = screenRect.x + 170.0f;
+    float startY = screenRect.y + 100.0f;
 
     for (int i = 0; i < inventoryCount; i++) {
         int col = i % cols;
         int row = i / cols;
+
+        float yOffset = 0.0f;
+        if (row == 1) yOffset = -20.0f;
+
         float x = startX + col * (cellSize + padding);
-        float y = startY + row * (cellSize + padding);
+        float y = startY + row * (cellSize + padding) + yOffset;
         Rectangle itemRect = {x, y, cellSize, cellSize};
+
         if (CheckCollisionPointRec(mousePos, itemRect)) {
             return i;
         }
