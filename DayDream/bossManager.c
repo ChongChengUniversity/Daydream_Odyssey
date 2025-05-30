@@ -14,6 +14,7 @@
 #include "EnemyStats.h"
 #include "assetManager.h"
 
+
 static int bossCD = 3;             // 初始冷卻：第一回合增益，下一回合開始攻擊
 static bool bossAlive = true;     // 用來判斷 Boss 是否還活著
 static int CDcount = 0;
