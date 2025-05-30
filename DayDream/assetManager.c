@@ -53,36 +53,17 @@ ItemType GetRandomItemType()
     float r = (float)rand() / RAND_MAX;
     if (r < 0.20f)
         return ITEM_HP;       // 補血藥水 20%
-    else if (r < 0.20f + 0.15f)
-        return ITEM_COIN;     // 金幣 15%
-    else if (r < 0.20f + 0.15f + 0.25f)
-        return SCROLL_SINGLE; // 單體傷害卷軸 25%
-    else if (r < 0.20f + 0.15f + 0.25f + 0.15f)
-        return SCROLL_AOE;    // 群體傷害卷軸 15%
-    else if (r < 0.20f + 0.15f + 0.25f + 0.15f + 0.15f)
-        return SCROLL_HEAL;   // 補血卷軸 15%
+    else if (r < 0.20f + 0.35f)
+        return ITEM_COIN;     // 金幣 35%
+    else if (r < 0.20f + 0.35f + 0.20f)
+        return SCROLL_SINGLE; // 單體傷害卷軸 20%
+    else if (r < 0.20f + 0.35f + 0.20f + 0.12f)
+        return SCROLL_AOE;    // 群體傷害卷軸 12%
+    else if (r < 0.20f + 0.35f + 0.20f + 0.12f + 0.08f)
+        return SCROLL_HEAL;   // 補血卷軸 8%
     else
-        return SCROLL_SHIELD; // 護盾卷軸 10%
-
-    // float r = (float)rand() / RAND_MAX; // RAND_MAX defined in stdlib.h
-    // if (r < 0.25f)
-    //     return ITEM_HP; // 25% for hp
-    // else if (r < 0.50f)
-    //     return ITEM_MP; // 25%
-    // else if (r < 0.60f)
-    //     return ITEM_COIN; // 10%
-    // else if (r < 0.68f)
-    //     return SCROLL_TIME; // all the scrolls are 8% each
-    // else if (r < 0.76f)
-    //     return SCROLL_AOE;
-    // else if (r < 0.84f)
-    //     return SCROLL_SHIELD;
-    // else if (r < 0.92f)
-    //     return SCROLL_HEAL;
-    // else
-    //     return SCROLL_SINGLE;
+        return SCROLL_SHIELD; // 護盾卷軸 5%
 }
-
 
 void InitAssetManager() {
     // background image
@@ -94,7 +75,8 @@ void InitAssetManager() {
     // Door, Enemy, Key, character
     textures[TEXTURE_DOOR] = LoadTexture("assets/DOOR/door.png");
     textures[TEXTURE_KEY] = LoadTexture("assets/items/key.png");
-    textures[TEXTURE_CHARACTER] = LoadTexture("assets/monsters/enemy111.png");
+    textures[TEXTURE_CHARACTER] = LoadTexture("assets/monsters/maincharacter.png");
+    textures[TEXTURE_CHARACTER_HURT] = LoadTexture("assets/monsters/maincharacter_hurt.png");
     textures[TEXTURE_PORTAL] = LoadTexture("assets/portal.png");
 
     OPEN = LoadTexture("assets/DOOR/OPEN.png");

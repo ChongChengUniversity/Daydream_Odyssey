@@ -11,8 +11,8 @@
 #include "enemyManager.h"
 #include "inventory.h"
 #include "money.h"
-
 #include "itemUse.h"
+#include "CharacterStats.h"
 
 void EnterPlaying(void)
 {
@@ -33,6 +33,8 @@ void EnterPlaying(void)
 void UpdatePlaying(void)
 {
     Vector2 mousePos = GetMousePosition();
+
+    UpdatePlayer(GetPlayerStats());
 
     if (GetItemUseState() != ITEM_STATE_NONE) {
         UpdateItemUse(mousePos);

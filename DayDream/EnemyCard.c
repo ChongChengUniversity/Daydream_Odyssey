@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include "CardBase.h"
 #include "enemyManager.h"
+#include "money.h"
 
 // 畫出粗體字（加黑邊）
 static void DrawBoldText(const char* text, int posX, int posY, int fontSize, Color color) {
@@ -65,8 +66,8 @@ void DrawEnemy(CardBase* self) {
         if (CheckCollisionPointRec(GetMousePosition(), self->bounds)){
             int fontSize = 16;
             //printf("▶ SHOW INFO for enemy at (%d, %d)\n", self->row, self->col);
-            // 左上角：攻擊力（黃色）
-            DrawBoldText(TextFormat("%d", enemy->atk), bounds.x + 2, bounds.y + 2, fontSize, YELLOW);
+            // 左上角：攻擊力（橘色）
+            DrawBoldText(TextFormat("%d", enemy->atk), bounds.x + 2, bounds.y + 2, fontSize, ORANGE);
             // 左下角：血量（紅色）
             DrawBoldText(TextFormat("%d", enemy->currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED);
             // 右下角：防禦力（黃色）
@@ -95,6 +96,7 @@ static void OnInteractEnemy(CardBase* self) {
     bool enemyDead = AttackEnemy(player, enemy);
     if (enemyDead) {
         //會翻開新轉成的空卡
+        AddCoins(10);
         ReplaceCardWithEmpty(self->indexInArray, true);
         AbleToReveal();
         UpdateVisibleBufferCounts();

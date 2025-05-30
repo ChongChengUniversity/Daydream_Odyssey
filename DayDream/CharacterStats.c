@@ -29,6 +29,8 @@ void InitPlayerStats() {
     player.magic = player.baseMagic;
 
     player.currentBuff = BUFF_NONE;
+    player.isHit = 0;
+    player.hitTimer = 0;
 }
 
 PlayerStats* GetPlayerStats() {
@@ -93,9 +95,22 @@ bool ApplyDamageToEnemy(EnemyStats* enemy, int damageToEnemy){
 void ApplyDamageToPlayer(PlayerStats* player, int damageToPlayer){
     if(player->currentHp - damageToPlayer > 0){
         player->currentHp = player->currentHp - damageToPlayer;
+
+        // 新增：觸發受攻擊效果
+        player->isHit = true;
+        player->hitTimer = 30;  // 顯示 0.5 秒 (30 幀)
     }
     else{
         GOTO(LOSE);
+    }
+}
+
+void UpdatePlayer(PlayerStats* player) {
+    if (player->isHit) {
+        player->hitTimer--;
+        if (player->hitTimer <= 0) {
+            player->isHit = false;
+        }
     }
 }
 

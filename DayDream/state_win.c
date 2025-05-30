@@ -9,6 +9,7 @@
 #include "inventory.h"
 #include "money.h"
 #include "equipmentSystem.h"
+#include "itemSystem.h"
 
 const char* labelGameWin = "YOU WIN";
 static const char* labelEnter = "PRESS ENTER FOR MAIN MENU";

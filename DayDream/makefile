@@ -47,7 +47,8 @@ SRC = \
     scrollManager.c \
     itemUse.c \
     shopSystem.c \
-    bossManager.c 
+    bossManager.c  \
+    portalCard.c
 
 # 輸出檔案名稱
 TARGET = test.exe

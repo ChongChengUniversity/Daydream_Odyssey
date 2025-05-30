@@ -7,6 +7,7 @@
 #include "levelManager.h"
 #include "itemUse.h"
 #include "CardBase.h"
+#include "money.h"
 
 int GetSingleTargetMagicDamage(int magicPower, int floor, MonsterType type){
     float rawDamage;
@@ -47,6 +48,7 @@ void UseScrollEffect(ScrollType scroll, GridPos targetPos) {
 
             bool enemyDead = ApplyDamageToEnemy(targetStats, singleDamage);
             if (enemyDead) {
+                AddCoins(10);
                 int index = GetCardIndexByGridPos(targetPos.row, targetPos.col);
 
                 if (GetCurrentLevel() == 10) {
@@ -82,6 +84,7 @@ void UseScrollEffect(ScrollType scroll, GridPos targetPos) {
                 if (cards[i]->isRevealed || enemyInfo[row][col].isVisible) {
                     bool enemyDead = ApplyDamageToEnemy(enemy, aoeDamage);
                     if (enemyDead) {
+                        AddCoins(10);
                         ReplaceCardWithEmpty(cards[i]->indexInArray, true);
                         printf("怪物已被擊敗\n");
                     }

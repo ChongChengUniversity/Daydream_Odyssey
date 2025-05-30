@@ -29,6 +29,8 @@ typedef struct {
     int bonusMagic;  // 裝備提供的魔力加成
 
     BuffType currentBuff;
+    bool isHit;         // 是否剛被打中
+    int hitTimer;       // 受攻擊顯示計時器（單位：幀）
 } PlayerStats;
 
 typedef enum {
@@ -39,6 +41,7 @@ typedef enum {
 void InitPlayerStats();
 bool ApplyDamageToEnemy(EnemyStats* enemy, int damage);
 void ApplyDamageToPlayer(PlayerStats* player, int damageToPlayer);
+void UpdatePlayer(PlayerStats* player);
 
 //void ApplyEquipmentToPlayer(int bonusHp, int bonusAtk, int bonusDef);
 // 上面的function改成底下這個(加上裝備後重新計算能力值)
