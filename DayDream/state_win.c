@@ -17,6 +17,7 @@ static void EnterWin() {
     UnequipAllSlots(); // 清空裝備欄
     ResetInventory();
     ResetPlayerCoins();
+    InitAllEquipments();
 }
 
 static void UpdateWin() {
