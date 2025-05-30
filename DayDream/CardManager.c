@@ -5,6 +5,7 @@
 #include "ItemCard.h"
 #include "DoorCard.h"
 #include "EmptyCard.h"
+#include "portalCard.h"
 #include "KeyCard.h"
 #include "config.h"
 #include "raylib.h"
@@ -14,7 +15,6 @@
 #include "CharacterStats.h"
 #include "enemyManager.h"
 #include "levelManager.h"
-#include "KeyCard.h"
 #include "bossManager.h"
 #include <stdio.h>
 
@@ -52,6 +52,39 @@ static int indexdoorCol = -1;
 // create cards
 void InitCards()
 {
+    if (GetCurrentLevel() == 10) {
+        InitBossState();
+        int start_x = BOARD_START_X;
+        int start_y = BOARD_START_Y;
+        int card_index = 0;
+
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                float x = start_x + TILE_GAP + col * (TILE_SIZE + TILE_GAP);
+                float y = start_y + TILE_GAP + row * (TILE_SIZE + TILE_GAP);
+
+                if (row == 2 && col == 2) {
+                    // 中央 Boss 卡不翻開
+                    cards[card_index] = CreateBossCard(x, y, card_index, row, col);
+                }
+                else {
+                    // 其他空卡建立並直接翻開
+                    cards[card_index] = CreateEmptyCard(x, y, card_index, row, col);
+                    if (cards[card_index] && cards[card_index]->onReveal) {
+                        cards[card_index]->onReveal(cards[card_index]);
+                    }
+                }
+
+                card_index++;
+            }
+        }
+
+        return; // ✅ 完成後不走原本流程
+    }
+
+
+
+
     for (int i = 0; i < TOTAL_CARDS; ++i)
     {
         cards[i] = NULL;
@@ -69,13 +102,6 @@ void InitCards()
         {
             float x = start_x + TILE_GAP + col * (TILE_SIZE + TILE_GAP);
             float y = start_y + TILE_GAP + row * (TILE_SIZE + TILE_GAP);
-
-            //第十關boss位置(可更改)
-            if (GetCurrentLevel() == 10 && row == 2 && col == 2) {
-                cards[card_index] = CreateBossCard(x, y, card_index, row, col);
-                card_index++;
-                continue; // 避免重複插卡
-            }
             
             switch (cardTypes[card_index])
             {
@@ -163,6 +189,7 @@ void AbleToReveal() {
 
 //一開始自動翻開門並更新可翻開卡片
 void RevealDoorCardAtStart(){
+   
     for (int i = 0; i < COLS * ROWS; ++i){
         GridPos pos = GetCardGridPosition(cards[i]->bounds);
         if(indexdoorCol == pos.col && indexdoorRow == pos.row){
@@ -330,6 +357,20 @@ void ReplaceCardWithEmpty(int index, bool shouldReveal) {
 
     SafeDestroyCard(&cards[index]);
     cards[index] = CreateEmptyCard(x, y, index, row, col);  // 換成空卡
+
+    if (shouldReveal) {
+        cards[index]->onReveal(cards[index]);  // 只有需要時才觸發翻開
+    }
+}
+
+void ReplaceCardWithPortal(int index, bool shouldReveal) {
+    float x = cards[index]->bounds.x;
+    float y = cards[index]->bounds.y;
+    int row = cards[index]->row;
+    int col = cards[index]->col;
+
+    SafeDestroyCard(&cards[index]);
+    cards[index] = CreatePortalCard(x, y, index, row, col);  // 換成傳送門
 
     if (shouldReveal) {
         cards[index]->onReveal(cards[index]);  // 只有需要時才觸發翻開

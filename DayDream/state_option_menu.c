@@ -38,14 +38,15 @@ static void UpdateOptionMenu() {
 }
 
 static void RenderOptionMenu() {
-    // èƒŒæ™¯åœ–
+    // ­I´º¹Ï
     float screenRatio = (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT;
     float imageRatio = (float)optionBackground.width / (float)optionBackground.height;
 
     float scale;
     if (screenRatio > imageRatio) {
         scale = (float)SCREEN_WIDTH / (float)optionBackground.width;
-    } else {
+    }
+    else {
         scale = (float)SCREEN_HEIGHT / (float)optionBackground.height;
     }
 
@@ -55,9 +56,15 @@ static void RenderOptionMenu() {
     float offsetY = (SCREEN_HEIGHT - bgHeight) / 2;
 
     DrawTexturePro(optionBackground,
-                   (Rectangle){0, 0, optionBackground.width, optionBackground.height},
-                   (Rectangle){offsetX, offsetY, bgWidth, bgHeight},
-                   (Vector2){0, 0}, 0.0f, WHITE);
+        (Rectangle) {
+        0, 0, optionBackground.width, optionBackground.height
+    },
+        (Rectangle) {
+        offsetX, offsetY, bgWidth, bgHeight
+    },
+        (Vector2) {
+        0, 0
+    }, 0.0f, WHITE);
 
     // DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, DARKBLUE);
     DrawText("DAYDREAM :: OPTIONS", 20, 20, 45, WHITE);

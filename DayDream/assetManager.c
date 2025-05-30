@@ -44,7 +44,8 @@ const char *itemSuffix[ITEM_TYPE_COUNT] = {
 const char *enemyImagePaths[ENEMY_TYPE_COUNT] = {
     "assets/monsters/enemy.png",         // 普通怪
     "assets/monsters/buff_atk.png",      // 提升攻擊力
-    "assets/monsters/buff_def.png"       // 提升防禦力
+    "assets/monsters/buff_def.png",      // 提升防禦力
+    "assets/monsters/boss.png"
 };
 
 ItemType GetRandomItemType()
@@ -94,6 +95,7 @@ void InitAssetManager() {
     textures[TEXTURE_DOOR] = LoadTexture("assets/DOOR/door.png");
     textures[TEXTURE_KEY] = LoadTexture("assets/items/key.png");
     textures[TEXTURE_CHARACTER] = LoadTexture("assets/monsters/enemy111.png");
+    textures[TEXTURE_PORTAL] = LoadTexture("assets/portal.png");
 
     OPEN = LoadTexture("assets/DOOR/OPEN.png");
     // SHOP

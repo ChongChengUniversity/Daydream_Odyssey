@@ -25,7 +25,10 @@ static void UpdateWin() {
     {
         GamePlaySound(SOUND_TWO);
         InitLevelManager();
+        ResetAllCards();
         InitPlayerStats();
+        InitAllEquipments();
+        InitAllItems();
         GOTO(MAIN_MENU);
     }
 }

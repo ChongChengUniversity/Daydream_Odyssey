@@ -166,7 +166,7 @@ void ResetEnemyInfo() {
     for (int row = 0; row < ROWS; ++row) {
         for (int col = 0; col < COLS; ++col) {
 
-            if (enemyInfo[row][col].type == MONSTER_BOSS) continue; //  不清空 boss
+            if (GetCurrentLevel() == 10 && row == 2 && col == 2) continue;
 
             enemyInfo[row][col].isVisible = false;
             enemyInfo[row][col].isHidden = false;
@@ -219,7 +219,7 @@ void UpdateEnemyVisibility() {
         int row = cards[i]->row;
         int col = cards[i]->col;
 
-        if (enemyInfo[row][col].type == MONSTER_BOSS) continue; //  跳過 boss
+        if (GetCurrentLevel() == 10 && row == 2 && col == 2) continue;
 
         enemyIndices[enemyCount++] = i;
     }
