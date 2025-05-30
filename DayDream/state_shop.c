@@ -139,8 +139,8 @@ static void UpdateShop() {
 
 // === 繪製整個商店畫面（商品格子、圖片、名稱、價格、資訊等）===
 static void RenderShop() {
-    ClearBackground((Color){77, 51, 25, 255});
-    DrawRectangle(0, 0, SCREEN_WIDTH, 80, (Color){193, 117, 56, 255});
+    ClearBackground((Color) { 77, 51, 25, 255 });
+    DrawRectangle(0, 0, SCREEN_WIDTH, 80, (Color) { 193, 117, 56, 255 });
     DrawText("SHOP", SCREEN_WIDTH / 2 - MeasureText("SHOP", 48) / 2, 20, 48, YELLOW);
 
     char coinText[64];
@@ -152,7 +152,7 @@ static void RenderShop() {
     RenderItemHover(hoverIndex, itemBounds, SHOP_ROWS * SHOP_COLS);
 
     for (int i = 0; i < SHOP_ROWS * SHOP_COLS; ++i) {
-        DrawRectangleRounded(shopGrid[i].bounds, 0.1f, 12, (Color){236, 204, 158, 255});
+        DrawRectangleRounded(shopGrid[i].bounds, 0.1f, 12, (Color) { 236, 204, 158, 255 });
         DrawRectangleRoundedLines(shopGrid[i].bounds, 0.1f, 12, BROWN);
 
         // 若有圖就畫圖
@@ -160,18 +160,24 @@ static void RenderShop() {
             // 圖片正常，才畫圖
             DrawTexturePro(
                 *shopGrid[i].image,
-                (Rectangle){0, 0, shopGrid[i].image->width, shopGrid[i].image->height},
-                (Rectangle){shopGrid[i].bounds.x, shopGrid[i].bounds.y, shopGrid[i].bounds.width, shopGrid[i].bounds.height},
-                (Vector2){0, 0}, 0.0f, WHITE
+                (Rectangle) {
+                0, 0, shopGrid[i].image->width, shopGrid[i].image->height
+            },
+                (Rectangle) {
+                shopGrid[i].bounds.x, shopGrid[i].bounds.y, shopGrid[i].bounds.width, shopGrid[i].bounds.height
+            },
+                (Vector2) {
+                0, 0
+            }, 0.0f, WHITE
             );
-        }            
+        }
 
         // 商品名稱
         int nameW = MeasureText(shopGrid[i].name, 16);
         DrawText(shopGrid[i].name,
-                 shopGrid[i].bounds.x + SHOP_ITEM_SIZE / 2 - nameW / 2,
-                 shopGrid[i].bounds.y + SHOP_ITEM_SIZE - 30,
-                 16, WHITE);
+            shopGrid[i].bounds.x + SHOP_ITEM_SIZE / 2 - nameW / 2,
+            shopGrid[i].bounds.y + SHOP_ITEM_SIZE - 30,
+            16, WHITE);
 
         // 價格
         if (shopGrid[i].active) {
@@ -179,31 +185,32 @@ static void RenderShop() {
             snprintf(priceStr, sizeof(priceStr), "$%d", shopGrid[i].price);
             int priceWidth = MeasureText(priceStr, 14);
             DrawText(priceStr,
-                     shopGrid[i].bounds.x + SHOP_ITEM_SIZE / 2 - priceWidth / 2,
-                     shopGrid[i].bounds.y + SHOP_ITEM_SIZE - 15,
-                     14, WHITE);
+                shopGrid[i].bounds.x + SHOP_ITEM_SIZE / 2 - priceWidth / 2,
+                shopGrid[i].bounds.y + SHOP_ITEM_SIZE - 15,
+                14, WHITE);
         }
 
         if (shopGrid[i].isSoldOut) {
-            DrawTexture(SOLD_OUT, shopGrid[i].bounds.x, shopGrid[i].bounds.y, (Color){255, 255, 255, 180});  // 半透明覆蓋
+            DrawTexture(SOLD_OUT, shopGrid[i].bounds.x, shopGrid[i].bounds.y, (Color) { 255, 255, 255, 180 });  // 半透明覆蓋
         }
-        
+
         if (shopGrid[i].locked) {
-            DrawTexture(LOCK, shopGrid[i].bounds.x, shopGrid[i].bounds.y, (Color){255, 255, 255, 200});  // 半透明覆蓋
+            DrawTexture(LOCK, shopGrid[i].bounds.x, shopGrid[i].bounds.y, (Color) { 255, 255, 255, 200 });  // 半透明覆蓋
         }
     }
 
     // 商品資訊框（滑鼠右鍵顯示）
     if (infoIndex >= 0) {
         if (GetTime() - infoStartTime > 3.0) {
-            infoIndex = -1;  
-        } else {
+            infoIndex = -1;
+        }
+        else {
             char infoText[256];
             snprintf(infoText, sizeof(infoText), "%s\n%s", shopGrid[infoIndex].name, shopGrid[infoIndex].description);
             RenderItemInfo(infoIndex, itemBounds, infoText);
         }
     }
-    
+
     RenderPurchaseConfirmation();
     RenderUnlockConfirmation();
     // 從按enter鍵離開改成按exit按鈕離開
@@ -216,9 +223,9 @@ static void RenderShop() {
     };
 
     Vector2 mouse = GetMousePosition();
-    Color tint = CheckCollisionPointRec(mouse, exitHitbox) ? (Color){255, 255, 255, 200} : WHITE;
+    Color tint = CheckCollisionPointRec(mouse, exitHitbox) ? (Color) { 255, 255, 255, 200 } : WHITE;
 
-    DrawTextureEx(exitButtonTexture, (Vector2){exitButtonBounds.x, exitButtonBounds.y}, 0.0f, scale, tint);
+    DrawTextureEx(exitButtonTexture, (Vector2) { exitButtonBounds.x, exitButtonBounds.y }, 0.0f, scale, tint);
 
 }
 

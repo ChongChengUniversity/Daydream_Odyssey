@@ -10,7 +10,8 @@ typedef enum
     TYPE_ITEM,
     TYPE_ENEMY,
     TYPE_EMPTY,
-    TYPE_KEY
+    TYPE_KEY,
+    TYPE_PORTAL
 } CardType;
 
 struct CardBase {

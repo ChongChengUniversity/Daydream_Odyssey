@@ -78,18 +78,18 @@ void InitBackpackIcon(void) {
         SCREEN_WIDTH - (backpackMenu.width * menuScale) - 10,
         SCREEN_HEIGHT - (backpackMenu.height * menuScale) - 10,
         backpackMenu.width * menuScale,
-        backpackMenu.height * menuScale};
+        backpackMenu.height * menuScale };
 
     float scaledScreenWidth = backpackScreen.width * screenScale;
     float scaledScreenHeight = backpackScreen.height * screenScale;
 
-    backpackScreenRect = (Rectangle){(SCREEN_WIDTH - scaledScreenWidth) / 2, (SCREEN_HEIGHT - scaledScreenHeight) / 2, scaledScreenWidth, scaledScreenHeight};
+    backpackScreenRect = (Rectangle){ (SCREEN_WIDTH - scaledScreenWidth) / 2, (SCREEN_HEIGHT - scaledScreenHeight) / 2, scaledScreenWidth, scaledScreenHeight };
 
-    equipSlotPositions[0] = (Vector2){backpackScreenRect.x + 153,  backpackScreenRect.y + 94};   // Head
-    equipSlotPositions[1] = (Vector2){backpackScreenRect.x + 307, backpackScreenRect.y + 170};   // Body
-    equipSlotPositions[2] = (Vector2){backpackScreenRect.x + 463, backpackScreenRect.y + 94};   // Hand
-    equipSlotPositions[3] = (Vector2){backpackScreenRect.x + 153,  backpackScreenRect.y + 248};  // Leg
-    equipSlotPositions[4] = (Vector2){backpackScreenRect.x + 463, backpackScreenRect.y + 248};   // Accessory
+    equipSlotPositions[0] = (Vector2){ backpackScreenRect.x + 153,  backpackScreenRect.y + 94 };   // Head
+    equipSlotPositions[1] = (Vector2){ backpackScreenRect.x + 307, backpackScreenRect.y + 170 };   // Body
+    equipSlotPositions[2] = (Vector2){ backpackScreenRect.x + 463, backpackScreenRect.y + 94 };   // Hand
+    equipSlotPositions[3] = (Vector2){ backpackScreenRect.x + 153,  backpackScreenRect.y + 248 };  // Leg
+    equipSlotPositions[4] = (Vector2){ backpackScreenRect.x + 463, backpackScreenRect.y + 248 };   // Accessory
 
     exitButtonRect = (Rectangle){
         backpackScreenRect.x + backpackScreenRect.width - exitButton.width * exitScale - 55,
@@ -102,17 +102,17 @@ void InitBackpackIcon(void) {
         backpackScreenRect.x + backpackScreenRect.width - (nextButton.width * buttonScale) + 40,
         backpackScreenRect.y + backpackScreenRect.height - (nextButton.height * buttonScale) - 230,
         nextButton.width * buttonScale,
-        nextButton.height * buttonScale};
+        nextButton.height * buttonScale };
 
     backButtonRect = (Rectangle){
         backpackScreenRect.x - 40,
         backpackScreenRect.y + backpackScreenRect.height - (backButton.height * buttonScale) - 230,
         backButton.width * buttonScale,
-        backButton.height * buttonScale};
+        backButton.height * buttonScale };
 }
 
 void UpdateBackpackIcon(Vector2 mousePos) {
-      if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         if (isBackpackOpen) {
             if (CheckCollisionPointRec(mousePos, exitButtonRect)) {
                 isBackpackOpen = false;
@@ -127,7 +127,8 @@ void UpdateBackpackIcon(Vector2 mousePos) {
                 currentPage = SCREEN_BACKPACK;
                 return;
             }
-        } else {
+        }
+        else {
             if (CheckCollisionPointRec(mousePos, backpackMenuRect)) {
                 isBackpackOpen = true;
             }
@@ -145,7 +146,7 @@ static void DrawEquipmentSlots(Rectangle screenRect) {
         {screenRect.x + 155,  screenRect.y + 365},  // Leg（左下）
         {screenRect.x + 465, screenRect.y + 365}   // Accessory（右下）
     };
-    const char *slotLabels[5] = {"Head", "Body", "Hand", "Leg", "Accessory"};
+    const char* slotLabels[5] = { "Head", "Body", "Hand", "Leg", "Accessory" };
 
     for (int i = 0; i < 5; i++) {
         DrawText(slotLabels[i], slotPositions[i].x, slotPositions[i].y - 20, 20, DARKGRAY);
@@ -165,7 +166,7 @@ static void DrawPlayerStats(Rectangle screenRect) {
         {screenRect.x + 390, screenRect.y + 453}   // MAX HP
     };
 
-    const char* labels[4] = {"ATK", "MATK", "DEF", "MAX HP"};
+    const char* labels[4] = { "ATK", "MATK", "DEF", "MAX HP" };
     int values[4] = {
         stats->atk,
         stats->magic,
@@ -184,36 +185,37 @@ void DrawBackpackIcon(void) {
 
     if (!isBackpackOpen) {
         // 背包關閉狀態，只畫圖示按鈕
-        DrawTextureEx(backpackMenu, (Vector2){backpackMenuRect.x, backpackMenuRect.y}, 0.0f, menuScale, WHITE);
+        DrawTextureEx(backpackMenu, (Vector2) { backpackMenuRect.x, backpackMenuRect.y }, 0.0f, menuScale, WHITE);
         return;
     }
 
     if (currentPage == SCREEN_BACKPACK) {
         // 背包畫面、道具與 next 按鈕
-        DrawTextureEx(backpackScreen, (Vector2){backpackScreenRect.x, backpackScreenRect.y}, 0.0f, screenScale, WHITE);
-        DrawInventoryUI((Vector2){backpackScreenRect.x + 20, backpackScreenRect.y + 50}, backpackScreenRect);
-        Color nextButtonTint = CheckCollisionPointRec(mouse, nextButtonRect) ? (Color){255, 255, 255, 200} : WHITE;
-        DrawTextureEx(nextButton, (Vector2){nextButtonRect.x, nextButtonRect.y}, 0.0f, buttonScale, nextButtonTint);
-    } else {
+        DrawTextureEx(backpackScreen, (Vector2) { backpackScreenRect.x, backpackScreenRect.y }, 0.0f, screenScale, WHITE);
+        DrawInventoryUI((Vector2) { backpackScreenRect.x + 20, backpackScreenRect.y + 50 }, backpackScreenRect);
+        Color nextButtonTint = CheckCollisionPointRec(mouse, nextButtonRect) ? (Color) { 255, 255, 255, 200 } : WHITE;
+        DrawTextureEx(nextButton, (Vector2) { nextButtonRect.x, nextButtonRect.y }, 0.0f, buttonScale, nextButtonTint);
+    }
+    else {
         // 裝備畫面、slot與 back 按鈕
-        DrawTextureEx(equipmentScreen, (Vector2){backpackScreenRect.x, backpackScreenRect.y}, 0.0f, screenScale, WHITE);
+        DrawTextureEx(equipmentScreen, (Vector2) { backpackScreenRect.x, backpackScreenRect.y }, 0.0f, screenScale, WHITE);
         DrawEquipmentSlots(backpackScreenRect);
         DrawPlayerStats(backpackScreenRect);
-        Color backButtonTint = CheckCollisionPointRec(mouse, backButtonRect) ? (Color){255, 255, 255, 200} : WHITE;
-        DrawTextureEx(backButton, (Vector2){backButtonRect.x, backButtonRect.y}, 0.0f, buttonScale, backButtonTint);
+        Color backButtonTint = CheckCollisionPointRec(mouse, backButtonRect) ? (Color) { 255, 255, 255, 200 } : WHITE;
+        DrawTextureEx(backButton, (Vector2) { backButtonRect.x, backButtonRect.y }, 0.0f, buttonScale, backButtonTint);
 
         if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
             Vector2 mousePos = GetMousePosition();
             for (int i = 0; i < EQUIP_SLOT_COUNT; i++) {
                 EquipmentData* eq = GetEquippedInSlot(i);
                 if (eq && eq->image) {
-                    Rectangle slotRect = (Rectangle){equipSlotPositions[i].x, equipSlotPositions[i].y, eq->image->width * 0.3f, eq->image->height * 0.3f};
+                    Rectangle slotRect = (Rectangle){ equipSlotPositions[i].x, equipSlotPositions[i].y, eq->image->width * 0.3f, eq->image->height * 0.3f };
                     if (CheckCollisionPointRec(mousePos, slotRect)) {
                         isInfoVisible = true;
                         selectedSlot = i;
 
                         // 設定卡片和關閉鈕位置
-                        infoCardRect = (Rectangle){SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2 - 120, 360, 240};
+                        infoCardRect = (Rectangle){ SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2 - 120, 360, 240 };
                         closeButtonRect = (Rectangle){
                             infoCardRect.x + infoCardRect.width - CLOSE_BUTTON_IMG.width * closeScale - 12,
                             infoCardRect.y + 12,
@@ -230,7 +232,7 @@ void DrawBackpackIcon(void) {
             EquipmentData* eq = GetEquippedInSlot(selectedSlot);
             if (eq) {
                 // 背景卡片
-                DrawTexturePro(EQUIP_INFO_CARD, (Rectangle){ 0, 0, EQUIP_INFO_CARD.width, EQUIP_INFO_CARD.height}, infoCardRect, (Vector2){0, 0}, 0.0f, WHITE);
+                DrawTexturePro(EQUIP_INFO_CARD, (Rectangle) { 0, 0, EQUIP_INFO_CARD.width, EQUIP_INFO_CARD.height }, infoCardRect, (Vector2) { 0, 0 }, 0.0f, WHITE);
 
                 // 裝備名稱與能力值
                 int fontSize = 18;
@@ -246,8 +248,8 @@ void DrawBackpackIcon(void) {
                 // 畫關閉按鈕
                 Vector2 mouse = GetMousePosition();
                 bool hover = CheckCollisionPointRec(mouse, closeButtonRect);
-                Color tint = hover ? (Color){255, 255, 255, 200} : WHITE;
-                DrawTextureEx(CLOSE_BUTTON_IMG, (Vector2){closeButtonRect.x, closeButtonRect.y}, 0.0f, closeScale, tint);
+                Color tint = hover ? (Color) { 255, 255, 255, 200 } : WHITE;
+                DrawTextureEx(CLOSE_BUTTON_IMG, (Vector2) { closeButtonRect.x, closeButtonRect.y }, 0.0f, closeScale, tint);
                 // 處理點擊關閉
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && hover) {
                     isInfoVisible = false;
@@ -257,8 +259,8 @@ void DrawBackpackIcon(void) {
         }
     }
 
-    Color exitButtonTint = CheckCollisionPointRec(mouse, exitButtonRect) ? (Color){255, 255, 255, 200} : WHITE;
-    DrawTextureEx(exitButton, (Vector2){exitButtonRect.x, exitButtonRect.y}, 0.0f, exitScale, exitButtonTint);
+    Color exitButtonTint = CheckCollisionPointRec(mouse, exitButtonRect) ? (Color) { 255, 255, 255, 200 } : WHITE;
+    DrawTextureEx(exitButton, (Vector2) { exitButtonRect.x, exitButtonRect.y }, 0.0f, exitScale, exitButtonTint);
 }
 
 void ExitBackpackIcon(void) {

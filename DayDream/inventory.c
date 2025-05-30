@@ -9,7 +9,7 @@ InventoryItem inventory[INVENTORY_CAPACITY];
 int inventoryCount = 0;
 
 // 道具圖片縮放比例
-float itemScale = 0.1f; 
+float itemScale = 0.1f;
 
 // 初始化背包
 void InitInventory() {
@@ -63,7 +63,7 @@ void DrawInventoryUI(Vector2 position, Rectangle screenRect) {
         float y = startY + row * (cellSize + padding) + yOffset;
 
         Vector2 mousePos = GetMousePosition();
-        Rectangle itemRect = {x, y, cellSize, cellSize};
+        Rectangle itemRect = { x, y, cellSize, cellSize };
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mousePos, itemRect)) {
             BeginItemUse(i);
@@ -79,7 +79,7 @@ void DrawInventoryUI(Vector2 position, Rectangle screenRect) {
         float itemX = x + (cellSize - itemWidth) / 2;
         float itemY = y + (cellSize - itemHeight) / 2;
 
-        DrawTextureEx(itemTexture, (Vector2){itemX, itemY}, 0.0f, itemScale, WHITE);
+        DrawTextureEx(itemTexture, (Vector2) { itemX, itemY }, 0.0f, itemScale, WHITE);
 
         // 顯示道具數量
         DrawText(TextFormat("x%d", inventory[i].quantity), x + cellSize - 20, y + cellSize - 20, 18, WHITE);
@@ -103,7 +103,7 @@ int GetClickedInventoryIndex(Vector2 mousePos, Rectangle screenRect) {
 
         float x = startX + col * (cellSize + padding);
         float y = startY + row * (cellSize + padding) + yOffset;
-        Rectangle itemRect = {x, y, cellSize, cellSize};
+        Rectangle itemRect = { x, y, cellSize, cellSize };
 
         if (CheckCollisionPointRec(mousePos, itemRect)) {
             return i;

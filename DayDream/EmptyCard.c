@@ -9,7 +9,7 @@ static void ResetEmpty(CardBase* self) {
 
 static void DrawEmpty(CardBase* self) {
     if (self->isRevealed)
-        DrawRectangleRec(self->bounds, LIGHTGRAY);
+        DrawRectangleRec(self->bounds, BLANK);
     else
         DrawRectangleLinesEx(self->bounds, 2.0f, WHITE);
 }

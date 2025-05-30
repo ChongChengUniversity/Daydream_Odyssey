@@ -19,7 +19,7 @@ void EnterPlaying(void)
     if (!IsReturningFromShop())
     {
         InitCards();
-        RevealDoorCardAtStart();
+        if (!(GetCurrentLevel() == 10)) RevealDoorCardAtStart();// ✅ 第十關不自動翻門
         InitFloor();    //載入怪物資訊
     }
 

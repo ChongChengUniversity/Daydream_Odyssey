@@ -48,7 +48,14 @@ void UseScrollEffect(ScrollType scroll, GridPos targetPos) {
             bool enemyDead = ApplyDamageToEnemy(targetStats, singleDamage);
             if (enemyDead) {
                 int index = GetCardIndexByGridPos(targetPos.row, targetPos.col);
-                ReplaceCardWithEmpty(index, true);
+
+                if (GetCurrentLevel() == 10) {
+                    ReplaceCardWithPortal(index, true);  // BOSS → 傳送門
+                }
+                else {
+                    ReplaceCardWithEmpty(index, true);   // 普通怪 → 空卡
+                }
+
                 printf("怪物已被擊敗\n");
             }
             AbleToReveal();

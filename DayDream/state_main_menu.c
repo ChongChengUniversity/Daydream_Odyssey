@@ -5,13 +5,13 @@
 #include "audioManager.h"
 #include "CharacterStats.h"
 
-// ÂúñÁâáË≥áÊ∫ê
+// πœ§˘∏Í∑Ω
 Texture2D menuBackground;
 Texture2D buttonStart;
 Texture2D buttonOptions;
 Texture2D buttonExit;
 
-// ÊåâÈàï‰ΩçÁΩÆ
+// ´ˆ∂s¶Ï∏m
 Rectangle rectStart;
 Rectangle rectOptions;
 Rectangle rectExit;
@@ -25,9 +25,9 @@ static void EnterMainMenu() {
 
     float scale = 0.8f;
 
-    rectStart = (Rectangle){ SCREEN_WIDTH/2 - buttonStart.width*scale/2, 450, buttonStart.width*scale, buttonStart.height*scale };
-    rectOptions = (Rectangle){ SCREEN_WIDTH/2 - buttonOptions.width*scale/2, 550, buttonOptions.width*scale, buttonOptions.height*scale };
-    rectExit = (Rectangle){ SCREEN_WIDTH/2 - buttonExit.width*scale/2, 650, buttonExit.width*scale, buttonExit.height*scale };
+    rectStart = (Rectangle){ SCREEN_WIDTH / 2 - buttonStart.width * scale / 2, 450, buttonStart.width * scale, buttonStart.height * scale };
+    rectOptions = (Rectangle){ SCREEN_WIDTH / 2 - buttonOptions.width * scale / 2, 550, buttonOptions.width * scale, buttonOptions.height * scale };
+    rectExit = (Rectangle){ SCREEN_WIDTH / 2 - buttonExit.width * scale / 2, 650, buttonExit.width * scale, buttonExit.height * scale };
 }
 
 static void UpdateMainMenu() {
@@ -50,10 +50,12 @@ static void UpdateMainMenu() {
             GamePlaySound(SOUND_TWO);
             InitPlayerStats();
             GOTO(PLAYING);
-        } else if (CheckCollisionPointRec(mouse, rectOptions)) {
+        }
+        else if (CheckCollisionPointRec(mouse, rectOptions)) {
             GamePlaySound(SOUND_TWO);
             GOTO(OPTION_MENU);
-        } else if (CheckCollisionPointRec(mouse, rectExit)) {
+        }
+        else if (CheckCollisionPointRec(mouse, rectExit)) {
             GamePlaySound(SOUND_TWO);
             CloseWindow();
         }
@@ -69,14 +71,15 @@ static void RenderMainMenu() {
     DrawText("ESC to QUIT", 120, 280, 20, WHITE);
     */
 
-    // ËÉåÊôØÂúñ
+    // ≠I¥∫πœ
     float screenRatio = (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT;
     float imageRatio = (float)menuBackground.width / (float)menuBackground.height;
 
     float scale;
     if (screenRatio > imageRatio) {
         scale = (float)SCREEN_WIDTH / (float)menuBackground.width;
-    } else {
+    }
+    else {
         scale = (float)SCREEN_HEIGHT / (float)menuBackground.height;
     }
 
@@ -86,24 +89,30 @@ static void RenderMainMenu() {
     float offsetY = (SCREEN_HEIGHT - bgHeight) / 2;
 
     DrawTexturePro(menuBackground,
-                   (Rectangle){0, 0, menuBackground.width, menuBackground.height},
-                   (Rectangle){offsetX, offsetY, bgWidth, bgHeight},
-                   (Vector2){0, 0}, 0.0f, WHITE);
+        (Rectangle) {
+        0, 0, menuBackground.width, menuBackground.height
+    },
+        (Rectangle) {
+        offsetX, offsetY, bgWidth, bgHeight
+    },
+        (Vector2) {
+        0, 0
+    }, 0.0f, WHITE);
 
-    // È°ØÁ§∫ÊåâÈàïÔºàStart„ÄÅOptions„ÄÅExitÔºâ
+    // ≈„•‹´ˆ∂s°]Start°BOptions°BExit°^
     Vector2 mouse = GetMousePosition();
 
-    // Start ÊåâÈàï
-    Color tintStart = CheckCollisionPointRec(mouse, rectStart) ? (Color){255, 255, 255, 200} : WHITE;
-    DrawTextureEx(buttonStart, (Vector2){rectStart.x, rectStart.y}, 0.0f, 0.8f, tintStart);
+    // Start ´ˆ∂s
+    Color tintStart = CheckCollisionPointRec(mouse, rectStart) ? (Color) { 255, 255, 255, 200 } : WHITE;
+    DrawTextureEx(buttonStart, (Vector2) { rectStart.x, rectStart.y }, 0.0f, 0.8f, tintStart);
 
-    // Options ÊåâÈàï
-    Color tintOptions = CheckCollisionPointRec(mouse, rectOptions) ? (Color){255, 255, 255, 200} : WHITE;
-    DrawTextureEx(buttonOptions, (Vector2){rectOptions.x, rectOptions.y}, 0.0f, 0.8f, tintOptions);
+    // Options ´ˆ∂s
+    Color tintOptions = CheckCollisionPointRec(mouse, rectOptions) ? (Color) { 255, 255, 255, 200 } : WHITE;
+    DrawTextureEx(buttonOptions, (Vector2) { rectOptions.x, rectOptions.y }, 0.0f, 0.8f, tintOptions);
 
-    // Exit ÊåâÈàï
-    Color tintExit = CheckCollisionPointRec(mouse, rectExit) ? (Color){255, 255, 255, 200} : WHITE;
-    DrawTextureEx(buttonExit, (Vector2){rectExit.x, rectExit.y}, 0.0f, 0.8f, tintExit);
+    // Exit ´ˆ∂s
+    Color tintExit = CheckCollisionPointRec(mouse, rectExit) ? (Color) { 255, 255, 255, 200 } : WHITE;
+    DrawTextureEx(buttonExit, (Vector2) { rectExit.x, rectExit.y }, 0.0f, 0.8f, tintExit);
 }
 
 static void ExitMainMenu() {

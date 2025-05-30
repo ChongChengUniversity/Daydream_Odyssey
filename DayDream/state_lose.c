@@ -10,7 +10,6 @@
 #include "money.h"
 #include "equipmentSystem.h"
 #include "itemSystem.h"
-#include "equipmentSystem.h"
 
 static const char* labelGameLose = "GAME OVER";
 static const char* labelEnter = "TRY AGAIN (PRESS ENTER)";
