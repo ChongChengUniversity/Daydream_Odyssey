@@ -49,9 +49,17 @@ bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
 
             bool enemyDead = ApplyDamageToEnemy(targetStats, singleDamage);
             if (enemyDead) {
+                AddCoins(10);
                 int index = GetCardIndexByGridPos(targetPos.row, targetPos.col);
-                ReplaceCardWithEmpty(index, true);
-                printf("Enemy defeated\n");
+
+                if (GetCurrentLevel() == 10) {
+                    ReplaceCardWithPortal(index, true);  // BOSS → 傳送門Add commentMore actions
+                }
+                else {
+                    ReplaceCardWithEmpty(index, true);   // 普通怪 → 空卡
+                }
+
+                printf("怪物已被擊敗\n");
             }
             AbleToReveal();
             UpdateVisibleBufferCounts();
@@ -77,6 +85,7 @@ bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
                 if (cards[i]->isRevealed || enemyInfo[row][col].isVisible) {
                     bool enemyDead = ApplyDamageToEnemy(enemy, aoeDamage);
                     if (enemyDead) {
+                        AddCoins(10);
                         ReplaceCardWithEmpty(cards[i]->indexInArray, true);
                         printf("Enemy defeated\n");
                     }
