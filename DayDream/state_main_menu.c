@@ -5,13 +5,13 @@
 #include "audioManager.h"
 #include "CharacterStats.h"
 
-// ¹Ï¤ù¸ê·½
+// ï¿½Ï¤ï¿½ï¿½ê·½
 Texture2D menuBackground;
 Texture2D buttonStart;
 Texture2D buttonOptions;
 Texture2D buttonExit;
 
-// «ö¶s¦ì¸m
+// ï¿½ï¿½ï¿½sï¿½ï¿½m
 Rectangle rectStart;
 Rectangle rectOptions;
 Rectangle rectExit;
@@ -49,7 +49,7 @@ static void UpdateMainMenu() {
         if (CheckCollisionPointRec(mouse, rectStart)) {
             GamePlaySound(SOUND_TWO);
             InitPlayerStats();
-            GOTO(PLAYING);
+            ChangeState(&STATE_OPENING_CUTSCENE);
         }
         else if (CheckCollisionPointRec(mouse, rectOptions)) {
             GamePlaySound(SOUND_TWO);
@@ -71,7 +71,7 @@ static void RenderMainMenu() {
     DrawText("ESC to QUIT", 120, 280, 20, WHITE);
     */
 
-    // ­I´º¹Ï
+    // ï¿½Iï¿½ï¿½ï¿½ï¿½
     float screenRatio = (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT;
     float imageRatio = (float)menuBackground.width / (float)menuBackground.height;
 
@@ -99,18 +99,18 @@ static void RenderMainMenu() {
         0, 0
     }, 0.0f, WHITE);
 
-    // Åã¥Ü«ö¶s¡]Start¡BOptions¡BExit¡^
+    // ï¿½ï¿½Ü«ï¿½ï¿½sï¿½]Startï¿½BOptionsï¿½BExitï¿½^
     Vector2 mouse = GetMousePosition();
 
-    // Start «ö¶s
+    // Start ï¿½ï¿½ï¿½s
     Color tintStart = CheckCollisionPointRec(mouse, rectStart) ? (Color) { 255, 255, 255, 200 } : WHITE;
     DrawTextureEx(buttonStart, (Vector2) { rectStart.x, rectStart.y }, 0.0f, 0.8f, tintStart);
 
-    // Options «ö¶s
+    // Options ï¿½ï¿½ï¿½s
     Color tintOptions = CheckCollisionPointRec(mouse, rectOptions) ? (Color) { 255, 255, 255, 200 } : WHITE;
     DrawTextureEx(buttonOptions, (Vector2) { rectOptions.x, rectOptions.y }, 0.0f, 0.8f, tintOptions);
 
-    // Exit «ö¶s
+    // Exit ï¿½ï¿½ï¿½s
     Color tintExit = CheckCollisionPointRec(mouse, rectExit) ? (Color) { 255, 255, 255, 200 } : WHITE;
     DrawTextureEx(buttonExit, (Vector2) { rectExit.x, rectExit.y }, 0.0f, 0.8f, tintExit);
 }

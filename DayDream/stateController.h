@@ -16,6 +16,7 @@ extern const GameState* PLAYING;
 extern const GameState* WIN;
 extern const GameState* LOSE;
 extern const GameState* OPTION_MENU;
+extern const GameState STATE_OPENING_CUTSCENE;
 
 // 新增的結局選擇狀態
 extern const GameState* ENDING_CHOICE; // 宣告新的結局選擇狀態

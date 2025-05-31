@@ -22,6 +22,7 @@ void GameStartup() {
     SetSoundVolume(sounds[SOUND_ONE], 0.4f); // adjust the volume
     SetSoundVolume(sounds[SOUND_TWO], 0.2f); // adjust the volume
     SetSoundVolume(sounds[SOUND_THREE], 0.4f); // adjust the volume
+
     GOTO(MAIN_MENU);
 }
 

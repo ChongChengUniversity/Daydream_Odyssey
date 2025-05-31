@@ -10,6 +10,7 @@ extern const GameState STATE_LOSE;
 extern const GameState STATE_OPTION_MENU;
 extern const GameState STATE_SHOP;
 extern const GameState STATE_ENDING_CHOICE;
+extern const GameState STATE_OPENING_CUTSCENE;
 
 const GameState* currentState = NULL; // 初始化為NULL
 
@@ -36,3 +37,4 @@ const GameState* LOSE = &STATE_LOSE;
 const GameState* OPTION_MENU = &STATE_OPTION_MENU;
 const GameState* SHOP = &STATE_SHOP;
 const GameState* ENDING_CHOICE = &STATE_ENDING_CHOICE;
+const GameState* OPENING_CUTSCENE = &STATE_OPENING_CUTSCENE;

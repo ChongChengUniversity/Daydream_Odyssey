@@ -18,6 +18,7 @@
 
 // 用於追蹤劇情是否已觸發的標誌
 static bool openingDialogueTriggered = false;
+static bool springDialogueTriggered = false;
 static bool summerDialogueTriggered = false;
 static bool autumnDialogueTriggered = false;
 static bool winterDialogueTriggered = false;
@@ -42,7 +43,10 @@ void EnterPlaying(void)
     }
 
     // 觸發季節對話
-    if (GetCurrentLevel() == 4 && !summerDialogueTriggered) {
+    if (GetCurrentLevel() == 1 && !springDialogueTriggered) {
+        StartDialogue(seasonChange_SpringStart, seasonChange_SpringStart_Count);
+        springDialogueTriggered = true;
+    } else if (GetCurrentLevel() == 4 && !summerDialogueTriggered) {
         StartDialogue(seasonChange_SummerStart, seasonChange_SummerStart_Count);
         summerDialogueTriggered = true;
     } else if (GetCurrentLevel() == 7 && !autumnDialogueTriggered) {

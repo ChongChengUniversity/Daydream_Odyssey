@@ -104,9 +104,12 @@ DialogueLine seasonChange_WinterStart[] = {
     {"You", "Impossible!!"},
     {"Boss", "Denial is useless, I am the you who enjoys escaping, indulging in dreams, rejecting responsibility."},
     {"You", "If I defeat the boss, I can wake up... right?"},
-    {"Boss", "(Spreading arms): Hahaha! What if you wake up? You chose to fall asleep, coming here to seek my protection, and I can build a paradise for you. You can stay here forever, no longer bothered by reality, come!"},
+    {"Boss", "(Spreading arms): Hahaha! What if you wake up?"},
+    {"Boss", "You chose to fall asleep, coming here to seek my protection, and I can build a paradise for you."},
+    {"Boss", "You can stay here forever, no longer bothered by reality, come!"},
     {"You", "I don't need you. I can go back."},
-    {"Boss", "Are you sure? When you wake up, you'll still face all those unresolved issues, the people you avoided, and the never-good-enough self."},
+    {"Boss", "Are you sure?"},
+    {"Boss", "When you wake up, you'll still face all those unresolved issues, the people you avoided, and the never-good-enough self."},
     {"You", "(Silent for a moment) I know. But even if it hurts, reality is more worth living than a dream."},
     {"Boss", "......Then come and take the last key I guard. But remember—defeating me won't make you perfect. It just means you're finally willing to admit that you can live even if you're not perfect."}
 };
