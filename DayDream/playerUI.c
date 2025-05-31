@@ -73,6 +73,12 @@ void DrawPlayerUI() {
     // 畫出血量（紅色）
     DrawBoldText(TextFormat("%d", player->currentHp), hpPosX, hpPosY, fontSize, RED, thickness);
 
+    // 如果有護盾，畫在血量旁邊
+    if (player->bonusDef > 0) {
+        int shieldOffsetX = hpPosX + MeasureText(TextFormat("%d", player->currentHp), fontSize) + 6; // 血量字寬後加點距離
+        DrawBoldText(TextFormat("+%d", player->bonusDef), shieldOffsetX, hpPosY, fontSize, BLUE, thickness);
+    }
+
     // 畫出魔力（藍色）
     DrawBoldText(TextFormat("%d", player->magic), magicPosX, magicPosY, fontSize, PURPLE, thickness);
 

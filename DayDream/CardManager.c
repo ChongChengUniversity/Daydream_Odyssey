@@ -269,12 +269,12 @@ void DrawAllCards() {
                             WHITE);
 
                 // ✅ 畫數值
-                if (CheckCollisionPointRec(GetMousePosition(), cards[i]->bounds)){
-                    int fontSize = 16;
-                    DrawBoldText(TextFormat("%d", enemy->stats.atk), bounds.x + 2, bounds.y + 2, fontSize, ORANGE); // 攻擊
-                    DrawBoldText(TextFormat("%d", enemy->stats.currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED); // 血量
-                    DrawBoldText(TextFormat("%d", enemy->stats.def), bounds.x + bounds.width - fontSize - 2, bounds.y + bounds.height - fontSize - 2, fontSize, YELLOW); // 防禦
-                }
+                
+                int fontSize = 16;
+                DrawBoldText(TextFormat("%d", enemy->stats.atk), bounds.x + 2, bounds.y + 2, fontSize, ORANGE); // 攻擊
+                DrawBoldText(TextFormat("%d", enemy->stats.currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED); // 血量
+                DrawBoldText(TextFormat("%d", enemy->stats.def), bounds.x + bounds.width - fontSize - 2, bounds.y + bounds.height - fontSize - 2, fontSize, YELLOW); // 防禦
+                
             }
             // else {
             //     // 畫一個紅框提醒，表示怪物類型錯誤

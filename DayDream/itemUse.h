@@ -23,3 +23,7 @@ void DrawItemUseUI(void);
 
 // 外部讀取目前狀態
 ItemUseState GetItemUseState(void);
+
+void SetMessage(const char* text);   // 🔥 對外開放函數
+extern int messageTimer;
+extern char message[256];

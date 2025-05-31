@@ -20,6 +20,15 @@ static Texture2D quitTexture;
 static int targetRow = -1;
 static int targetCol = -1;
 
+char message[256] = "";
+int messageTimer = 0;
+#define MESSAGE_DURATION 90  // 顯示多久幀數 (2秒，如果60FPS)
+
+void SetMessage(const char* text) {
+    snprintf(message, sizeof(message), "%s", text);
+    messageTimer = MESSAGE_DURATION;
+}
+
 ScrollType GetScrollTypeFromItemType(ItemType type) {
     switch (type) {
         case SCROLL_SINGLE: return SCROLL_TYPE_SINGLE;
@@ -49,6 +58,7 @@ ItemUseState GetItemUseState(void) {
 }
 
 void UpdateItemUse(Vector2 mousePos) {
+    int messageTimer = 0;
     if (itemState != ITEM_STATE_WAIT_GRID) return;
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) 
@@ -92,15 +102,14 @@ void UpdateItemUse(Vector2 mousePos) {
         if (!valid) return;
 
         // 執行對應道具的效果?
-        UseScrollEffect(GetScrollTypeFromItemType(type), pos);
-
-        // 完成使用，減道具數量並結束狀態
+        bool success = UseScrollEffect(GetScrollTypeFromItemType(type), pos);
+    if (success) {
         inventory[selectedItemIndex].quantity--;
         if (inventory[selectedItemIndex].quantity <= 0) {
             RemoveInventoryItem(selectedItemIndex);
         }
-
-            itemState = ITEM_STATE_NONE;
+    }
+    itemState = ITEM_STATE_NONE;
     }
 }
 
@@ -127,4 +136,22 @@ void DrawItemUseUI(void) {
         Color quitButtonTint = CheckCollisionPointRec(mouse, quitButtonRect) ? (Color){255, 255, 255, 200} : WHITE;
         DrawTextureEx(quitTexture, (Vector2){ quitButtonRect.x, quitButtonRect.y }, 0.0f, 0.5f, quitButtonTint);
     }
-}
+
+    if (messageTimer > 0) {
+        int fontSize = 32;  // 稍微大一點比較好看
+        int textWidth = MeasureText(message, fontSize);
+        int textHeight = fontSize;  // Raylib的字體高度就是字體大小
+        
+        // 中心座標
+        int posX = (SCREEN_WIDTH - textWidth) / 2;
+        int posY = (SCREEN_HEIGHT - textHeight) / 2;
+
+        // 先畫個黑色半透明背景
+        DrawRectangle(posX - 20, posY - 10, textWidth + 40, textHeight + 20, (Color){0, 0, 0, 180});
+
+        // 再畫訊息字
+        DrawText(message, posX, posY, fontSize, RED);
+
+        messageTimer--;
+    }
+}   

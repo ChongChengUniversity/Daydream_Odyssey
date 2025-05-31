@@ -63,16 +63,15 @@ void DrawEnemy(CardBase* self) {
             (float)TILE_SIZE / monsters[enemy->type].width,
             WHITE);
         
-        if (CheckCollisionPointRec(GetMousePosition(), self->bounds)){
-            int fontSize = 16;
-            //printf("▶ SHOW INFO for enemy at (%d, %d)\n", self->row, self->col);
-            // 左上角：攻擊力（橘色）
-            DrawBoldText(TextFormat("%d", enemy->atk), bounds.x + 2, bounds.y + 2, fontSize, ORANGE);
-            // 左下角：血量（紅色）
-            DrawBoldText(TextFormat("%d", enemy->currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED);
-            // 右下角：防禦力（黃色）
-            DrawBoldText(TextFormat("%d", enemy->def),bounds.x + bounds.width - fontSize - 2,bounds.y + bounds.height - fontSize - 2,fontSize, YELLOW);
-        }
+        int fontSize = 16;
+        //printf("▶ SHOW INFO for enemy at (%d, %d)\n", self->row, self->col);
+        // 左上角：攻擊力（橘色）
+        DrawBoldText(TextFormat("%d", enemy->atk), bounds.x + 2, bounds.y + 2, fontSize, ORANGE);
+        // 左下角：血量（紅色）
+        DrawBoldText(TextFormat("%d", enemy->currentHp), bounds.x + 2, bounds.y + bounds.height - fontSize - 2, fontSize, RED);
+        // 右下角：防禦力（黃色）
+        DrawBoldText(TextFormat("%d", enemy->def),bounds.x + bounds.width - fontSize - 2,bounds.y + bounds.height - fontSize - 2,fontSize, YELLOW);
+        
     } else {
         DrawRectangleLinesEx(self->bounds, 2.0f, WHITE); // 未翻開時只畫邊框
     }

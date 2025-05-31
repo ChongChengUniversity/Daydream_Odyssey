@@ -95,6 +95,21 @@ bool ApplyDamageToEnemy(EnemyStats* enemy, int damageToEnemy){
 }
 
 void ApplyDamageToPlayer(PlayerStats* player, int damageToPlayer){
+    if (player->bonusDef > 0) {
+        if(damageToPlayer > player->bonusDef){
+            damageToPlayer -= player->bonusDef;
+            player->bonusDef = 0;
+        }else{
+            player->bonusDef -= damageToPlayer;
+            damageToPlayer = 0;
+        }
+
+        printf("[Shield] Remaining shield: %d\n", player->bonusDef);
+
+        if (damageToPlayer <= 0) {
+            return; // 完全擋住，不扣血
+        }
+    }
     if(player->currentHp - damageToPlayer > 0){
         player->currentHp = player->currentHp - damageToPlayer;
 
@@ -103,6 +118,7 @@ void ApplyDamageToPlayer(PlayerStats* player, int damageToPlayer){
         player->hitTimer = 30;  // 顯示 0.5 秒 (30 幀)
     }
     else{
+        GOTO(LOSE);
         player->currentHp = 0; // avoid negtive number
         // player died, jump to bad end
         if (!IsDialogueActive()) { // 避免重複觸發對話
@@ -187,6 +203,8 @@ void GetBaseStatsByTypeAndFloor(MonsterType type, int floor, EnemyStats* outStat
     outStats->currentHp = outStats->maxHp;
 }
 
+
+
 // 範例：在處理玩家受傷或死亡的函式中
 void PlayerDies() {
     // 檢查是否已經在對話中，避免重複觸發
@@ -196,5 +214,8 @@ void PlayerDies() {
         // 例如： static bool badEndDialogueStarted = false; badEndDialogueStarted = true;
     }
     // 遊戲狀態可能在對話結束後跳轉到 LOSE
-    // GOTO(LOSE); // 暫時不要直接跳，讓對話完成
+    // GOTO(LOSE); // 暫時不要直接跳，讓對話完成Add commentMore actions
 }
+
+
+

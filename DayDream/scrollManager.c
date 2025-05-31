@@ -8,6 +8,7 @@
 #include "itemUse.h"
 #include "CardBase.h"
 #include "money.h"
+#define MESSAGE_DURATION 90
 
 int GetSingleTargetMagicDamage(int magicPower, int floor, MonsterType type){
     float rawDamage;
@@ -35,10 +36,10 @@ int GetAOEMagicDamage(int magicPower, int floor){
     return (int)(rawDamage + 0.5f);
 }
 
-void UseScrollEffect(ScrollType scroll, GridPos targetPos) {
+bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
     switch (scroll) {
         case SCROLL_TYPE_SINGLE: {
-            printf("使用單體傷害卷軸\n");
+            printf("Use single target damage scroll\n");
 
             EnemyInfo* enemy = &enemyInfo[targetPos.row][targetPos.col];
             EnemyStats* targetStats = &enemy->stats;
@@ -48,26 +49,18 @@ void UseScrollEffect(ScrollType scroll, GridPos targetPos) {
 
             bool enemyDead = ApplyDamageToEnemy(targetStats, singleDamage);
             if (enemyDead) {
-                AddCoins(10);
                 int index = GetCardIndexByGridPos(targetPos.row, targetPos.col);
-
-                if (GetCurrentLevel() == 10) {
-                    ReplaceCardWithPortal(index, true);  // BOSS → 傳送門
-                }
-                else {
-                    ReplaceCardWithEmpty(index, true);   // 普通怪 → 空卡
-                }
-
-                printf("怪物已被擊敗\n");
+                ReplaceCardWithEmpty(index, true);
+                printf("Enemy defeated\n");
             }
             AbleToReveal();
             UpdateVisibleBufferCounts();
             ApplyBuffsToVisibleEnemies();
-            break;
+            return true;
         }
 
         case SCROLL_TYPE_AOE: {
-            printf("使用群體傷害卷軸\n");
+            printf("Use AOE damage scroll\n");
 
             PlayerStats* player = GetPlayerStats();
             int currentFloor = GetCurrentLevel();
@@ -84,36 +77,49 @@ void UseScrollEffect(ScrollType scroll, GridPos targetPos) {
                 if (cards[i]->isRevealed || enemyInfo[row][col].isVisible) {
                     bool enemyDead = ApplyDamageToEnemy(enemy, aoeDamage);
                     if (enemyDead) {
-                        AddCoins(10);
                         ReplaceCardWithEmpty(cards[i]->indexInArray, true);
-                        printf("怪物已被擊敗\n");
+                        printf("Enemy defeated\n");
                     }
                     AbleToReveal();
                     UpdateVisibleBufferCounts();
                     ApplyBuffsToVisibleEnemies();
                 }
             }
-            break;
+            return true;
         }
 
         case SCROLL_TYPE_HEAL:
-            printf("使用補血卷軸\n");
-            // TODO: 回復玩家生命
-            break;
+            PlayerStats* player = GetPlayerStats();
+            printf("[Scroll] Healing scroll used\n");
+            int healAmount = 50; // Heal 50 HP
+            player->currentHp += healAmount;
+            if (player->currentHp > player->maxHp) {
+                player->currentHp = player->maxHp;
+            }
+            return true;
 
-        case SCROLL_TYPE_SHIELD:
-            printf("使用護盾卷軸\n");
-            // TODO: 增加防禦或護盾值
-            break;
+        case SCROLL_TYPE_SHIELD: {
+            printf("Use shield scroll\n");
+            PlayerStats* player = GetPlayerStats();
+            if (player->bonusDef >= 10) {
+                printf("Shield already active\n");
+                SetMessage("Shield already active");
+                return false;  //  失敗，已經有護盾了
+            }else{
+                player->bonusDef = 10; // 加護盾
+                printf("Shield applied successfully\n");
+                return true;  //  成功
+            }
+        }
 
         case SCROLL_TYPE_TIME:
-            printf("使用時間停止卷軸\n");
-            // TODO: 暫停敵人行動 N 回合
-            break;
+            printf("Use time-stop scroll\n");
+            return true;
 
         default:
-            printf("錯誤：未知卷軸類型\n");
-            break;
+            printf("Error: Unknown scroll type\n");
+            return false;
     }
 }
+
 
