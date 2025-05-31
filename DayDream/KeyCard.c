@@ -6,6 +6,8 @@
 #include "assetManager.h"
 #include "levelManager.h"
 #include "CardManager.h"
+#include "story.h"     // 引入 keyDialogueTriggered 的 extern 宣告)
+#include "dialogues.h" // 引入 所有對話文本的 extern 宣告)
 
 static void ResetKey(CardBase *self)
 {
@@ -34,6 +36,24 @@ static void OnInteractKey(CardBase *self)
     {
         AcquireKey(); // hasKey = true
         ReplaceCardWithEmpty(self->indexInArray, true);
+
+        // 根據當前關卡觸發不同的鑰匙對話
+        int currentLvl = GetCurrentLevel();
+        if (currentLvl >= 1 && currentLvl <= 10 && !keyDialogueTriggered[currentLvl - 1]) { // 陣列索引從0開始，並檢查範圍
+            switch (currentLvl) {
+                case 1: StartDialogue(keyAcquiredDialogue_L1, keyAcquiredDialogue_L1_Count); break;
+                case 2: StartDialogue(keyAcquiredDialogue_L2, keyAcquiredDialogue_L2_Count); break;
+                case 3: StartDialogue(keyAcquiredDialogue_L3, keyAcquiredDialogue_L3_Count); break;
+                case 4: StartDialogue(keyAcquiredDialogue_L4, keyAcquiredDialogue_L4_Count); break;
+                case 5: StartDialogue(keyAcquiredDialogue_L5, keyAcquiredDialogue_L5_Count); break;
+                case 6: StartDialogue(keyAcquiredDialogue_L6, keyAcquiredDialogue_L6_Count); break;
+                case 7: StartDialogue(keyAcquiredDialogue_L7, keyAcquiredDialogue_L7_Count); break;
+                case 8: StartDialogue(keyAcquiredDialogue_L8, keyAcquiredDialogue_L8_Count); break;
+                case 9: StartDialogue(keyAcquiredDialogue_L9, keyAcquiredDialogue_L9_Count); break;
+                case 10: StartDialogue(keyAcquiredDialogue_L10, keyAcquiredDialogue_L10_Count); break;
+            }
+            keyDialogueTriggered[currentLvl - 1] = true;
+        }
     }
 }
 

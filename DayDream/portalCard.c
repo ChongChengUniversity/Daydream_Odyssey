@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include "assetManager.h"
 #include "stateController.h"
+#include "endingChoice.h" // 如果需要觸發選擇
+#include "story.h"
+#include "dialogues.h"
 
 static void ResetPortal(CardBase* self) {
     self->isRevealed = false;
@@ -26,7 +29,7 @@ static void OnRevealPortal(CardBase* self) {
 static void OnInteractPortal(CardBase* self) {
     if (self->isRevealed)
     {
-        GOTO(WIN);
+        GOTO(ENDING_CHOICE);
     }
 }
 

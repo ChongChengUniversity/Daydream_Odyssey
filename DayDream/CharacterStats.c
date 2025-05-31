@@ -5,6 +5,8 @@
 #include "stateController.h"
 #include <stdio.h>
 #include "equipmentSystem.h" // 取得裝備資料
+#include "dialogues.h"
+#include "story.h" // for SetBadEndDialogueFlag
 
 static PlayerStats player;
 
@@ -101,7 +103,13 @@ void ApplyDamageToPlayer(PlayerStats* player, int damageToPlayer){
         player->hitTimer = 30;  // 顯示 0.5 秒 (30 幀)
     }
     else{
-        GOTO(LOSE);
+        player->currentHp = 0; // avoid negtive number
+        // player died, jump to bad end
+        if (!IsDialogueActive()) { // 避免重複觸發對話
+            StartDialogue(ending_Bad, ending_Bad_Count);
+            SetBadEndDialogueFlag(true); // 設置 Bad End 標誌
+        }
+        // goto lose in main.c
     }
 }
 
@@ -179,5 +187,14 @@ void GetBaseStatsByTypeAndFloor(MonsterType type, int floor, EnemyStats* outStat
     outStats->currentHp = outStats->maxHp;
 }
 
-
-
+// 範例：在處理玩家受傷或死亡的函式中
+void PlayerDies() {
+    // 檢查是否已經在對話中，避免重複觸發
+    if (player.currentHp <= 0 && !IsDialogueActive()) {
+        StartDialogue(ending_Bad, ending_Bad_Count);
+        // 設定一個標誌，讓 main 迴圈知道 Bad End 對話即將結束
+        // 例如： static bool badEndDialogueStarted = false; badEndDialogueStarted = true;
+    }
+    // 遊戲狀態可能在對話結束後跳轉到 LOSE
+    // GOTO(LOSE); // 暫時不要直接跳，讓對話完成
+}

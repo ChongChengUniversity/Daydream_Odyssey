@@ -6,7 +6,7 @@
 #include "assetManager.h"
 #include "CombatSystem.h"
 #include "CharacterStats.h"
-#include "cardManager.h"
+#include "CardManager.h"
 #include <stdio.h>
 #include "CardBase.h"
 #include "enemyManager.h"

@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "config.h"
 #include "EmptyCard.h"
-#include "cardManager.h" 
+#include "CardManager.h" 
 #include "CardBase.h"
 #include "levelManager.h"
 #include "CharacterStats.h"

@@ -5,7 +5,8 @@
 #include "stateController.h"
 #include "assetManager.h"
 #include "levelManager.h"
-// #include "CardBase.h"
+#include "story.h"
+#include "dialogues.h"
 
 static void ResetDoor(CardBase *self)
 {
@@ -36,14 +37,18 @@ static void OnInteractDoor(CardBase *self)
 
     if (self->isRevealed)
     {
-        if (IsFinalLevel() && HasKey())
+        if (IsFinalLevel())
         {
-            GOTO(WIN);
+            return;
         }
         else if (HasKey())
         {
             NextLevel();
             GOTO(PLAYING);
+        }
+        else
+        {
+            StartDialogue(keyHint, keyHint_Count); // give key hint
         }
     }
 }
