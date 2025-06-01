@@ -91,9 +91,9 @@ void UpdatePlaying(void)
         return; // 阻止其他互動
     }
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        OnMouseClick(mousePos); // 只有這裡處理地圖卡片點擊
-    }
+    
+    OnMouseClick(mousePos); // 只有這裡處理地圖卡片點擊
+    
 
     UpdateBackpackIcon(mousePos);
     UpdateShopIcon();
