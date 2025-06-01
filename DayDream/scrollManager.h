@@ -22,4 +22,4 @@ typedef enum {
 int GetSingleTargetMagicDamage(int magicPower, int floor, MonsterType type);
 int GetAOEMagicDamage(int magicPower, int floor);
 
-void UseScrollEffect(ScrollType scroll, GridPos targetPos);
+bool UseScrollEffect(ScrollType scroll, GridPos targetPos);

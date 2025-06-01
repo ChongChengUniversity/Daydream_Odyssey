@@ -25,7 +25,7 @@ SRC = \
     audioManager.c \
     stateController.c \
     levelManager.c \
-    cardManager.c \
+    CardManager.c \
     assetManager.c \
     DoorCard.c \
     EmptyCard.c \
@@ -40,15 +40,19 @@ SRC = \
     backpackicon.c \
     money.c \
 	KeyCard.c \
-    cardbase.c \
+    Cardbase.c \
     enemyManager.c \
     equipmentSystem.c \
     itemSystem.c \
     scrollManager.c \
     itemUse.c \
     shopSystem.c \
-    bossManager.c  \
-    portalCard.c
+    bossManager.c \
+    portalCard.c \
+    story.c \
+    openingScene.c \
+    endingChoice.c \
+    dialogues.c \
 
 # 輸出檔案名稱
 TARGET = test.exe
