@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include "CardBase.h"
 
-// °²³] BOSS ©T©w¦b¦a¹Ï¤¤¥¡
+// ï¿½ï¿½ï¿½] BOSS ï¿½Tï¿½wï¿½bï¿½aï¿½Ï¤ï¿½ï¿½ï¿½
 #define BOSS_ROW 2
 #define BOSS_COL 2
 
@@ -14,3 +14,5 @@ void UpdateBossAction();
 CardBase* CreateBossCard(float x, float y, int index, int row, int col);
 void DrawBoss(CardBase* self);
 void OnInteractBoss(CardBase* self);
+void ToggleBossMessage(const char* text);
+void DrawBossMessage();

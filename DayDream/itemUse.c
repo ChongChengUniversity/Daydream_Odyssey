@@ -22,6 +22,10 @@ static int targetCol = -1;
 
 char message[256] = "";
 int messageTimer = 0;
+
+char bossMessage[256] = "";
+bool bossMessageVisible = false;
+
 #define MESSAGE_DURATION 90  // 顯示多久幀數 (2秒，如果60FPS)
 
 void SetMessage(const char* text) {

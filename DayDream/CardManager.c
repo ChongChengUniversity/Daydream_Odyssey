@@ -293,60 +293,70 @@ void DrawAllCards() {
             DrawRectangleLinesEx(cards[i]->bounds, 2.0f, RED);
         }
     }
+    DrawBossMessage();
 }
 
 //滑鼠點到的卡片第一次狀態改為已翻開 第二次以上執行互動
 void OnMouseClick(Vector2 mousePos)
 {
-    AbleToReveal();     //滑鼠點擊後先確定好允許翻開的格子
-    for (int i = 0; i < TOTAL_CARDS; ++i)   
-    {
-        //如果這格被點到
-        if (cards[i] && CheckCollisionPointRec(mousePos, cards[i]->bounds)) {
-            int row = cards[i]->row, col = cards[i]->col;
-            bool isEnemy = IsEnemyCardAt(row, col);
-            bool isVisible = false;
-
-            if (isEnemy) {
-                isVisible = enemyInfo[row][col].isVisible;
-            }
-
-            if (abletoReveal[row][col] == 1) {
-                // 合法可以互動的格子
-                if (isEnemy && isVisible) {
-                    // 可視敵人 → 可攻擊
-                    if (cards[i]->onInteract) {
+    AbleToReveal();
+    if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+        for (int i = 0; i < TOTAL_CARDS; ++i) {
+            if (cards[i] && CheckCollisionPointRec(mousePos, cards[i]->bounds)) {
+                if (cards[i]->type == TYPE_ENEMY) {
+                    EnemyInfo* info = &enemyInfo[cards[i]->row][cards[i]->col];
+                    if (info->type == MONSTER_BOSS && cards[i]->onInteract) {
+                        // 是 Boss 卡，就呼叫 onInteract（右鍵情境）
                         cards[i]->onInteract(cards[i]);
+                        return; // 只處理一張卡
                     }
                 }
-                else if (!cards[i]->isRevealed) {
-                    // 一般未翻開卡 → 翻開
-                    if (cards[i]->onReveal) {
-                        cards[i]->onReveal(cards[i]);
+            }
+        }
+    }
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        for (int i = 0; i < TOTAL_CARDS; ++i)   
+        {
+            if (cards[i] && CheckCollisionPointRec(mousePos, cards[i]->bounds)) {
+                int row = cards[i]->row, col = cards[i]->col;
+                bool isEnemy = IsEnemyCardAt(row, col);
+                bool isVisible = false;
+
+                if (isEnemy) {
+                    isVisible = enemyInfo[row][col].isVisible;
+                }
+
+                if (abletoReveal[row][col] == 1) {
+                    if (isEnemy && isVisible) {
+                        if (cards[i]->onInteract) {
+                            cards[i]->onInteract(cards[i]);
+                        }
+                    }
+                    else if (!cards[i]->isRevealed) {
+                        if (cards[i]->onReveal) {
+                            cards[i]->onReveal(cards[i]);
+                        }
+                    }
+                    else {
+                        if (cards[i]->onInteract) {
+                            cards[i]->onInteract(cards[i]);
+                        }
                     }
                 }
                 else {
-                    // 其他可互動卡片
-                    if (cards[i]->onInteract) {
+                    if ((cards[i]->isRevealed || isEnemy) && cards[i]->onInteract) {
                         cards[i]->onInteract(cards[i]);
                     }
                 }
-            }
-            else {
-                // 不在允許翻開區域，但是「已翻開」或是「不可視怪物」的特例仍允許互動
-                if (cards[i]->isRevealed && cards[i]->onInteract ||
-                    IsBlockedByEnemy(row, col) && isVisible) {
-                    cards[i]->onInteract(cards[i]);
-                }
-            }
 
-            // 更新 buff 狀態
-            UpdateVisibleBufferCounts();
-            ApplyBuffsToVisibleEnemies();
+                UpdateVisibleBufferCounts();
+                ApplyBuffsToVisibleEnemies();
+            }
         }
-
     }
 }
+
 
 //死亡的怪物卡變為翻開狀態空卡(不能在這邊就主動把空卡打開)
 void ReplaceCardWithEmpty(int index, bool shouldReveal) {

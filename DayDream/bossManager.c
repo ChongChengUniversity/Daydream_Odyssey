@@ -13,21 +13,13 @@
 #include "CardBase.h"
 #include "EnemyStats.h"
 #include "assetManager.h"
-
-
+#include "itemUse.h"
+#include <string.h>
+#include "playerUI.h"
 static int bossCD = 3;             // 初始冷卻：第一回合增益，下一回合開始攻擊
 static bool bossAlive = true;     // 用來判斷 Boss 是否還活著
 static int CDcount = 0;
-static void DrawBoldText(const char* text, int posX, int posY, int fontSize, Color color) {
-    for (int dx = -1; dx <= 1; dx++) {
-        for (int dy = -1; dy <= 1; dy++) {
-            if (dx != 0 || dy != 0) {
-                DrawText(text, posX + dx, posY + dy, fontSize, BLACK); // 黑邊
-            }
-        }
-    }
-    DrawText(text, posX, posY, fontSize, color); // 主文字
-}
+
 void InitBossState() {
     bossCD = 3;
     bossAlive = true;
@@ -64,6 +56,8 @@ void UpdateBossAction() {
         CDcount ++;
         if(CDcount == 1){
             //全場增益
+            boss->bonusDef += 2;
+            boss->def = boss->baseDef + boss->bonusDef;
             for (int i = 0; i < TOTAL_CARDS; ++i) {
                 if (cards[i] && cards[i]->type == TYPE_ENEMY) {
                     int row = cards[i]->row;
@@ -74,6 +68,7 @@ void UpdateBossAction() {
 
                     stats->externalBonusAtk += 10;
                     stats->externalBonusDef += 2;
+                    
                 }
             }
             printf("Boss buffed all monsters!\n");
@@ -200,32 +195,150 @@ void DrawBoss(CardBase* self) {
     );
 
     // 顯示資訊（滑鼠碰到才畫數值）
-    if (CheckCollisionPointRec(GetMousePosition(), self->bounds)) {
-        EnemyStats* boss = &enemyInfo[self->row][self->col].stats;
-        int fontSize = 16;
-        // 用 drawX, drawY, drawWidth, drawHeight 作為新的座標依據
-        DrawBoldText(TextFormat("%d", boss->atk), drawX + 2, drawY + 2, fontSize, YELLOW); // 左上角
-        DrawBoldText(TextFormat("%d", boss->currentHp), drawX + 2, drawY + drawHeight - fontSize - 2, fontSize, RED); // 左下角
-        DrawBoldText(TextFormat("%d", boss->def), drawX + drawWidth - fontSize - 2, drawY + drawHeight - fontSize - 2, fontSize, YELLOW); // 右下角
-    }
+    EnemyStats* boss = &enemyInfo[self->row][self->col].stats;
+    int fontSize = 16;
+    // 用 drawX, drawY, drawWidth, drawHeight 作為新的座標依據
+    DrawBoldText(TextFormat("%d", boss->atk), drawX + 2, drawY + 2, fontSize, YELLOW, 1); // 左上角
+    DrawBoldText(TextFormat("%d", boss->currentHp), drawX + 2, drawY + drawHeight - fontSize - 2, fontSize, RED, 1); // 左下角
+    DrawBoldText(TextFormat("%d", boss->def), drawX + drawWidth - fontSize - 2, drawY + drawHeight - fontSize - 2, fontSize, YELLOW, 1); // 右下角
+    
+    int cdFontSize = 40;
+    int cdPaddingY = 30; // CD 距離 Boss 圖下方的距離
+    int cdPosX = bounds.x + bounds.width / 2 - MeasureText(TextFormat("%d", GetBossCD()), cdFontSize) / 2;
+    int cdPosY = bounds.y + bounds.height + cdPaddingY;
+
+    DrawBoldText(TextFormat("%d", GetBossCD()), cdPosX, cdPosY, cdFontSize, PURPLE, 2);
 }
 
 
 void OnInteractBoss(CardBase* self) {
-    PlayerStats* player = GetPlayerStats();
-    EnemyInfo* bossInfoPtr = &enemyInfo[self->row][self->col];
-    EnemyStats* boss = &bossInfoPtr->stats;
+    
+    if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+        printf("show boss detial");
+        ToggleBossMessage(
+            "Boss Details:\n"
+            "- Boss cooldown: 3\n"
+            "- First cooldown ends -> Buffs all monsters.\n"
+            "- Subsequent cooldowns -> Increases its own attack.\n"
+            "- HP below half -> Attacks the player."
+        );
+    }
+    
 
-    bool bossDead = AttackEnemy(player, boss);  // 玩家攻擊 Boss
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        printf("attack");
+        PlayerStats* player = GetPlayerStats();
+        EnemyInfo* bossInfoPtr = &enemyInfo[self->row][self->col];
+        EnemyStats* boss = &bossInfoPtr->stats;
 
-    if (bossDead) {
-        ReplaceCardWithPortal(self->indexInArray, true); // Boss 死了 → 換成空卡
-        KillBoss(); // 更新狀態為死亡
-        AbleToReveal();
-        UpdateVisibleBufferCounts();
-        ApplyBuffsToVisibleEnemies();
-        printf("BOSS DEFEATED!\n");
+        bool bossDead = AttackEnemy(player, boss);
+
+        if (bossDead) {
+            ReplaceCardWithEmpty(self->indexInArray, true);
+            KillBoss();
+            AbleToReveal();
+            UpdateVisibleBufferCounts();
+            ApplyBuffsToVisibleEnemies();
+            printf("BOSS DEFEATED!\n");
+
+            // 關掉訊息
+            bossMessage[0] = '\0';
+            bossMessageVisible = false;
+        } else {
+            UpdateBossAction();
+        }
+    }
+}
+
+
+void ToggleBossMessage(const char* text) {
+    if (bossMessageVisible) {
+        bossMessage[0] = '\0';   // 關掉訊息
+        bossMessageVisible = false;
     } else {
-        UpdateBossAction(); // Boss 活著 → 進行行動（CD、增益、攻擊玩家）
+        snprintf(bossMessage, sizeof(bossMessage), "%s", text); // 設訊息
+        bossMessageVisible = true;
+    }
+}
+
+
+void DrawBossMessage() {
+    if (bossMessageVisible && bossMessage[0] != '\0') {
+        int fontSize = 20;
+        int lineSpacing = 32;
+        int padding = 20; // 內邊距
+        int borderThickness = 4; // 框邊寬度
+
+        // 🧩 先抓最大行長
+        int maxLineWidth = 0;
+        const char* start = bossMessage;
+        while (*start) {
+            const char* end = strchr(start, '\n');
+            if (!end) end = start + strlen(start);
+
+            char line[256] = {0};
+            strncpy(line, start, end - start);
+            line[end - start] = '\0';
+
+            int lineWidth = MeasureText(line, fontSize);
+            if (lineWidth > maxLineWidth) {
+                maxLineWidth = lineWidth;
+            }
+
+            if (*end == '\n') start = end + 1;
+            else break;
+        }
+
+        // 總行數
+        int lineCount = 1;
+        for (const char* p = bossMessage; *p; ++p) {
+            if (*p == '\n') lineCount++;
+        }
+
+        // 📐 框大小
+        int boxWidth = maxLineWidth + padding * 2;
+        int boxHeight = fontSize * lineCount + lineSpacing * (lineCount - 1) + padding * 2;
+
+        // 🧩 Boss 中心位置
+        int bossRow = 2;
+        int bossCol = 2;
+        float bossX = BOARD_START_X + TILE_GAP + bossCol * (TILE_SIZE + TILE_GAP);
+        float bossY = BOARD_START_Y + TILE_GAP + bossRow * (TILE_SIZE + TILE_GAP);
+        float centerX = bossX + TILE_SIZE / 2;
+        float centerY = bossY; // 頭頂
+
+        int boxX = centerX - boxWidth / 2;
+        int boxY = centerY - boxHeight - 50; // 頭頂上 50 px
+
+        // 🎨 畫黑底
+        DrawRectangle(boxX, boxY, boxWidth, boxHeight, BLACK);
+
+        // 🎨 畫白邊
+        DrawRectangleLinesEx(
+            (Rectangle){ boxX - borderThickness / 2.0f, boxY - borderThickness / 2.0f, boxWidth + borderThickness, boxHeight + borderThickness },
+            borderThickness,
+            WHITE
+        );
+
+        // 📝 畫文字（每行居中）
+        int textY = boxY + padding;
+        start = bossMessage;
+        while (*start) {
+            const char* end = strchr(start, '\n');
+            if (!end) end = start + strlen(start);
+
+            char line[256] = {0};
+            strncpy(line, start, end - start);
+            line[end - start] = '\0';
+
+            int lineWidth = MeasureText(line, fontSize);
+            int textX = boxX + (boxWidth - lineWidth) / 2; // 文字居中
+
+            DrawText(line, textX, textY, fontSize, WHITE);
+            textY += fontSize + lineSpacing;
+
+            if (*end == '\n') start = end + 1;
+            else break;
+        }
     }
 }

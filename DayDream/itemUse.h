@@ -25,5 +25,9 @@ void DrawItemUseUI(void);
 ItemUseState GetItemUseState(void);
 
 void SetMessage(const char* text);   // 🔥 對外開放函數
+
 extern int messageTimer;
 extern char message[256];
+
+extern char bossMessage[256];
+extern bool bossMessageVisible;
