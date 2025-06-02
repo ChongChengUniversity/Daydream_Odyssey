@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "stateController.h"
 #include "assetManager.h"
+#include "audioManager.h"
 #include "levelManager.h"
 #include "story.h"
 #include "dialogues.h"
@@ -18,6 +19,7 @@ static void DrawDoor(CardBase *self)
     if (HasKey()) {
         DrawTextureEx(OPEN, (Vector2){self->bounds.x, self->bounds.y}, 0.0f,
                 (float)TILE_SIZE / textures[TEXTURE_DOOR].width, WHITE);
+        GamePlaySound(SOUND_NINE);
     }
 
     else {
