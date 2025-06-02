@@ -19,6 +19,7 @@
 #include "gauntletEvent.h"
 #include "levelManager.h"
 #include "stateController.h"
+#include "audioManager.h" 
 
 static int bossCD = 3;             // 初始冷卻：第一回合增益，下一回合開始攻擊
 static bool bossAlive = true;     // 用來判斷 Boss 是否還活著
@@ -238,6 +239,7 @@ void OnInteractBoss(CardBase* self) {
         bool bossDead = AttackEnemy(player, boss);
 
         if (bossDead) {
+            GamePlaySound(SOUND_EIGHT);
             GivePlayerInfinityGauntlet(); // 呼叫這個函式來給予手套
             ReplaceCardWithEmpty(self->indexInArray, true);
             KillBoss();

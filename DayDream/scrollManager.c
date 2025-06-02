@@ -8,6 +8,10 @@
 #include "itemUse.h"
 #include "CardBase.h"
 #include "money.h"
+#include "stateController.h"
+#include "gauntletEvent.h"
+#include "audioManager.h" 
+
 #define MESSAGE_DURATION 90
 
 int GetSingleTargetMagicDamage(int magicPower, int floor, MonsterType type){
@@ -32,13 +36,13 @@ int GetAOEMagicDamage(int magicPower, int floor){
 
     const float aoeMultiplier = 1.2f;
     rawDamage = (magicPower + floor * 2) * aoeMultiplier;
-
     return (int)(rawDamage + 0.5f);
 }
 
 bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
     switch (scroll) {
         case SCROLL_TYPE_SINGLE: {
+            GamePlaySound(SOUND_TEN);
             printf("Use single target damage scroll\n");
 
             EnemyInfo* enemy = &enemyInfo[targetPos.row][targetPos.col];
@@ -53,7 +57,10 @@ bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
                 int index = GetCardIndexByGridPos(targetPos.row, targetPos.col);
 
                 if (GetCurrentLevel()==10 && index==12) {
+                    GivePlayerInfinityGauntlet(); // 呼叫這個函式來給予手套
                     ReplaceCardWithPortal(index, true);  // BOSS → 傳送門Add commentMore actions
+                    NextLevel();
+                    GOTO(PLAYING); 
                 }
                 else {
                     ReplaceCardWithEmpty(index, true);   // 普通怪 → 空卡
@@ -68,6 +75,7 @@ bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
         }
 
         case SCROLL_TYPE_AOE: {
+            GamePlaySound(SOUND_TEN);
             printf("Use AOE damage scroll\n");
 
             PlayerStats* player = GetPlayerStats();
@@ -98,6 +106,7 @@ bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
         }
 
         case SCROLL_TYPE_HEAL:
+            GamePlaySound(SOUND_TWELVE);
             PlayerStats* player = GetPlayerStats();
             printf("[Scroll] Healing scroll used\n");
             int healAmount = 50; // Heal 50 HP
@@ -108,6 +117,7 @@ bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
             return true;
 
         case SCROLL_TYPE_SHIELD: {
+            GamePlaySound(SOUND_SEVEN);
             printf("Use shield scroll\n");
             PlayerStats* player = GetPlayerStats();
             if (player->bonusDef >= 10) {

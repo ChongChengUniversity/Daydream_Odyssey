@@ -7,6 +7,7 @@
 #include "equipmentSystem.h" // 取得裝備資料
 #include "dialogues.h"
 #include "story.h" // for SetBadEndDialogueFlag
+#include "audioManager.h" 
 
 static PlayerStats player;
 
@@ -83,6 +84,8 @@ void RecalculatePlayerStats() {
 bool ApplyDamageToEnemy(EnemyStats* enemy, int damageToEnemy){
     if (enemy == NULL) return false;
 
+    sounds[SOUND_ELEVEN];
+    
     enemy->currentHp -= damageToEnemy;
     printf("對怪物造成 %d 傷害，剩餘 HP: %d\n", damageToEnemy, enemy->currentHp);
 
@@ -150,12 +153,9 @@ void HealPlayerBySource(HealSource source) {
 
     switch (source) {
         case HEAL_FROM_POTION:
+            sounds[SOUND_TWELVE];
             healAmount = 15 + 2 * GetCurrentLevel();
             printf("你喝下補血藥水，恢復了 %d 點 HP！\n", healAmount);
-            break;
-
-        case HEAL_FROM_SCROLL:
-            // 預留邏輯，先不實作
             break;
     }
 

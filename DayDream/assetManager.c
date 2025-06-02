@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-
 // 通用圖片：背景、門等
 Texture2D textures[MAX_TEXTURES];
 
