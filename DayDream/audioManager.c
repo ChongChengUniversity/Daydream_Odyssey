@@ -13,12 +13,19 @@ void InitAudioManager()
 {
     InitAudioDevice(); // 初始化音訊裝置（Raylib 必需呼叫）
 
-    // 載入三種音效資源並存入陣列中
-    sounds[SOUND_ONE] = LoadSound("assets/music/click.wav");        // 點擊音效
+    
+    sounds[SOUND_ONE] = LoadSound("assets/music/click.wav");    // 點擊音效
     sounds[SOUND_TWO] = LoadSound("assets/music/bell.mp3");    // 爆炸音效
-    sounds[SOUND_THREE] = LoadSound("assets/music/pickupCoin.wav"); // 撿金幣音效
-    sounds[SOUND_FOUR] = LoadSound("assets/music/fail.mp3");
-    sounds[SOUND_FIVE] = LoadSound("assets/music/success.mp3");
+    sounds[SOUND_THREE] = LoadSound("assets/music/coin.mp3"); // 撿金幣音效
+    sounds[SOUND_FOUR] = LoadSound("assets/music/fail.mp3");    // 購買失敗
+    sounds[SOUND_FIVE] = LoadSound("assets/music/success.mp3"); // 購買成功
+    sounds[SOUND_SIX] = LoadSound("assets/music/ice.mp3"); // 時間卷軸
+    sounds[SOUND_SEVEN] = LoadSound("assets/music/shield.mp3"); // 盾卷軸
+    sounds[SOUND_EIGHT] = LoadSound("assets/music/boss.mp3"); //BOSS
+    sounds[SOUND_NINE] = LoadSound("assets/music/opendoor.mp3"); // 開門
+    sounds[SOUND_TEN] = LoadSound("assets/music/magic.mp3"); // 法術
+    sounds[SOUND_ELEVEN] = LoadSound("assets/music/attack.mp3"); // 普攻
+    sounds[SOUND_TWELVE] = LoadSound("assets/music/drink.mp3"); // 血瓶
 
     // 載入一種背景音樂流（支援長時間播放）
     music[MUSIC_ONE] = LoadMusicStream("assets/music/game_music.mp3");

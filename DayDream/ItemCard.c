@@ -1,6 +1,7 @@
 // ItemCard.c
 #include "ItemCard.h"
 #include "assetManager.h"  // 引入 assetManager.h 來使用 GetRandomItemType
+#include "audioManager.h"
 #include "config.h"
 #include <stdlib.h>
 #include "CardBase.h"
@@ -54,6 +55,7 @@ static void OnInteractItem(CardBase* self) {
     ItemCard *card = (ItemCard *)self;
     if (card->type == ITEM_COIN) {
         AddCoins(10);
+        GamePlaySound(SOUND_THREE);
     } else if (card->type == ITEM_HP) {
         HealPlayerBySource(HEAL_FROM_POTION);
     } else {

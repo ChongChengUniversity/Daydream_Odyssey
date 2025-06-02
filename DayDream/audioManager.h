@@ -2,14 +2,22 @@
 #pragma once // 防止這個標頭檔被重複包含多次
 #include "raylib.h"
 
-#define MAX_SOUNDS 5 // 定義最多 5 種音效
+#define MAX_SOUNDS 12// 定義最多 12 種音效
 typedef enum
 {
     SOUND_ONE = 0, // 音效索引 0：點擊音效
     SOUND_TWO,     // 音效索引 1：爆炸音效
     SOUND_THREE ,  // 音效索引 2：撿金幣音效
     SOUND_FOUR,    // 音效索引 3：購買失敗音效
-    SOUND_FIVE     // 音效索引 4：購買成功音效
+    SOUND_FIVE,    // 音效索引 4：購買成功音效
+    SOUND_SIX,     // 音效索引 5: 時間卷軸
+    SOUND_SEVEN,   // 音效索引 6: 盾卷軸
+    SOUND_EIGHT,   // 音效索引 7: 怪物
+    SOUND_NINE,   // 音效索引 8: 開門
+    SOUND_TEN,   // 音效索引 9: 法術
+    SOUND_ELEVEN,   // 音效索引 10: 普攻
+    SOUND_TWELVE,   // 音效索引 11: 血瓶
+
 
 } sound_asset;     // 自訂 enum 型別表示音效資產
 
