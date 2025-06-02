@@ -163,49 +163,108 @@ void StartDialogue(DialogueLine *dialogueSet, int lineCount)
     dialogueState = DIALOGUE_STATE_ACTIVE;
 }
 
+// void UpdateStory(void)
+// {
+//     if (dialogueState == DIALOGUE_STATE_NONE)
+//         return;
+
+//     if (dialogueState == DIALOGUE_STATE_ACTIVE)
+//     {
+//         charDisplayTimer += GetFrameTime();
+//         if (charDisplayTimer >= charDisplayDelay)
+//         {
+//             currentCharIndex++;
+//             charDisplayTimer = 0.0f;
+//             // 當逐字顯示達到當前對話行的總字元數時，切換到等待點擊狀態
+//             if (currentCharIndex > strlen(currentDialogueSet[currentLineIndex].text))
+//             {
+//                 currentCharIndex = strlen(currentDialogueSet[currentLineIndex].text); // 確保不越界
+//                 dialogueState = DIALOGUE_STATE_WAIT_CLICK;
+//             }
+//         }
+//     }
+
+//     if (dialogueState == DIALOGUE_STATE_WAIT_CLICK)
+//     {
+//         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_ENTER))
+//         {
+//             currentLineIndex++;
+//             if (currentLineIndex >= totalDialogueLines)
+//             {
+//                 // 對話結束
+//                 dialogueState = DIALOGUE_STATE_NONE;
+//                 currentDialogueSet = NULL; // 清除對話集指針
+//                 // 在這裡加入 Bad End 判斷與自動跳轉
+//                 if (IsBadEndDialogueFlagActive())
+//                 {
+//                     SetBadEndDialogueFlag(false); // 重置旗標
+//                     GOTO(LOSE);                   // 自動跳轉到失敗畫面
+//                 }
+//             }
+//             else
+//             {
+//                 // 進入下一行
+//                 currentCharIndex = 0; // 重置下一行的逐字顯示計數
+//                 dialogueState = DIALOGUE_STATE_ACTIVE;
+//             }
+//         }
+//     }
+// }
+
 void UpdateStory(void)
 {
     if (dialogueState == DIALOGUE_STATE_NONE)
         return;
 
-    if (dialogueState == DIALOGUE_STATE_ACTIVE)
+    // 總是增加 charDisplayTimer 以實現逐字顯示
+    charDisplayTimer += GetFrameTime();
+    if (charDisplayTimer >= charDisplayDelay)
     {
-        charDisplayTimer += GetFrameTime();
-        if (charDisplayTimer >= charDisplayDelay)
+        // 只有在當前行仍在逐字顯示時才增加 currentCharIndex
+        if (currentDialogueSet != NULL && currentLineIndex < totalDialogueLines &&
+            currentCharIndex < (int)strlen(currentDialogueSet[currentLineIndex].text))
         {
             currentCharIndex++;
-            charDisplayTimer = 0.0f;
-            // 當逐字顯示達到當前對話行的總字元數時，切換到等待點擊狀態
-            if (currentCharIndex > strlen(currentDialogueSet[currentLineIndex].text))
-            {
-                currentCharIndex = strlen(currentDialogueSet[currentLineIndex].text); // 確保不越界
-                dialogueState = DIALOGUE_STATE_WAIT_CLICK;
-            }
         }
+        charDisplayTimer = 0.0f;
     }
 
-    if (dialogueState == DIALOGUE_STATE_WAIT_CLICK)
+    // 處理滑鼠點擊/Enter 鍵，用於跳過逐字顯示和前進到下一行
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_ENTER))
     {
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_ENTER))
+        if (currentDialogueSet != NULL && currentLineIndex < totalDialogueLines)
         {
-            currentLineIndex++;
-            if (currentLineIndex >= totalDialogueLines)
+            // 獲取當前行的文本
+            const char* currentText = currentDialogueSet[currentLineIndex].text;
+
+            // 如果當前行仍在逐字顯示（未完全顯示）
+            if (currentCharIndex < (int)strlen(currentText))
             {
-                // 對話結束
-                dialogueState = DIALOGUE_STATE_NONE;
-                currentDialogueSet = NULL; // 清除對話集指針
-                // 在這裡加入 Bad End 判斷與自動跳轉
-                if (IsBadEndDialogueFlagActive())
-                {
-                    SetBadEndDialogueFlag(false); // 重置旗標
-                    GOTO(LOSE);                   // 自動跳轉到失敗畫面
-                }
+                // 立即跳到當前行的末尾
+                currentCharIndex = strlen(currentText);
+                // 跳過後，當前行會完全顯示，等待下一次點擊以推進。
+                // 無需在此處更改 dialogueState，因為它會自然地在下一個循環中被處理。
             }
-            else
+            else // 當前行已完全顯示，因此前進到下一行
             {
-                // 進入下一行
-                currentCharIndex = 0; // 重置下一行的逐字顯示計數
-                dialogueState = DIALOGUE_STATE_ACTIVE;
+                currentLineIndex++; // 前進到下一行
+                currentCharIndex = 0; // 重置新行的字元索引
+                charDisplayTimer = 0.0f; // 重置新行的計時器
+
+                // 檢查對話是否結束
+                if (currentLineIndex >= totalDialogueLines)
+                {
+                    dialogueState = DIALOGUE_STATE_NONE;
+                    currentDialogueSet = NULL; // 清除對話集指針
+
+                    // 如果 Bad End 標誌為活動狀態，則處理 Bad End 過渡
+                    if (IsBadEndDialogueFlagActive())
+                    {
+                        SetBadEndDialogueFlag(false); // 重置標誌
+                        GOTO(LOSE);                   // 過渡到 LOSE 狀態
+                    }
+                }
+                // 如果對話未結束，則會自動為新的一行開始逐字顯示 (由於 currentCharIndex 和 charDisplayTimer 的邏輯)。
             }
         }
     }
