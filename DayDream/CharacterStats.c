@@ -182,10 +182,18 @@ void GetBaseStatsByTypeAndFloor(MonsterType type, int floor, EnemyStats* outStat
             outStats->isBuffer = true;
             break;
         case MONSTER_GLOBAL_BUFF:
-            outStats->maxHp = 15 + floor * 2;
-            outStats->baseAtk = 7 + floor;
-            outStats->baseDef = 4 + floor / 2;
-            outStats->isBuffer = true;
+           if(floor==10){
+                outStats->maxHp = 999;
+                outStats->baseAtk = 999;
+                outStats->baseDef = 999;
+                outStats->isBuffer = true;
+            }
+            else{
+                outStats->maxHp = 15 + floor * 2;
+                outStats->baseAtk = 7 + floor;
+                outStats->baseDef = 4 + floor / 2;
+                outStats->isBuffer = true;
+            }
             break;
         default:
             // 預設值（安全備援）

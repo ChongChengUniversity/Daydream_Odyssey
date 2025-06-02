@@ -52,7 +52,7 @@ bool UseScrollEffect(ScrollType scroll, GridPos targetPos) {
                 AddCoins(10);
                 int index = GetCardIndexByGridPos(targetPos.row, targetPos.col);
 
-                if (GetCurrentLevel() == 10) {
+                if (GetCurrentLevel()==10 && index==12) {
                     ReplaceCardWithPortal(index, true);  // BOSS → 傳送門Add commentMore actions
                 }
                 else {

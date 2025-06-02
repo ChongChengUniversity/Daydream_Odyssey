@@ -21,7 +21,7 @@ Texture2D OPEN;
 
 Texture2D equipmentImages[EQUIP_TYPE_COUNT];  
 
-
+Texture2D TEX_INFINITY_GAUNTLET;
 
 // 當前季節（可供外部引用）
 Season currentSeason = SEASON_SPRING;
@@ -110,6 +110,8 @@ void InitAssetManager() {
     }
 
     equipmentImages[45] = LoadTexture("assets/equipment/level10/1.png");
+    
+    TEX_INFINITY_GAUNTLET = LoadTexture("assets/The Infinity Gauntlet.png");
 }
 
 
@@ -135,6 +137,8 @@ void ShutdownAssetManager() {
     for (int i = 0; i < EQUIP_TYPE_COUNT; ++i) {
         UnloadTexture(equipmentImages[i]);
     }
+
+    UnloadTexture(TEX_INFINITY_GAUNTLET);
 }
 
 // 裝備說明卡

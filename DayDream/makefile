@@ -53,6 +53,7 @@ SRC = \
     openingScene.c \
     endingChoice.c \
     dialogues.c \
+    gauntletEvent.c
 
 # 輸出檔案名稱
 TARGET = test.exe

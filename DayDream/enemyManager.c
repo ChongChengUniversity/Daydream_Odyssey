@@ -11,11 +11,11 @@
 #include "CharacterStats.h"
 
 // 客製化每層怪物設定
-FloorEnemyConfig floorConfigs[10];
+FloorEnemyConfig floorConfigs[11];
 
 // 初始化每層怪物設定
 void InitFloorEnemyConfigs() {
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 11; ++i) {
         FloorEnemyConfig *cfg = &floorConfigs[i];
         cfg->visibleMin = 1;
         cfg->visibleMax = 2;
@@ -30,11 +30,19 @@ void InitFloorEnemyConfigs() {
             cfg->maxSameTypeBuffEnemies = 2;
             cfg->allowGlobalBuff = true;
             cfg->maxGlobalBuffEnemies = 1;
-        } else {
+        } else if (i < 9){
             cfg->allowSameTypeBuff = true;
             cfg->maxSameTypeBuffEnemies = 3;
             cfg->allowGlobalBuff = true;
             cfg->maxGlobalBuffEnemies = 1;
+        } else if (i < 10){
+            cfg->allowSameTypeBuff = false;
+            cfg->allowGlobalBuff = true;
+            cfg->maxGlobalBuffEnemies = 2;
+        } else { 
+            cfg->allowSameTypeBuff = false;
+            cfg->allowGlobalBuff = true;
+            cfg->maxGlobalBuffEnemies = 25; 
         }
     }
 }
@@ -182,6 +190,9 @@ void ResetEnemyInfo() {
             enemyInfo[row][col].stats.bonusDef = 0;
             enemyInfo[row][col].stats.isBuffer = false;
             enemyInfo[row][col].stats.type = -1;
+            
+            enemyInfo[row][col].stats.externalBonusAtk = 0;
+            enemyInfo[row][col].stats.externalBonusDef = 0;
         }
     }
 }
@@ -202,6 +213,33 @@ void UpdateEnemyVisibility() {
 
     int currentFloor = GetCurrentLevel() - 1;
 
+    // 特殊處理：第十層中央兩側固定為守衛怪
+    if (GetCurrentLevel() == 10) {
+        int guardCols[2] = {0, 4};  // 守衛怪的位置在 (2,0) 和 (2,4)
+        int fixedRow = 2;
+
+        for (int i = 0; i < 2; ++i) {
+            int col = guardCols[i];
+            EnemyInfo* guardEnemy = &enemyInfo[fixedRow][col];
+            guardEnemy->isVisible = false;
+            guardEnemy->type = MONSTER_GLOBAL_BUFF;
+            GetBaseStatsByTypeAndFloor(MONSTER_GLOBAL_BUFF, currentFloor, &guardEnemy->stats);
+        }
+        return;
+    }
+
+    if (GetCurrentLevel() == 11) {
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+            EnemyInfo* crazyEnemy = &enemyInfo[row][col];
+            crazyEnemy->isVisible = false;
+            crazyEnemy->type = MONSTER_GLOBAL_BUFF;
+            GetBaseStatsByTypeAndFloor(MONSTER_GLOBAL_BUFF, currentFloor, &crazyEnemy->stats);
+            }    
+        }
+        return;
+    }
+    
     // 根據目前層數讀取本層怪物設定
     FloorEnemyConfig config = floorConfigs[currentFloor];
 

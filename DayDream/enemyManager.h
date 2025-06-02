@@ -32,7 +32,7 @@ typedef struct {
     bool allowGlobalBuff;
 } FloorEnemyConfig;
 
-extern FloorEnemyConfig floorConfigs[10];
+extern FloorEnemyConfig floorConfigs[11];
 
 void InitFloorEnemyConfigs();
 void InitFloor();

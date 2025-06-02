@@ -15,6 +15,7 @@
 #include "CharacterStats.h"
 #include "story.h"
 #include "dialogues.h"
+#include "gauntletEvent.h"
 
 // 用於追蹤劇情是否已觸發的標誌
 static bool openingDialogueTriggered = false;
@@ -128,6 +129,9 @@ void RenderPlaying(void)
     snprintf(buffer, sizeof(buffer), "Level %d", GetCurrentLevel());
     int textWidth = MeasureText(buffer, 24);
     DrawText(buffer, (GetScreenWidth() - textWidth) / 2, 10, 30, WHITE);
+
+    // 繪製無限手套左下角icon
+    DrawInfinityGauntletIcon();  
 }
 
 const GameState STATE_PLAYING = {

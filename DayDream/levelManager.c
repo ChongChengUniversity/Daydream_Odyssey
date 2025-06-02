@@ -3,7 +3,7 @@
 #include "assetManager.h"
 
 static int currentLevel = 1;
-static const int totalLevels = 10;
+static const int totalLevels = 11;
 bool hasKey = false;
 
 void AcquireKey() {

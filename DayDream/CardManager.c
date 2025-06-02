@@ -17,7 +17,7 @@
 #include "levelManager.h"
 #include "bossManager.h"
 #include <stdio.h>
-
+#include <stdbool.h>
 
 CardBase *cards[TOTAL_CARDS];
 
@@ -67,6 +67,10 @@ void InitCards()
                     // 中央 Boss 卡不翻開
                     cards[card_index] = CreateBossCard(x, y, card_index, row, col);
                 }
+                else if(row==2 && col==0 || row==2 && col==4){
+                    cards[card_index] = CreateEnemyCard(x, y, card_index, row, col);
+                    cards[card_index]->onReveal(cards[card_index]);
+                }
                 else {
                     // 其他空卡建立並直接翻開
                     cards[card_index] = CreateEmptyCard(x, y, card_index, row, col);
@@ -82,7 +86,25 @@ void InitCards()
         return; // ✅ 完成後不走原本流程
     }
 
+    if (GetCurrentLevel() == 11) {
+        InitBossState();
+        int start_x = BOARD_START_X;
+        int start_y = BOARD_START_Y;
+        int card_index = 0;
 
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                float x = start_x + TILE_GAP + col * (TILE_SIZE + TILE_GAP);
+                float y = start_y + TILE_GAP + row * (TILE_SIZE + TILE_GAP);
+
+                cards[card_index] = CreateEnemyCard(x, y, card_index, row, col);
+                cards[card_index]->onReveal(cards[card_index]);
+
+                card_index++;
+            }
+        }
+        return;
+    }
 
 
     for (int i = 0; i < TOTAL_CARDS; ++i)
@@ -345,7 +367,7 @@ void OnMouseClick(Vector2 mousePos)
                     }
                 }
                 else {
-                    if ((cards[i]->isRevealed || isEnemy) && cards[i]->onInteract) {
+                    if (cards[i]->onInteract && (cards[i]->isRevealed || (IsBlockedByEnemy(row, col) && isVisible))) {
                         cards[i]->onInteract(cards[i]);
                     }
                 }
