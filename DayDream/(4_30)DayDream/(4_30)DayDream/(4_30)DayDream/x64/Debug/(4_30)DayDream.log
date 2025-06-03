@@ -1,0 +1,24 @@
+﻿  assetManager.c
+  audioManager.c
+  CardManager.c
+  DoorCard.c
+  EmptyCard.c
+C:\Users\yujun\OneDrive\桌面\(4_30)DayDream\(4_30)DayDream\CardManager.c(56,42): warning C4244: '正在初始化': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
+C:\Users\yujun\OneDrive\桌面\(4_30)DayDream\(4_30)DayDream\CardManager.c(57,42): warning C4244: '正在初始化': 將 'int' 轉換為 'float'，由於類型不同，可能導致資料遺失
+  EnemyCard.c
+  game.c
+  ItemCard.c
+  levelManager.c
+  main.c
+  stateController.c
+  state_lose.c
+C:\Users\yujun\OneDrive\桌面\(4_30)DayDream\(4_30)DayDream\state_lose.c(16,9): warning C4013: 'InitLevelManager' 未定義; 假設 extern 傳回整數
+  state_main_menu.c
+  state_option_menu.c
+  state_playing.c
+  state_win.c
+C:\Users\yujun\OneDrive\桌面\(4_30)DayDream\(4_30)DayDream\state_win.c(15,9): warning C4013: 'InitLevelManager' 未定義; 假設 extern 傳回整數
+C:\Users\yujun\OneDrive\桌面\(4_30)DayDream\(4_30)DayDream\state_win.c(21,5): warning C4013: 'DrawAllCards' 未定義; 假設 extern 傳回整數
+  正在產生程式碼...
+  (4_30)DayDream.vcxproj -> C:\Users\yujun\OneDrive\桌面\(4_30)DayDream\(4_30)DayDream\x64\Debug\(4_30)DayDream.exe
+  'pwsh.exe' 不是內部或外部命令、可執行的程式或批次檔。

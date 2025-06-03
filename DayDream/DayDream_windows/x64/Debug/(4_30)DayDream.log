@@ -1,8 +1,0 @@
-﻿  state_lose.c
-  state_win.c
-  正在產生程式碼...
-C:\Users\yujun\source\repos\(4_30)DayDream\state_lose.c(16,9): warning C4013: 'InitLevelManager' 未定義; 假設 extern 傳回整數
-C:\Users\yujun\source\repos\(4_30)DayDream\state_win.c(15,9): warning C4013: 'InitLevelManager' 未定義; 假設 extern 傳回整數
-C:\Users\yujun\source\repos\(4_30)DayDream\state_win.c(21,5): warning C4013: 'DrawAllCards' 未定義; 假設 extern 傳回整數
-  (4_30)DayDream.vcxproj -> C:\Users\yujun\source\repos\(4_30)DayDream\x64\Debug\(4_30)DayDream.exe
-  'pwsh.exe' 不是內部或外部命令、可執行的程式或批次檔。
